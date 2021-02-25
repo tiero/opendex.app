@@ -1,0 +1,15 @@
+.textinfo {
+    margin: 18px 12px;
+
+    &-label {
+        color: #999999;
+        line-height: 1.6;
+        font-size: 11px;
+    }
+
+    &-value {
+        color: #333333;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}

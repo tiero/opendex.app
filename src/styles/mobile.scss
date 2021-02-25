@@ -1,0 +1,154 @@
+@import './variables.scss';
+@import './mixins.scss';
+
+.drawer-btn {
+    width: 100px;
+    height: 4px;
+    background-color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 7px;
+    outline: none;
+}
+
+.drawer-close-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    background: transparent;
+    color: $gray-text-color;
+    position: absolute;
+    right: 20px;
+    top: 22px;
+
+    img {
+        filter: grayscale(1) contrast(0);
+    }
+}
+
+.homepage {
+    .homepage-drawer:not(.open) {
+        position: fixed;
+        bottom: 0;
+        left: 25px;
+        right: 25px;
+        text-align: center;
+        min-height: 78px;
+        background: #FFF;
+        z-index: 99;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+        cursor: pointer;
+
+        .submarine__pickcrypto-options {
+            display: flex;
+            align-items: center;
+
+            .swap-icons {
+                padding: 0;
+            }
+
+            .currency-options {
+                width: 30%;
+                min-width: 100px;
+
+                .MuiSelect-root {
+                    padding: 8px 10px;
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                .MuiInputBase-root {
+                    color: rgba(0, 0, 0, 0.87);
+                }
+            }
+        }
+    }
+}
+
+.drawer-wrapper {
+    text-align: center;
+    display: none;
+
+    .MuiDrawer-paper {
+        left: 25px;
+        right: 25px;
+        top: 30px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    &__content {
+        > div {
+            height: 100%;
+
+            > div {
+                height: 100%;
+                box-shadow: none;
+            }
+        }
+
+        @include stepper;
+
+        .MuiCardContent-root > div{
+            position: relative;
+        }
+
+        .MuiStepper-alternativeLabel {
+            padding-top: 0;
+            align-items: center;
+
+            .MuiStep-alternativeLabel {
+                flex: 0 1 auto;
+            }
+
+            .MuiStepConnector-alternativeLabel {
+                display: none;
+            }
+
+            .Mui-disabled {
+                + .MuiStepLabel-root > .MuiStepLabel-labelContainer {
+                    display: none;
+                }
+            }
+
+            .MuiStep-completed {
+                .MuiStepLabel-labelContainer {
+                    display: none;
+                }
+            }
+
+            .MuiStepLabel-root.MuiStepLabel-alternativeLabel {
+                flex-direction: row;
+                margin: 0 5px;
+
+                .MuiStepLabel-label{
+                    margin: 0 10px 0 5px;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .submarine__destination {
+            .action-buttons {
+                .MuiButtonBase-root.MuiButton-root.MuiButton-outlined {
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+
+    .modal-btn {
+        display: none;
+    }
+
+    &.open {
+        display: block;
+    }
+}

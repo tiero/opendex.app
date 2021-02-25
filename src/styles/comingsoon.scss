@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+body {
+    background: $homepage-bg-color;
+}
+
+.comingsoon{
+    color: #cdb734;
+    background: #4e593d;
+    border-radius: 4px;
+    padding: 20px;
+    width: 530px;
+    max-width: 70%;
+    margin: 120px auto 0;
+    text-align: center;
+    font-size: 22px;
+}
