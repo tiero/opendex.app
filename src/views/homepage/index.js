@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import Footer from './footer';
 import NavBar from './navbar';
 import { connectWeb3Modal } from '../../utils/web3modal';
 import { UtilsContext } from '../../context/UtilsContext';
@@ -60,7 +59,6 @@ export default (props) => {
         <div className={`homepage ${isMobileView ? 'mobile-view' : ''}`}>
             <NavBar />
             {props.children}
-            <Footer />
         </div>
     );
 }
