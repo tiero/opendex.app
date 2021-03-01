@@ -47,20 +47,6 @@ $homepage-border-color-grey: #cbcbcb;
             padding: 20px;
             display: flex;
             cursor: pointer;
-
-            &:before {
-                content: ' ';
-                position: absolute;
-                left: 60px;
-                top: 59px;
-                display: inline-block;
-                height: 118px;
-                @include home-page-border(right);
-            }
-
-            img:first-of-type {
-                margin: 0 20px;
-            }
         }
 
         .nav-bar-links {
@@ -88,7 +74,6 @@ $homepage-border-color-grey: #cbcbcb;
             padding-left: 10px;
             color: $gray-text-color;
             font-size: x-large;
-            margin-top: 21px;
         }
     }
 

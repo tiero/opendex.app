@@ -8,6 +8,7 @@ import snap from '../assets/images/snap.svg';
 import clock from '../assets/images/Cameraclock.svg';
 import logo from '../assets/images/Shape.svg';
 import boltz from '../assets/images/Boltz.svg';
+import opendex from '../assets/images/OpenDEX.svg';
 import fast from '../assets/images/fast.svg';
 import safe from '../assets/images/safe.svg';
 import hacked from '../assets/images/hacked.svg';
@@ -34,6 +35,7 @@ export default {
     clock,
     logo,
     boltz,
+    opendex,
     fast,
     safe,
     hacked,

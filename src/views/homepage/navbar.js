@@ -91,8 +91,7 @@ export default () => {
     return (
         <div className={'homepage__nav-bar'}>
             <div className={'logo-wrapper'} onClick={onLogoClick}>
-                <img src={svgIcons.logo} alt="" />
-                <img src={svgIcons.boltz} alt="" />
+                <img src={svgIcons.opendex} alt="OpenDEX Logo" />
                 <span className={'network'} style={{ visibility: network === 'mainnet' ? 'hidden' : 'visible' }}>{network.toUpperCase()}</span>
             </div>
             { !isMobileView ? (
