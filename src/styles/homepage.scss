@@ -16,6 +16,11 @@ $homepage-border-color-grey: #cbcbcb;
         padding: 0;
     }
 
+    .separator {
+      color: #1c1b1b;
+      margin: 0 20px;
+    }
+
     .img-container {
         width: 100%;
         // padding-bottom: 56.25%;
@@ -50,7 +55,7 @@ $homepage-border-color-grey: #cbcbcb;
         }
 
         .nav-bar-links {
-            margin-right: 45px;
+            margin-right: 20px;
 
             li {
                 display: inline-flex;
