@@ -5,11 +5,12 @@
         padding: 0;
         height: 55px;
         font-size: 18px;
+        background-color: $default-container-background-color;
 
         &:focus {
-            background: $blue-fill-light;
-            color: $blue-text-color;
-            border: $blue-border-dark;
+            background: $default-container-background-color;
+            color: $opendex-orange;
+            border: green;
         }
     }
 
@@ -21,18 +22,18 @@
         }
 
         &.MuiStepIcon-active {
-            color: $blue-text-color;
+            color: $default-text-color;
             width: 30px;
             height: 30px;
             margin-top: -3px;
             z-index: 9;
-            circle{
-                stroke: $blue-border-dark;
+            circle {
+                stroke: $opendex-orange;
                 stroke-width: 2;
                 r: 10;
             }
             text {
-                fill: #FFF;
+                fill: $default-container-background-color;
             }
         }
         &.MuiStepIcon-completed {
@@ -46,7 +47,7 @@
         color: #999999;
 
         &.MuiStepLabel-active {
-            color: $blue-text-color;
+            color: $default-text-color;
             margin-top: 12px;
         }
         &.MuiStepLabel-completed {
@@ -66,16 +67,12 @@
         transform: translate(10px, 20px) scale(1);
 
         &.Mui-focused {
-            color: $blue-text-color;
+            color: $default-container-background-color;
         }
     }
 
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-        border-color: $blue-border-dark;
-    }
-
-    .MuiTypography-root {
-        // font-family: $font-regular;
+        border-color: $opendex-orange;
     }
 
     .MuiCardContent-root {

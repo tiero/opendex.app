@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { Grid } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
@@ -101,84 +102,96 @@ export default () => {
   ];
 
   return (
-    <div className={"homepage__nav-bar"}>
-      <div className={"logo-wrapper"} onClick={onLogoClick}>
-        <img
-          className={"opendex-logo"}
-          src={svgIcons.opendex}
-          alt="OpenDEX Logo"
-        />
-        <span
-          className={"network"}
-          style={{ visibility: network === "mainnet" ? "hidden" : "visible" }}
-        >
-          {network.toUpperCase()}
-        </span>
-      </div>
-      {!isMobileView ? (
-        <ul className={"nav-bar-links"}>
-          {getNavBarLinks().map((link) => (
-            <li> {link} </li>
-          ))}
-        </ul>
-      ) : null}
-      {isMobileView && (
-        <div className="mobile-view-menu">
-          <Button
-            ref={anchorRef}
-            aria-controls={open ? "menu-list-grow" : undefined}
-            aria-haspopup="true"
-            onClick={handleToggle}
-          >
-            {open && <img src={svgIcons.close} alt="" />}
-            {!open && <img src={svgIcons.hamburger} alt="" />}
-          </Button>
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            role={undefined}
-            transition
-            disablePortal
-            className="menu-popup"
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin:
-                    placement === "bottom" ? "center top" : "center bottom",
-                }}
+    <Grid
+      container
+      spacing={1}
+      justify="center"
+      direction="row"
+      alignItems="center"
+    >
+      <Grid item xs={12} sm={10} md={9} lg={8} xl={6}>
+        <div className={"homepage__nav-bar"}>
+          <div className={"logo-wrapper"} onClick={onLogoClick}>
+            <img
+              className={"opendex-logo"}
+              src={svgIcons.opendex}
+              alt="OpenDEX Logo"
+            />
+            <span
+              className={"network"}
+              style={{
+                visibility: network === "mainnet" ? "hidden" : "visible",
+              }}
+            >
+              {network.toUpperCase()}
+            </span>
+          </div>
+          {!isMobileView ? (
+            <ul className={"nav-bar-links"}>
+              {getNavBarLinks().map((link) => (
+                <li> {link} </li>
+              ))}
+            </ul>
+          ) : null}
+          {isMobileView && (
+            <div className="mobile-view-menu">
+              <Button
+                ref={anchorRef}
+                aria-controls={open ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
               >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList
-                      autoFocusItem={open}
-                      id="menu-list-grow"
-                      onKeyDown={handleListKeyDown}
-                    >
-                      {isRefund ? (
-                        <MenuItem onClick={handleClose}>
-                          <a onClick={onMenuItemClick("/")}>Swap</a>
-                        </MenuItem>
-                      ) : (
-                        <MenuItem onClick={handleClose}>
-                          <a onClick={onMenuItemClick("/refund")}>Refund</a>
-                        </MenuItem>
-                      )}
-                      {getNavBarLinks().map((link) => (
-                        <MenuItem key={link} onClick={handleClose}>
-                          {" "}
-                          {link}{" "}
-                        </MenuItem>
-                      ))}
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
+                {open && <img src={svgIcons.close} alt="" />}
+                {!open && <img src={svgIcons.hamburger} alt="" />}
+              </Button>
+              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+                className="menu-popup"
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom" ? "center top" : "center bottom",
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList
+                          autoFocusItem={open}
+                          id="menu-list-grow"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          {isRefund ? (
+                            <MenuItem onClick={handleClose}>
+                              <a onClick={onMenuItemClick("/")}>Swap</a>
+                            </MenuItem>
+                          ) : (
+                            <MenuItem onClick={handleClose}>
+                              <a onClick={onMenuItemClick("/refund")}>Refund</a>
+                            </MenuItem>
+                          )}
+                          {getNavBarLinks().map((link) => (
+                            <MenuItem key={link} onClick={handleClose}>
+                              {" "}
+                              {link}{" "}
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </Grid>
+    </Grid>
   );
 };

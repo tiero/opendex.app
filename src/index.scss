@@ -1,4 +1,4 @@
-@import './styles/submarine.scss';
+// @import './styles/submarine.scss';
 
 body {
   margin: 0;
@@ -17,25 +17,9 @@ code {
 
 .homepage_error_wrapper {
   color: white;
-
   height: 100vh;
   flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@media only screen and (min-width: 2560px) {
-  .max-width {
-    max-width: 50%;
-    margin: auto;
-  }
-
-  .max-width-margin-left {
-    margin-left: 25% !important;
-  }
-
-  .max-width-margin-right {
-    margin-right: 25% !important;
-  }
 }

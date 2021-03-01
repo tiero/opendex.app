@@ -36,6 +36,11 @@ $homepage-border-color-grey: #cbcbcb;
         }
     }
 
+    .MuiPaper-root {
+      color: $default-text-color;
+      background-color: $default-container-background-color;
+    }
+
     li {
         list-style: none;
     }
@@ -44,7 +49,6 @@ $homepage-border-color-grey: #cbcbcb;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        // background: url(../assets/images/BackgroundDesktop.svg);
         background: $homepage-bg-color;
         z-index: 999;
 
