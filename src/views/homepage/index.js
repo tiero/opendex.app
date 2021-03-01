@@ -58,6 +58,7 @@ export default (props) => {
     return (
         <div className={`homepage ${isMobileView ? 'mobile-view' : ''}`}>
             <NavBar />
+            <hr />
             {props.children}
         </div>
     );
