@@ -97,26 +97,6 @@ $homepage-border-color-grey: #cbcbcb;
         padding: 0;
         margin: 87px 60px 0;
 
-        .header-bg-container {
-            background: $homepage-bg-color;
-            width: calc(100% + 120px);
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: -60px;
-            z-index: -1;
-
-            &:after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                border-bottom: 250px solid white;
-                border-left: 100vw solid transparent;
-                z-index: 8;
-            }
-        }
-
         &-container {
             display: flex;
             flex-direction: column;
@@ -136,71 +116,6 @@ $homepage-border-color-grey: #cbcbcb;
                 }
             }
 
-            .header-top {
-                position: relative;
-                padding: 70px 0;
-                @include home-page-border(top);
-                @include home-page-border(right);
-                @include home-page-border(bottom);
-
-                .header-title {
-                    font-size: 36px;
-                    font-weight: 700;
-                    margin-top: 35px;
-                }
-
-                .sub-heading {
-                    color: $gray-text-color;
-                    font-size: 22px;
-                    margin: 26px 0;
-                }
-            }
-
-            .header-bottom {
-                position: relative;
-                padding: 20px 0 128px 0;
-                @include home-page-border(left);
-
-                .features-list {
-                    display: flex;
-                    flex-direction: row;
-                    padding: 40px 0 30px;
-
-                    article {
-                        padding-right: 10px;
-                        font-size: 14px;
-
-                        p {
-                            color: $gray-text-color;
-
-                            img {
-                                width: 24px;
-                                height: 24px;
-                                margin: 0 10px 0 0;
-                                vertical-align: -5px;
-                            }
-
-                            .highlight {
-                                color: #ffda00;
-                                background: #4e593d;
-                                border-radius: 4px;
-                                padding: 2px 4px;
-                                width: 95px;
-                                text-transform: uppercase;
-                                filter: contrast(1.5);
-                            }
-                        }
-                    }
-                }
-                .demo-container {
-                    position: absolute;
-                    bottom: 128px;
-                    z-index: 10;
-                    width: 180px;
-                    height: 130px;
-                    cursor: pointer;
-                }
-            }
         }
     }
 
@@ -402,18 +317,6 @@ $homepage-border-color-grey: #cbcbcb;
         transform: scale(0.6) translate(-130px);
     }
 
-    .homepage__header {
-        margin: 33px 30px 0;
-
-        .header-bg-container {
-            width: calc(100% + 90px);
-        }
-    }
-
-    .header-top {
-        padding: 30px 0;
-    }
-
     .mobile-view-menu {
         position: absolute;
         right: 10px;
@@ -456,7 +359,7 @@ $homepage-border-color-grey: #cbcbcb;
         }
     }
 
-    .header-title, .sub-heading, .features-list {
+    .sub-heading, .features-list {
         width: auto;
         padding-right: 35px;
         max-width: none;

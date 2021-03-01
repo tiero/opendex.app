@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import Header from './header';
 import Footer from './footer';
 import NavBar from './navbar';
 import { connectWeb3Modal } from '../../utils/web3modal';
@@ -20,7 +19,7 @@ export default (props) => {
 
     const utilsContext = useContext(UtilsContext);
     const isMobileView = !!utilsContext?.isMobileView;
-   
+
     const contractAddresses = useSelector(selectContracts);
 
     if (history?.location?.pathname === '/swapbox' && !isMobileView) {
@@ -32,11 +31,11 @@ export default (props) => {
     const activeSwap = localStorage.getItem(LocalStorageState.ActiveSwap);
 
     const currentSubmarineState = JSON.parse(localStorage.getItem(LocalStorageState.CurrentSubmarineState));
-    
+
     if (activeSwap === 'submarine') {
         submarineActionCreators.checkCurrentSwap(currentSubmarineState.swapDetails.data, dispatch, () => {setSubmarineActiveStep(3)});
         setSubmarineActiveStep(2);
-        
+
     } else if (activeSwap === 'reverse') {
         const currentReverseState = JSON.parse(localStorage.getItem(LocalStorageState.CurrentReverseState));
         const extraDetails = JSON.parse(localStorage.getItem(LocalStorageState.ExtraDetails));
@@ -60,7 +59,6 @@ export default (props) => {
     return (
         <div className={`homepage ${isMobileView ? 'mobile-view' : ''}`}>
             <NavBar />
-            <Header />
             {props.children}
             <Footer />
         </div>
