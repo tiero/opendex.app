@@ -61,7 +61,7 @@ $homepage-border-color-grey: #cbcbcb;
 
                 a {
                     text-decoration: none;
-                    color: $gray-text-color;
+                    color: $default-text-color;
                 }
 
                 &:hover a{
@@ -76,7 +76,7 @@ $homepage-border-color-grey: #cbcbcb;
 
         .network {
             padding-left: 10px;
-            color: $gray-text-color;
+            color: $default-text-color;
             font-size: x-large;
         }
     }
