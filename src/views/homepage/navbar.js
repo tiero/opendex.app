@@ -16,8 +16,26 @@ import { UtilsContext } from "../../context/UtilsContext";
 import { selectSendCurrency } from "../../services/submarine/submarineSelectors";
 import confirmAlert from "../../utils/confirmAlert";
 import svgIcons from "../../utils/svgIcons";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: { padding: "0 2rem" },
+    logo: {
+      height: "2rem",
+    },
+    logoWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    network: {
+      paddingLeft: '0.5rem',
+    }
+  })
+);
 
 export default () => {
+  const classes = useStyles();
   const history = useHistory();
   const isRefund = history?.location?.pathname === "/refund";
 
@@ -105,92 +123,91 @@ export default () => {
     <Grid
       container
       spacing={1}
-      justify="center"
+      justify="space-between"
       direction="row"
       alignItems="center"
+      className={classes.root}
     >
-      <Grid item xs={12} sm={10} md={9} lg={8} xl={6}>
-        <div className={"homepage__nav-bar"}>
-          <div className={"logo-wrapper"} onClick={onLogoClick}>
-            <img
-              className={"opendex-logo"}
-              src={svgIcons.opendex}
-              alt="OpenDEX Logo"
-            />
-            <span
-              className={"network"}
-              style={{
-                visibility: network === "mainnet" ? "hidden" : "visible",
-              }}
+      <Grid item xs={3} sm={3} md={3} lg={3} xl={3} onClick={onLogoClick} className={classes.logoWrapper} >
+        <img
+          className={classes.logo}
+          src={svgIcons.opendex}
+          alt="OpenDEX Logo"
+        />
+        <span
+          className={classes.network}
+          style={{
+            visibility: network === "mainnet" ? "hidden" : "visible",
+          }}
+        >
+          {network.toUpperCase()}
+        </span>
+      </Grid>
+      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+        {!isMobileView ? (
+          <ul className={"nav-bar-links"}>
+            {getNavBarLinks().map((link) => (
+              <li> {link} </li>
+            ))}
+          </ul>
+        ) : null}
+        {isMobileView && (
+          <div className="mobile-view-menu">
+            <Button
+              ref={anchorRef}
+              aria-controls={open ? "menu-list-grow" : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
             >
-              {network.toUpperCase()}
-            </span>
+              {open && <img src={svgIcons.close} alt="" />}
+              {!open && <img src={svgIcons.hamburger} alt="" />}
+            </Button>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              transition
+              disablePortal
+              className="menu-popup"
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === "bottom" ? "center top" : "center bottom",
+                  }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList
+                        autoFocusItem={open}
+                        id="menu-list-grow"
+                        onKeyDown={handleListKeyDown}
+                      >
+                        {isRefund ? (
+                          <MenuItem onClick={handleClose}>
+                            <a onClick={onMenuItemClick("/")}>Swap</a>
+                          </MenuItem>
+                        ) : (
+                          <MenuItem onClick={handleClose}>
+                            <a onClick={onMenuItemClick("/refund")}>Refund</a>
+                          </MenuItem>
+                        )}
+                        {getNavBarLinks().map((link) => (
+                          <MenuItem key={link} onClick={handleClose}>
+                            {" "}
+                            {link}{" "}
+                          </MenuItem>
+                        ))}
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </div>
-          {!isMobileView ? (
-            <ul className={"nav-bar-links"}>
-              {getNavBarLinks().map((link) => (
-                <li> {link} </li>
-              ))}
-            </ul>
-          ) : null}
-          {isMobileView && (
-            <div className="mobile-view-menu">
-              <Button
-                ref={anchorRef}
-                aria-controls={open ? "menu-list-grow" : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-              >
-                {open && <img src={svgIcons.close} alt="" />}
-                {!open && <img src={svgIcons.hamburger} alt="" />}
-              </Button>
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-                className="menu-popup"
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === "bottom" ? "center top" : "center bottom",
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList
-                          autoFocusItem={open}
-                          id="menu-list-grow"
-                          onKeyDown={handleListKeyDown}
-                        >
-                          {isRefund ? (
-                            <MenuItem onClick={handleClose}>
-                              <a onClick={onMenuItemClick("/")}>Swap</a>
-                            </MenuItem>
-                          ) : (
-                            <MenuItem onClick={handleClose}>
-                              <a onClick={onMenuItemClick("/refund")}>Refund</a>
-                            </MenuItem>
-                          )}
-                          {getNavBarLinks().map((link) => (
-                            <MenuItem key={link} onClick={handleClose}>
-                              {" "}
-                              {link}{" "}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </div>
-          )}
-        </div>
+        )}
       </Grid>
     </Grid>
   );
