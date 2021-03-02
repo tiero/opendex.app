@@ -6,7 +6,6 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import svgIcons from '../../utils/svgIcons';
-import './styles.scss';
 
 function SimpleDialog(props) {
   const { onClose, open, title } = props;

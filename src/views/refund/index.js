@@ -5,11 +5,10 @@ import StepperComponent from '../../components/Stepper';
 import Wrapper from '../../components/Wrapper';
 import { refundSteps } from '../../constants/refund';
 import svgIcons from '../../utils/svgIcons';
-import '../../styles/refund.scss';
 import { StepsContext } from '../../context/StepsContext';
 
 const Refund = () => {
-    
+
     const stepsContext = useContext(StepsContext);
     const { refundActiveStep, setRefundActiveStep } = stepsContext;
 
@@ -17,7 +16,7 @@ const Refund = () => {
         <Wrapper>
             <div className="refund">
                 <CardComponent>
-                    <StepperComponent 
+                    <StepperComponent
                         steps={refundSteps}
                         activeStep={refundActiveStep}
                         changeActiveStep={setRefundActiveStep}>
@@ -28,7 +27,7 @@ const Refund = () => {
                 <img src={svgIcons.leftArrow} alt="" /> Back
             </Link>
         </Wrapper>
-        
+
     );
 }
 

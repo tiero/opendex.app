@@ -1,4 +1,3 @@
-import '../../styles/reverse.scss';
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import Wrapper from '../../components/Wrapper';

@@ -235,7 +235,7 @@ const PickCrypto = (props) => {
 
   const renderCryptoInput = () => {
     return (
-      <Grid container spacing={3}>
+      <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <TextField
             label="You send"
@@ -280,7 +280,7 @@ const PickCrypto = (props) => {
         direction="row"
         alignItems="center"
       >
-        <Grid item xs={12} sm={10} md={9} lg={8} xl={3}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <SelectComponent
               options={CurrencyOptions}
               variant="outlined"
@@ -290,13 +290,11 @@ const PickCrypto = (props) => {
               }}
               value={sendCurrencyType}
             />
-            <div classNames={'asdf'}>
-            </div>
         </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={8} xl={3}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <SwapIcon onClick={handleSwapClick} />
         </Grid>
-        <Grid item xs={12} sm={10} md={9} lg={8} xl={3}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <SelectComponent
               options={CurrencyOptions}
               variant="outlined"
@@ -304,7 +302,6 @@ const PickCrypto = (props) => {
                 handleReceiveCurrencyType(val);
                 updateReceiveAmount = true;
               }}
-              className="currency-options"
               value={receiveCurrencyType}
             />
         </Grid>

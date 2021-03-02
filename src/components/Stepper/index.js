@@ -8,7 +8,6 @@ import DrawerContext from '../Wrapper/DrawerContext';
 import { UtilsContext } from '../../context/UtilsContext';
 import svgIcons from '../../utils/svgIcons';
 import { resetState } from '../../services/reverse/reverseDuck';
-import './styles.scss';
 
 const StepperComponent = ({ className, steps, activeStep, changeActiveStep: setActiveStep, context }) => {
     const drawerContext = useContext(DrawerContext);

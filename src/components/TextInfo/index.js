@@ -1,5 +1,4 @@
 import React from 'react';
-import './styles.scss';
 import svgIcons from '../../utils/svgIcons';
 
 const TextInfo = (props) => {
