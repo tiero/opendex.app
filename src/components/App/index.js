@@ -19,30 +19,17 @@ import { StepsProvider } from "../../context/StepsContext";
 export const opendexTheme = createMuiTheme({
   palette: {
     type: "dark",
+    text: {
+      primary: '#f2f2f2', // whiteish
+    },
+    background: {
+      default: '#0c0c0c', // grayish
+    },
     primary: {
-      main: "#0c0c0c",
+      main: "#f15a24", // orange
     },
     secondary: {
-      main: "#f15a24",
-    },
-  },
-  overrides: {
-    MuiCssBaseline: {
-      "@global": {
-        html: {
-          WebkitFontSmoothing: "auto",
-          padding: "0",
-          margin: "0",
-        },
-        body: {
-          color: "#f2f2f2",
-          "background-color": "#0c0c0c",
-        },
-        a: {
-          color: "#f15a24",
-          "text-decoration": "none",
-        },
-      },
+      main: "#f2f2f2", // whiteish
     },
   },
 });

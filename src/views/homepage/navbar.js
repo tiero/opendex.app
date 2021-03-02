@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Grid } from "@material-ui/core";
+import { Grid, Link } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
@@ -20,17 +20,21 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: { padding: "0 2rem" },
+    root: { padding: "1rem 2rem" },
     logo: {
       height: "2rem",
     },
     logoWrapper: {
-      display: 'flex',
-      alignItems: 'center',
+      display: "flex",
+      alignItems: "center",
     },
     network: {
-      paddingLeft: '0.5rem',
-    }
+      paddingLeft: "0.5rem",
+    },
+    navLink: {
+      color: theme.palette.text.primary,
+      fontSize: "1.25rem",
+    },
   })
 );
 
@@ -103,20 +107,22 @@ export default () => {
   );
 
   const getNavBarLinks = () => [
-    <a
+    <Link
+      className={classes.navLink}
       href="https://discord.gg/aS5RMchDrU"
       target="_blank"
       rel="noopener noreferrer"
     >
       Community
-    </a>,
-    <a
+    </Link>,
+    <Link
+      className={classes.navLink}
       href="https://github.com/opendexnetwork/opendex.app"
       target="_blank"
       rel="noopener noreferrer"
     >
       Github
-    </a>,
+    </Link>,
   ];
 
   return (
@@ -128,7 +134,16 @@ export default () => {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item xs={3} sm={3} md={3} lg={3} xl={3} onClick={onLogoClick} className={classes.logoWrapper} >
+      <Grid
+        item
+        xs={3}
+        sm={3}
+        md={3}
+        lg={3}
+        xl={3}
+        onClick={onLogoClick}
+        className={classes.logoWrapper}
+      >
         <img
           className={classes.logo}
           src={svgIcons.opendex}
@@ -145,11 +160,17 @@ export default () => {
       </Grid>
       <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
         {!isMobileView ? (
-          <ul className={"nav-bar-links"}>
+          <Grid
+            container
+            spacing={1}
+            justify="flex-end"
+            direction="row"
+            alignItems="center"
+          >
             {getNavBarLinks().map((link) => (
-              <li> {link} </li>
+              <Grid item>{link}</Grid>
             ))}
-          </ul>
+          </Grid>
         ) : null}
         {isMobileView && (
           <div className="mobile-view-menu">
