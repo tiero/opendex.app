@@ -8,8 +8,18 @@ import { StepsContext } from "../../context/StepsContext";
 import { SubmarineSteps } from "../../constants/submarine";
 import * as submarineActionCreators from "../../services/submarine/submarineDuck";
 import { Grid } from "@material-ui/core";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    card: {
+      flex: 1,
+    }
+  })
+);
 
 const Submarine = () => {
+  const classes = useStyles();
   const stepsContext = useContext(StepsContext);
   const { submarineActiveStep, setSubmarineActiveStep } = stepsContext;
 
@@ -24,28 +34,32 @@ const Submarine = () => {
   return (
     <Grid
       container
-      spacing={1}
       justify="center"
-      direction="row"
+      direction="column"
       alignItems="center"
+      className={classes.card}
     >
       <Wrapper>
-        <div className="submarine">
-          <CardComponent>
-            <StepperComponent
-              steps={SubmarineSteps}
-              activeStep={submarineActiveStep}
-              changeActiveStep={setSubmarineActiveStep}
-            ></StepperComponent>
-          </CardComponent>
-        </div>
-        {showRefundLink ? (
-          <Link to="/refund" className={"modal-btn"}>
-            {refundLabel}
-          </Link>
-        ) : (
-          <span className={"modal-btn disabled"}>{refundLabel}</span>
-        )}
+        <Grid item>
+          <div className="submarine">
+            <CardComponent>
+              <StepperComponent
+                steps={SubmarineSteps}
+                activeStep={submarineActiveStep}
+                changeActiveStep={setSubmarineActiveStep}
+              ></StepperComponent>
+            </CardComponent>
+          </div>
+        </Grid>
+        <Grid item>
+          {showRefundLink ? (
+            <Link to="/refund" className={"modal-btn"}>
+              {refundLabel}
+            </Link>
+          ) : (
+            <span className={"modal-btn disabled"}>{refundLabel}</span>
+          )}
+        </Grid>
       </Wrapper>
     </Grid>
   );

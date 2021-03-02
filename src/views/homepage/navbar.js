@@ -128,7 +128,6 @@ export default () => {
   return (
     <Grid
       container
-      spacing={1}
       justify="space-between"
       direction="row"
       alignItems="center"
