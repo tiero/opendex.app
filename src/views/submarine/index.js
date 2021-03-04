@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Grid } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import React, { useContext, useEffect } from "react";
-import Wrapper from "../../components/Wrapper";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import CardComponent from "../../components/Card";
 import StepperComponent from "../../components/Stepper";
-import { StepsContext } from "../../context/StepsContext";
 import { SubmarineSteps } from "../../constants/submarine";
+import { StepsContext } from "../../context/StepsContext";
 import * as submarineActionCreators from "../../services/submarine/submarineDuck";
-import { Grid } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -17,11 +16,11 @@ const useStyles = makeStyles((theme) =>
       margin: "2rem 0",
     },
     refundContainer: {
-      marginTop: '1rem',
+      marginTop: "1rem",
     },
     refundLabel: {
       color: theme.palette.text.secondary,
-    }
+    },
   })
 );
 

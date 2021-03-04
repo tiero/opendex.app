@@ -1,20 +1,14 @@
-import React, { useContext } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import DrawerContext from "../Wrapper/DrawerContext";
-import { UtilsContext } from "../../context/UtilsContext";
-import svgIcons from "../../utils/svgIcons";
-import { resetState } from "../../services/reverse/reverseDuck";
+import Stepper from "@material-ui/core/Stepper";
 import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
 
 const useStyles = makeStyles({
   root: {
-    display: 'flex',
+    display: "flex",
     height: "100%",
-    'flex-direction': 'column',
+    "flex-direction": "column",
   },
 });
 
@@ -25,14 +19,15 @@ const StepperComponent = ({
   context,
 }) => {
   const classes = useStyles();
-  const drawerContext = useContext(DrawerContext);
-  const utilsContext = useContext(UtilsContext);
-  const isMobileView = !!utilsContext?.isMobileView;
-  const closeDrawer = drawerContext?.closeDrawer;
-  const [isDrawerClosed, setDrawerClosed] = React.useState(false);
-  const dispatch = useDispatch();
-  const history = useHistory();
+  // const drawerContext = useContext(DrawerContext);
+  // const utilsContext = useContext(UtilsContext);
+  // const isMobileView = !!utilsContext?.isMobileView;
+  // const closeDrawer = drawerContext?.closeDrawer;
+  // const [isDrawerClosed, setDrawerClosed] = React.useState(false);
+  // const dispatch = useDispatch();
+  // const history = useHistory();
 
+  /*
   const closeButtonHandler = () => {
     setActiveStep(0);
     dispatch(resetState());
@@ -47,6 +42,7 @@ const StepperComponent = ({
       history.push("/");
     }
   };
+  */
 
   const handleNextStep = () => {
     setActiveStep((prevActiveStep) =>
@@ -69,7 +65,7 @@ const StepperComponent = ({
         handleNextStep={handleNextStep}
         handlePrevStep={handlePrevStep}
         context={context}
-        isDrawerClosed={isDrawerClosed}
+        isDrawerClosed={false}
       />
     );
   };

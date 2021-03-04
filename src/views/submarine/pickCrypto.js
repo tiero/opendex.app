@@ -1,19 +1,12 @@
-import {
-  Button,
-  Divider,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import AssetSelector from "../../components/AssetSelector";
 import EthereumAccount from "../../components/EthereumAccount";
-import Popover from "../../components/Popover";
-import SelectComponent from "../../components/Select";
 import SwapIcon from "../../components/SwapIcon";
 import TextInfo from "../../components/TextInfo";
-import AssetSelector from "../../components/AssetSelector";
 import {
   CurrencyOptions,
   CurrencyTypes,
@@ -32,7 +25,6 @@ import {
 import { roundToDecimals } from "../../utils/roundToDecimals";
 import { connectWeb3Modal } from "../../utils/web3modal";
 import { checkEtherBalance, checkTokenBalance } from "./balanceChecks";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,16 +41,16 @@ const useStyles = makeStyles(() =>
       marginBottom: "1rem",
     },
     amount: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: '1rem'
+      display: "flex",
+      justifyContent: "center",
+      marginBottom: "1rem",
     },
     right: {
-      display: 'flex',
-      justifyContent: 'flex-end'
+      display: "flex",
+      justifyContent: "flex-end",
     },
     amountsContainer: {
-      marginTop: '1rem',
+      marginTop: "1rem",
     },
   })
 );
@@ -84,28 +76,28 @@ const PickCrypto = (props) => {
   const utilsContext = useContext(UtilsContext);
   const isMobileView = !!utilsContext?.isMobileView;
   const isDrawerClosed = props.isDrawerClosed;
-  const [rateAnchorEl, setRateAnchorEl] = React.useState(null);
-  const [minerFeeAnchorEl, setMinerFeeAnchorEl] = React.useState(null);
+  // const [rateAnchorEl, setRateAnchorEl] = React.useState(null);
+  // const [minerFeeAnchorEl, setMinerFeeAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState("");
 
   const handleRatePopoverOpen = (event) => {
-    setRateAnchorEl(event.currentTarget);
+    // setRateAnchorEl(event.currentTarget);
   };
 
   const handleRatePopoverClose = () => {
-    setRateAnchorEl(null);
+    // setRateAnchorEl(null);
   };
 
   const handleMinerFeePopoverOpen = (event) => {
-    setMinerFeeAnchorEl(event.currentTarget);
+    // setMinerFeeAnchorEl(event.currentTarget);
   };
 
   const handleMinerFeePopoverClose = () => {
-    setMinerFeeAnchorEl(null);
+    // setMinerFeeAnchorEl(null);
   };
 
-  const rateOpen = Boolean(rateAnchorEl);
-  const minerFeeOpen = Boolean(minerFeeAnchorEl);
+  // const rateOpen = Boolean(rateAnchorEl);
+  // const minerFeeOpen = Boolean(minerFeeAnchorEl);
 
   useEffect(() => {
     if (isDrawerClosed) {
@@ -412,6 +404,7 @@ const PickCrypto = (props) => {
     );
   };
 
+  /*
   const renderMobileViewInputs = () => (
     <Grid container>
       <Grid item>
@@ -470,6 +463,7 @@ const PickCrypto = (props) => {
       </Grid>
     </Grid>
   );
+  */
 
   const renderAmounts = () => {
     const percentageFee = selectedPairDetails
