@@ -4,22 +4,22 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   popover: {
-      pointerEvents: 'none',
+    pointerEvents: 'none',
   },
   paper: {
-      padding: theme.spacing(1),
+    padding: theme.spacing(1),
   },
 }));
 
-const PopoverComponent = (props) => {
+const PopoverComponent = props => {
   const classes = useStyles();
-  const {id, open, text, anchorEl, onCloseHandler} = props;
+  const { id, open, text, anchorEl, onCloseHandler } = props;
   return (
     <Popover
       id={id}
       className={classes.popover}
       classes={{
-      paper: classes.paper,
+        paper: classes.paper,
       }}
       open={open}
       anchorEl={anchorEl}
@@ -37,7 +37,7 @@ const PopoverComponent = (props) => {
     >
       {text}
     </Popover>
-  )
-}
+  );
+};
 
 export default PopoverComponent;

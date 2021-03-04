@@ -1,29 +1,29 @@
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import NavBar from "./navbar";
-import Footer from "../../components/Footer";
-import { connectWeb3Modal } from "../../utils/web3modal";
-import { UtilsContext } from "../../context/UtilsContext";
-import { StepsContext } from "../../context/StepsContext";
-import { LocalStorageState } from "../../constants/environment";
-import { isEthereumCurrencyType } from "../../constants/submarine";
-import { selectContracts } from "../../services/submarine/submarineSelectors";
-import * as submarineActionCreators from "../../services/submarine/submarineDuck";
-import * as reverseSubmarineActionCreators from "../../services/reverse/reverseDuck";
-import { Box, Divider } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import NavBar from './navbar';
+import Footer from '../../components/Footer';
+import { connectWeb3Modal } from '../../utils/web3modal';
+import { UtilsContext } from '../../context/UtilsContext';
+import { StepsContext } from '../../context/StepsContext';
+import { LocalStorageState } from '../../constants/environment';
+import { isEthereumCurrencyType } from '../../constants/submarine';
+import { selectContracts } from '../../services/submarine/submarineSelectors';
+import * as submarineActionCreators from '../../services/submarine/submarineDuck';
+import * as reverseSubmarineActionCreators from '../../services/reverse/reverseDuck';
+import { Box, Divider } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
     box: {
-      height: "100vh",
+      height: '100vh',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     },
   })
 );
-export default (props) => {
+export default props => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -33,8 +33,8 @@ export default (props) => {
 
   const contractAddresses = useSelector(selectContracts);
 
-  if (history?.location?.pathname === "/swapbox" && !isMobileView) {
-    history.push("/");
+  if (history?.location?.pathname === '/swapbox' && !isMobileView) {
+    history.push('/');
   }
 
   const stepsContext = useContext(StepsContext);
@@ -45,7 +45,7 @@ export default (props) => {
     localStorage.getItem(LocalStorageState.CurrentSubmarineState)
   );
 
-  if (activeSwap === "submarine") {
+  if (activeSwap === 'submarine') {
     submarineActionCreators.checkCurrentSwap(
       currentSubmarineState.swapDetails.data,
       dispatch,
@@ -54,7 +54,7 @@ export default (props) => {
       }
     );
     setSubmarineActiveStep(2);
-  } else if (activeSwap === "reverse") {
+  } else if (activeSwap === 'reverse') {
     const currentReverseState = JSON.parse(
       localStorage.getItem(LocalStorageState.CurrentReverseState)
     );
@@ -64,7 +64,7 @@ export default (props) => {
 
     // Get a signer again if it is needed for the claim transaction
     if (isEthereumCurrencyType(currentSubmarineState.receiveCurrency.type)) {
-      connectWeb3Modal(contractAddresses.ethereum.network).then((signer) => {
+      connectWeb3Modal(contractAddresses.ethereum.network).then(signer => {
         submarineActionCreators.checkCurrentSwap(
           currentReverseState.swapDetails,
           dispatch,
@@ -92,7 +92,7 @@ export default (props) => {
     }
 
     history.push({
-      pathname: "/reverse",
+      pathname: '/reverse',
       state: isMobileView ? { isDrawerOpen: true } : {},
     });
     setReverseActiveStep(2);

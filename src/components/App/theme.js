@@ -3,7 +3,7 @@ export const defaultBackgroundLight = '#1a1817';
 
 export const theme = {
   palette: {
-    type: "dark",
+    type: 'dark',
     text: {
       primary: '#f2f2f2', // whiteish
       secondary: 'rgba(255, 255, 255, 0.7)', // lighter whiteish
@@ -13,10 +13,10 @@ export const theme = {
       paper: defaultBackgroundLight, // light grayish
     },
     primary: {
-      main: "#f15a24", // orange
+      main: '#f15a24', // orange
     },
     secondary: {
-      main: "#f2f2f2", // whiteish
+      main: '#f2f2f2', // whiteish
     },
   },
 };

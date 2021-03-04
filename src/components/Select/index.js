@@ -1,5 +1,5 @@
-import { Box, MenuItem, TextField } from "@material-ui/core";
-import React from "react";
+import { Box, MenuItem, TextField } from '@material-ui/core';
+import React from 'react';
 
 const SelectComponent = ({
   options,
@@ -21,9 +21,9 @@ const SelectComponent = ({
     }
   }, [option, value]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const value = event.target.value;
-    const selectedOption = options.filter((option) => option.id === value)[0];
+    const selectedOption = options.filter(option => option.id === value)[0];
     setOption(value);
     onChange(selectedOption);
   };
@@ -42,7 +42,7 @@ const SelectComponent = ({
         disabled={disabled}
         SelectProps={{ MenuProps: { disableScrollLock: true } }}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <MenuItem key={option.id} value={option.id}>
             {option.label || option.id}
           </MenuItem>

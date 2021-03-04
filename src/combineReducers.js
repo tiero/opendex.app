@@ -5,8 +5,8 @@ import { ethereumReducer } from './services/ethereum/ethereumDuck';
 import { submarineReducer } from './services/submarine/submarineDuck';
 
 export default combineReducers({
-    refundReducer,
-    reverseReducer,
-    ethereumReducer,
-    submarineReducer,
+  refundReducer,
+  reverseReducer,
+  ethereumReducer,
+  submarineReducer,
 });

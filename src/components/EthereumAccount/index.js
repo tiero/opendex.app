@@ -1,15 +1,15 @@
-import { Button, CircularProgress, Divider } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { BigNumber } from "ethers";
-import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { explorers } from "../../constants/environment";
-import { selectSigner } from "../../services/ethereum/ethereumSelectors";
-import { setEthereumPrepayMinerFee } from "../../services/reverse/reverseDuck";
-import svgIcons from "../../utils/svgIcons";
-import { checkEtherBalance } from "../../views/submarine/balanceChecks";
-import Identicon from "./Identicon";
+import { Button, CircularProgress, Divider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { BigNumber } from 'ethers';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { explorers } from '../../constants/environment';
+import { selectSigner } from '../../services/ethereum/ethereumSelectors';
+import { setEthereumPrepayMinerFee } from '../../services/reverse/reverseDuck';
+import svgIcons from '../../utils/svgIcons';
+import { checkEtherBalance } from '../../views/submarine/balanceChecks';
+import Identicon from './Identicon';
 
 const gasUsage = {
   EtherSwap: {
@@ -25,7 +25,7 @@ const gasUsage = {
 };
 
 // TODO: button to clear web3modal state
-const EthereumAccount = (props) => {
+const EthereumAccount = props => {
   const dispatch = useDispatch();
 
   const signer = useSelector(selectSigner);
@@ -38,34 +38,34 @@ const EthereumAccount = (props) => {
 
   const useStyles = makeStyles(() => ({
     ethereumWrapper: {
-      marginTop: "50px",
-      textAlign: "center",
+      marginTop: '50px',
+      textAlign: 'center',
     },
     accountInfoWrapper: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: "10px",
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: '10px',
     },
     accountInfo: {
-      display: "flex",
-      flexDirection: "column",
-      marginLeft: "15px",
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: '15px',
     },
     accountValue: {
       fontSize: 20,
     },
     errorLabel: {
-      margin: "50px 70px 20px",
-      fontSize: "14px",
-      color: "#F7931A",
+      margin: '50px 70px 20px',
+      fontSize: '14px',
+      color: '#F7931A',
     },
     ethereumFooter: {},
     viewOnEtherscanLink: {
-      color: "#0095FF",
-      display: "flex",
-      alignItems: "center",
-      paddingTop: "5px",
+      color: '#0095FF',
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: '5px',
     },
     backButton: {
       padding: `17px`,
@@ -172,7 +172,7 @@ const EthereumAccount = (props) => {
           color="primary"
           onClick={handleNextStep}
           className={`next-step-button ${
-            fetching ? "waiting button-with-spinner" : ""
+            fetching ? 'waiting button-with-spinner' : ''
           }`}
         >
           Confirm account

@@ -1,11 +1,15 @@
-import React from "react";
-import currencyIcons from "../assets/images/currencies";
+import React from 'react';
+import currencyIcons from '../assets/images/currencies';
 
 const getCurrencyLabel = (text, icon) => {
   return (
     <>
       <span className="label-icon">
-        <img style={{width: '2rem', 'margin-right': '0.5rem'}} src={currencyIcons[icon]} alt={text} />
+        <img
+          style={{ width: '2rem', 'margin-right': '0.5rem' }}
+          src={currencyIcons[icon]}
+          alt={text}
+        />
       </span>
       <span>{text}</span>
     </>
@@ -13,4 +17,3 @@ const getCurrencyLabel = (text, icon) => {
 };
 
 export default getCurrencyLabel;
-

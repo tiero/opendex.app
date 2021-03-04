@@ -12,7 +12,7 @@ class DropZone extends React.Component {
   }
 
   componentDidMount() {
-    if(this.ref) {
+    if (this.ref) {
       this.ref.addEventListener('mouseup', this.onDragLeave);
       this.ref.addEventListener('dragenter', this.onDragEnter);
       this.ref.addEventListener('dragover', this.onDragOver);
@@ -21,7 +21,7 @@ class DropZone extends React.Component {
   }
 
   componentWillUnmount() {
-    if(this.ref) {
+    if (this.ref) {
       this.ref.removeEventListener('mouseup', this.onDragLeave);
       this.ref.removeEventListener('dragenter', this.onDragEnter);
       this.ref.addEventListener('dragover', this.onDragOver);
@@ -72,9 +72,11 @@ class DropZone extends React.Component {
     } = this.props;
     return (
       <div
-        className={`${className} drop-area ${this.state.dragover ? 'dragging' : ''}`}
+        className={`${className} drop-area ${
+          this.state.dragover ? 'dragging' : ''
+        }`}
         style={{ width: width, height: height, ...style }}
-        ref={(e) => this.ref = e}
+        ref={e => (this.ref = e)}
         {...otherProps}
       >
         {children}

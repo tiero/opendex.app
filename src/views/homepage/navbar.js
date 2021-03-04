@@ -1,39 +1,39 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Grid, Link } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import React, { useCallback, useContext, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { LocalStorageState, network } from "../../constants/environment";
-import { StepsContext } from "../../context/StepsContext";
-import { UtilsContext } from "../../context/UtilsContext";
-import { selectSendCurrency } from "../../services/submarine/submarineSelectors";
-import confirmAlert from "../../utils/confirmAlert";
-import svgIcons from "../../utils/svgIcons";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Grid, Link } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import React, { useCallback, useContext, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { LocalStorageState, network } from '../../constants/environment';
+import { StepsContext } from '../../context/StepsContext';
+import { UtilsContext } from '../../context/UtilsContext';
+import { selectSendCurrency } from '../../services/submarine/submarineSelectors';
+import confirmAlert from '../../utils/confirmAlert';
+import svgIcons from '../../utils/svgIcons';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
-    root: { padding: "1rem 2rem" },
+    root: { padding: '1rem 2rem' },
     logo: {
-      height: "2rem",
+      height: '2rem',
     },
     logoWrapper: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     network: {
-      paddingLeft: "0.5rem",
+      paddingLeft: '0.5rem',
     },
     navLink: {
       color: theme.palette.text.primary,
-      fontSize: "1.25rem",
+      fontSize: '1.25rem',
     },
   })
 );
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
 export default () => {
   const classes = useStyles();
   const history = useHistory();
-  const isRefund = history?.location?.pathname === "/refund";
+  const isRefund = history?.location?.pathname === '/refund';
 
   const [open, setOpen] = useState(false);
 
@@ -58,10 +58,10 @@ export default () => {
   const sendCurrency = useSelector(selectSendCurrency);
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpen(prevOpen => !prevOpen);
   };
 
-  const handleClose = (event) => {
+  const handleClose = event => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
@@ -70,7 +70,7 @@ export default () => {
   };
 
   function handleListKeyDown(event) {
-    if (event.key === "Tab") {
+    if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
     }
@@ -88,7 +88,7 @@ export default () => {
 
   const onLogoClick = () => {
     if ((sendCurrency && confirmAlert()) || !sendCurrency) {
-      history.push("/");
+      history.push('/');
       setReverseActiveStep(1);
       setSubmarineActiveStep(0);
       setRefundActiveStep(0);
@@ -100,7 +100,7 @@ export default () => {
   };
 
   const onMenuItemClick = useCallback(
-    (path) => () => {
+    path => () => {
       history.push(path);
     },
     [history]
@@ -151,7 +151,7 @@ export default () => {
         <span
           className={classes.network}
           style={{
-            visibility: network === "mainnet" ? "hidden" : "visible",
+            visibility: network === 'mainnet' ? 'hidden' : 'visible',
           }}
         >
           {network.toUpperCase()}
@@ -166,7 +166,7 @@ export default () => {
             direction="row"
             alignItems="center"
           >
-            {getNavBarLinks().map((link) => (
+            {getNavBarLinks().map(link => (
               <Grid item>{link}</Grid>
             ))}
           </Grid>
@@ -175,7 +175,7 @@ export default () => {
           <div className="mobile-view-menu">
             <Button
               ref={anchorRef}
-              aria-controls={open ? "menu-list-grow" : undefined}
+              aria-controls={open ? 'menu-list-grow' : undefined}
               aria-haspopup="true"
               onClick={handleToggle}
             >
@@ -195,7 +195,7 @@ export default () => {
                   {...TransitionProps}
                   style={{
                     transformOrigin:
-                      placement === "bottom" ? "center top" : "center bottom",
+                      placement === 'bottom' ? 'center top' : 'center bottom',
                   }}
                 >
                   <Paper>
@@ -207,17 +207,17 @@ export default () => {
                       >
                         {isRefund ? (
                           <MenuItem onClick={handleClose}>
-                            <a onClick={onMenuItemClick("/")}>Swap</a>
+                            <a onClick={onMenuItemClick('/')}>Swap</a>
                           </MenuItem>
                         ) : (
                           <MenuItem onClick={handleClose}>
-                            <a onClick={onMenuItemClick("/refund")}>Refund</a>
+                            <a onClick={onMenuItemClick('/refund')}>Refund</a>
                           </MenuItem>
                         )}
-                        {getNavBarLinks().map((link) => (
+                        {getNavBarLinks().map(link => (
                           <MenuItem key={link} onClick={handleClose}>
-                            {" "}
-                            {link}{" "}
+                            {' '}
+                            {link}{' '}
                           </MenuItem>
                         ))}
                       </MenuList>

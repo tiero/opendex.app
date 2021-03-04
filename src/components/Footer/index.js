@@ -1,13 +1,13 @@
-import { Divider, Grid } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import React from "react";
+import { Divider, Grid } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import React from 'react';
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     text: {
-      display: "flex",
-      justifyContent: "center",
-      margin: "1rem 0",
+      display: 'flex',
+      justifyContent: 'center',
+      margin: '1rem 0',
       color: theme.palette.text.secondary,
     },
   })

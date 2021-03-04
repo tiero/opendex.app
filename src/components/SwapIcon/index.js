@@ -1,16 +1,16 @@
-import React from "react";
-import svgIcons from "../../utils/svgIcons";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import svgIcons from '../../utils/svgIcons';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
     wrapper: {
       display: 'flex',
       height: '2rem',
-      "justify-content": "center",
-      "flex-direction": "column",
-      marginTop: "1rem",
-      marginBottom: "0.5rem",
+      'justify-content': 'center',
+      'flex-direction': 'column',
+      marginTop: '1rem',
+      marginBottom: '0.5rem',
     },
   })
 );

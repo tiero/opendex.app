@@ -1,17 +1,17 @@
-import { Typography } from "@material-ui/core";
-import is from "is_js";
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
-import "./index.scss";
-import * as serviceWorker from "./serviceWorker";
+import { Typography } from '@material-ui/core';
+import is from 'is_js';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
+import './index.scss';
+import * as serviceWorker from './serviceWorker';
 import routes from './services/route/routes';
 
 const isSupportedBrowser =
   is.chrome() || is.firefox() || is.safari() || is.ios();
 
 const Layout = () => {
-  if (!routes.map((r) => r.path).includes(window.location.pathname)) {
+  if (!routes.map(r => r.path).includes(window.location.pathname)) {
     return (
       <div className="homepage_error_wrapper">
         <Typography variant="h3" component="h2" align="center">
@@ -40,6 +40,6 @@ const Layout = () => {
   );
 };
 
-ReactDOM.render(<Layout />, document.getElementById("root"));
+ReactDOM.render(<Layout />, document.getElementById('root'));
 
 serviceWorker.register();

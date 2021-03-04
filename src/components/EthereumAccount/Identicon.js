@@ -6,15 +6,18 @@ const Identicon = props => {
   const [appended, setAppended] = useState(false);
 
   return (
-    <div id={"jazzicon"} ref={ref => {
-      if (!appended && ref !== null) {
-        ref.appendChild(
-          jazzicon(40, parseInt(props.account.slice(2, 10), 16)),
-        );
+    <div
+      id={'jazzicon'}
+      ref={ref => {
+        if (!appended && ref !== null) {
+          ref.appendChild(
+            jazzicon(40, parseInt(props.account.slice(2, 10), 16))
+          );
 
-        setAppended(true);
-      }
-    }} />
+          setAppended(true);
+        }
+      }}
+    />
   );
 };
 

@@ -6,10 +6,10 @@ import LightningBitcoin from './LightningBitcoin.svg';
 import LightningLitecoin from './LightningLitecoin.svg';
 
 export default {
-    Ether,
-    Tether,
-    Bitcoin,
-    Litecoin,
-    LightningBitcoin,
-    LightningLitecoin,
+  Ether,
+  Tether,
+  Bitcoin,
+  Litecoin,
+  LightningBitcoin,
+  LightningLitecoin,
 };

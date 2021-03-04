@@ -8,27 +8,25 @@ import svgIcons from '../../utils/svgIcons';
 import { StepsContext } from '../../context/StepsContext';
 
 const Refund = () => {
+  const stepsContext = useContext(StepsContext);
+  const { refundActiveStep, setRefundActiveStep } = stepsContext;
 
-    const stepsContext = useContext(StepsContext);
-    const { refundActiveStep, setRefundActiveStep } = stepsContext;
-
-    return (
-        <Wrapper>
-            <div className="refund">
-                <CardComponent>
-                    <StepperComponent
-                        steps={refundSteps}
-                        activeStep={refundActiveStep}
-                        changeActiveStep={setRefundActiveStep}>
-                    </StepperComponent>
-                </CardComponent>
-            </div>
-            <Link to="/" className={"modal-btn"} >
-                <img src={svgIcons.leftArrow} alt="" /> Back
-            </Link>
-        </Wrapper>
-
-    );
-}
+  return (
+    <Wrapper>
+      <div className="refund">
+        <CardComponent>
+          <StepperComponent
+            steps={refundSteps}
+            activeStep={refundActiveStep}
+            changeActiveStep={setRefundActiveStep}
+          ></StepperComponent>
+        </CardComponent>
+      </div>
+      <Link to="/" className={'modal-btn'}>
+        <img src={svgIcons.leftArrow} alt="" /> Back
+      </Link>
+    </Wrapper>
+  );
+};
 
 export default Refund;

@@ -1,7 +1,7 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 const useStyles = makeStyles({
   root: {
@@ -13,8 +13,8 @@ const useStyles = makeStyles({
     height: '100%',
     '&:last-child': {
       'padding-bottom': 0,
-    }
-  }
+    },
+  },
 });
 
 const CardComponent = ({ children }) => {
@@ -27,4 +27,3 @@ const CardComponent = ({ children }) => {
 };
 
 export default CardComponent;
-

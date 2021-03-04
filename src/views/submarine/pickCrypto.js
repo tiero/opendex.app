@@ -1,56 +1,56 @@
-import { Button, Grid, Typography } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import AssetSelector from "../../components/AssetSelector";
-import EthereumAccount from "../../components/EthereumAccount";
-import SwapIcon from "../../components/SwapIcon";
-import TextInfo from "../../components/TextInfo";
+import { Button, Grid, Typography } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import AssetSelector from '../../components/AssetSelector';
+import EthereumAccount from '../../components/EthereumAccount';
+import SwapIcon from '../../components/SwapIcon';
+import TextInfo from '../../components/TextInfo';
 import {
   CurrencyOptions,
   CurrencyTypes,
   getSelectedOption,
   isEthereumCurrencyType,
   isLightningCurrencyType,
-} from "../../constants/submarine";
-import { UtilsContext } from "../../context/UtilsContext";
-import { setSigner } from "../../services/ethereum/ethereumDuck";
-import { calculateMinerFee } from "../../services/submarine/minerFees";
-import * as submarineActionCreators from "../../services/submarine/submarineDuck";
+} from '../../constants/submarine';
+import { UtilsContext } from '../../context/UtilsContext';
+import { setSigner } from '../../services/ethereum/ethereumDuck';
+import { calculateMinerFee } from '../../services/submarine/minerFees';
+import * as submarineActionCreators from '../../services/submarine/submarineDuck';
 import {
   selectContracts,
   selectPairDetails,
-} from "../../services/submarine/submarineSelectors";
-import { roundToDecimals } from "../../utils/roundToDecimals";
-import { connectWeb3Modal } from "../../utils/web3modal";
-import { checkEtherBalance, checkTokenBalance } from "./balanceChecks";
+} from '../../services/submarine/submarineSelectors';
+import { roundToDecimals } from '../../utils/roundToDecimals';
+import { connectWeb3Modal } from '../../utils/web3modal';
+import { checkEtherBalance, checkTokenBalance } from './balanceChecks';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      display: "flex",
-      "flex-direction": "column",
-      "justify-content": "space-between",
+      display: 'flex',
+      'flex-direction': 'column',
+      'justify-content': 'space-between',
       flex: 1,
     },
     content: {
-      padding: "2rem",
+      padding: '2rem',
     },
     text: {
-      marginBottom: "1rem",
+      marginBottom: '1rem',
     },
     amount: {
-      display: "flex",
-      justifyContent: "center",
-      marginBottom: "1rem",
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: '1rem',
     },
     right: {
-      display: "flex",
-      justifyContent: "flex-end",
+      display: 'flex',
+      justifyContent: 'flex-end',
     },
     amountsContainer: {
-      marginTop: "1rem",
+      marginTop: '1rem',
     },
   })
 );
@@ -58,19 +58,19 @@ const useStyles = makeStyles(() =>
 const decimals = 100000000;
 let updateReceiveAmount = false;
 
-const PickCrypto = (props) => {
+const PickCrypto = props => {
   const classes = useStyles();
   const pairDetails = useSelector(selectPairDetails);
   const contractAddresses = useSelector(selectContracts);
   const [sendCurrencyType, handleSendCurrencyType] = useState(
-    getSelectedOption(CurrencyOptions, "USD Tether")
+    getSelectedOption(CurrencyOptions, 'USD Tether')
   );
   const [receiveCurrencyType, handleReceiveCurrencyType] = useState(
-    getSelectedOption(CurrencyOptions, "Lightning BTC")
+    getSelectedOption(CurrencyOptions, 'Lightning BTC')
   );
-  const [sendCurrencyValue, handleSendCurrencyValue] = useState("");
-  const [receiveCurrencyValue, handleReceiveCurrencyValue] = useState("");
-  const [error, setError] = useState("");
+  const [sendCurrencyValue, handleSendCurrencyValue] = useState('');
+  const [receiveCurrencyValue, handleReceiveCurrencyValue] = useState('');
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();
   const utilsContext = useContext(UtilsContext);
@@ -78,9 +78,9 @@ const PickCrypto = (props) => {
   const isDrawerClosed = props.isDrawerClosed;
   // const [rateAnchorEl, setRateAnchorEl] = React.useState(null);
   // const [minerFeeAnchorEl, setMinerFeeAnchorEl] = React.useState(null);
-  const [account, setAccount] = React.useState("");
+  const [account, setAccount] = React.useState('');
 
-  const handleRatePopoverOpen = (event) => {
+  const handleRatePopoverOpen = event => {
     // setRateAnchorEl(event.currentTarget);
   };
 
@@ -88,7 +88,7 @@ const PickCrypto = (props) => {
     // setRateAnchorEl(null);
   };
 
-  const handleMinerFeePopoverOpen = (event) => {
+  const handleMinerFeePopoverOpen = event => {
     // setMinerFeeAnchorEl(event.currentTarget);
   };
 
@@ -101,25 +101,25 @@ const PickCrypto = (props) => {
 
   useEffect(() => {
     if (isDrawerClosed) {
-      handleSendCurrencyValue("");
-      handleReceiveCurrencyValue("");
-      handleSendCurrencyType(getSelectedOption(CurrencyOptions, "USD Tether"));
+      handleSendCurrencyValue('');
+      handleReceiveCurrencyValue('');
+      handleSendCurrencyType(getSelectedOption(CurrencyOptions, 'USD Tether'));
       handleReceiveCurrencyType(
-        getSelectedOption(CurrencyOptions, "Lightning BTC")
+        getSelectedOption(CurrencyOptions, 'Lightning BTC')
       );
     }
   }, [isDrawerClosed]);
 
   let effectiveRate = 0;
 
-  let realPairId = "";
+  let realPairId = '';
   let isMirrorPair = false;
 
   const getSelectedPairTypeDetails = () => {
     realPairId = `${sendCurrencyType?.symbol}/${receiveCurrencyType?.symbol}`;
 
     if (!pairDetails || Object.keys(pairDetails).length === 0) {
-      const errorMessage = "Failed to fetch pairs";
+      const errorMessage = 'Failed to fetch pairs';
 
       if (error !== errorMessage) {
         setError(errorMessage);
@@ -140,7 +140,7 @@ const PickCrypto = (props) => {
       if (pairDetails[realPairId]) {
         return pairDetails[realPairId];
       } else {
-        const errorMessage = "Not supported";
+        const errorMessage = 'Not supported';
 
         if (error !== errorMessage) {
           setError(errorMessage);
@@ -151,7 +151,7 @@ const PickCrypto = (props) => {
 
   const selectedPairDetails = getSelectedPairTypeDetails();
 
-  const calculateLimits = (value) => {
+  const calculateLimits = value => {
     let limit = value / decimals;
 
     if (selectedPairDetails && selectedPairDetails.rate !== 1) {
@@ -185,7 +185,7 @@ const PickCrypto = (props) => {
         !isSendCurrencyLightning &&
         !isReceiveCurrencyLightning
       ) {
-        return "Coming soon";
+        return 'Coming soon';
       }
 
       if (
@@ -194,7 +194,7 @@ const PickCrypto = (props) => {
         sendCurrencyValue < 0 ||
         receiveCurrencyValue < 0
       ) {
-        return "Invalid input";
+        return 'Invalid input';
       }
 
       if (!sendCurrencyValue) return true;
@@ -206,7 +206,7 @@ const PickCrypto = (props) => {
         return `Amount ${sendCurrencyValue} is greater than ${maximal}`;
       }
 
-      return "";
+      return '';
     })();
 
     setError(errorStr);
@@ -230,7 +230,7 @@ const PickCrypto = (props) => {
     );
 
   // Block non-numeric chars.
-  const onNumberInputKeyPress = (event) => {
+  const onNumberInputKeyPress = event => {
     if ((event.which < 47 || event.which > 58) && event.which !== 46) {
       event.preventDefault();
       return false;
@@ -358,12 +358,12 @@ const PickCrypto = (props) => {
           />
     */
 
-  const onSendAssetChange = (asset) => {
+  const onSendAssetChange = asset => {
     handleSendCurrencyType(asset);
     updateReceiveAmount = true;
   };
 
-  const onReceiveAssetChange = (asset) => {
+  const onReceiveAssetChange = asset => {
     handleReceiveCurrencyType(asset);
     updateReceiveAmount = true;
   };
@@ -378,7 +378,7 @@ const PickCrypto = (props) => {
         alignItems="center"
       >
         <AssetSelector
-          label={"You send"}
+          label={'You send'}
           defaultValue={2.3}
           value={sendCurrencyValue}
           onAmountChange={onSendCurrencyChange}
@@ -391,7 +391,7 @@ const PickCrypto = (props) => {
         </Grid>
         <Grid item xs={12}>
           <AssetSelector
-            label={"You receive"}
+            label={'You receive'}
             defaultValue={3.2}
             value={receiveCurrencyValue}
             onAmountChange={onReceiveCurrencyChange}
@@ -475,7 +475,7 @@ const PickCrypto = (props) => {
     effectiveRate = isMirrorPair ? 1 / rate : rate;
 
     // Update the "You receive" value when the pair was changed
-    if (updateReceiveAmount && sendCurrencyValue !== "") {
+    if (updateReceiveAmount && sendCurrencyValue !== '') {
       onSendCurrencyChange({ target: { value: sendCurrencyValue } });
       updateReceiveAmount = false;
     }
@@ -533,7 +533,7 @@ const PickCrypto = (props) => {
 
     submarineActionCreators.setPair(dispatch, {
       pairId: realPairId,
-      orderSide: isMirrorPair ? "buy" : "sell",
+      orderSide: isMirrorPair ? 'buy' : 'sell',
 
       sendCurrency: prepareCurrency(sendCurrencyType, sendCurrencyValue),
       receiveCurrency: prepareCurrency(
@@ -544,7 +544,7 @@ const PickCrypto = (props) => {
 
     if (isSendCurrencyLightning && !isReceiveCurrencyLightning) {
       history.push({
-        pathname: "/reverse",
+        pathname: '/reverse',
         state: isMobileView ? { isDrawerOpen: true } : {},
       });
     } else {
@@ -553,7 +553,7 @@ const PickCrypto = (props) => {
   };
 
   const handleBack = () => {
-    setAccount("");
+    setAccount('');
   };
 
   const connectEthereumWallet = async () => {
@@ -684,7 +684,7 @@ const PickCrypto = (props) => {
         }
         className="next-step-button"
       >
-        {showConnectEthereumWalletButton ? "Connect wallet" : "Go to next step"}
+        {showConnectEthereumWalletButton ? 'Connect wallet' : 'Go to next step'}
       </Button>
     </div>
   );

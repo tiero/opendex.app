@@ -1,25 +1,25 @@
-import { TextField } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import React from "react";
-import { CurrencyOptions } from "../../constants/submarine";
-import SelectComponent from "../Select";
+import { TextField } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { CurrencyOptions } from '../../constants/submarine';
+import SelectComponent from '../Select';
 
 const useStyles = makeStyles(() =>
   createStyles({
     selectAsset: {
-      width: "8rem",
-      "& .MuiSelect-select:focus": {
-        "background-color": "inherit",
+      width: '8rem',
+      '& .MuiSelect-select:focus': {
+        'background-color': 'inherit',
       },
-      "& .MuiSelect-root": {
-        display: "flex",
-        alignItems: "center",
+      '& .MuiSelect-root': {
+        display: 'flex',
+        alignItems: 'center',
       },
     },
   })
 );
 
-const AssetSelector = (props) => {
+const AssetSelector = props => {
   const classes = useStyles();
   const {
     label,

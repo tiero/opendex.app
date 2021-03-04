@@ -1,22 +1,22 @@
-import { Grid } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import React, { useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import CardComponent from "../../components/Card";
-import StepperComponent from "../../components/Stepper";
-import { SubmarineSteps } from "../../constants/submarine";
-import { StepsContext } from "../../context/StepsContext";
-import * as submarineActionCreators from "../../services/submarine/submarineDuck";
+import { Grid } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React, { useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import CardComponent from '../../components/Card';
+import StepperComponent from '../../components/Stepper';
+import { SubmarineSteps } from '../../constants/submarine';
+import { StepsContext } from '../../context/StepsContext';
+import * as submarineActionCreators from '../../services/submarine/submarineDuck';
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     card: {
       flex: 1,
-      margin: "2rem 0",
+      margin: '2rem 0',
     },
     refundContainer: {
-      marginTop: "1rem",
+      marginTop: '1rem',
     },
     refundLabel: {
       color: theme.palette.text.secondary,
@@ -31,7 +31,7 @@ const Submarine = () => {
 
   const dispatch = useDispatch();
   const showRefundLink = submarineActiveStep === 0;
-  const refundLabel = "I want to check status or get refund";
+  const refundLabel = 'I want to check status or get refund';
 
   useEffect(() => {
     submarineActionCreators.getPairs(dispatch);
@@ -62,7 +62,7 @@ const Submarine = () => {
             {refundLabel}
           </Link>
         ) : (
-          <span className={"modal-btn disabled"}>{refundLabel}</span>
+          <span className={'modal-btn disabled'}>{refundLabel}</span>
         )}
       </Grid>
     </Grid>

@@ -7,10 +7,8 @@ export const UtilsProvider = ({ children }) => {
   const isMobileView = is.mobile();
 
   return (
-    <UtilsContext.Provider value={{isMobileView}}>
-      <>
-          {children}
-      </>
+    <UtilsContext.Provider value={{ isMobileView }}>
+      <>{children}</>
     </UtilsContext.Provider>
   );
-}
+};

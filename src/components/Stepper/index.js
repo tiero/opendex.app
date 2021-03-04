@@ -1,14 +1,14 @@
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Stepper from "@material-ui/core/Stepper";
-import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Stepper from '@material-ui/core/Stepper';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    height: "100%",
-    "flex-direction": "column",
+    display: 'flex',
+    height: '100%',
+    'flex-direction': 'column',
   },
 });
 
@@ -45,13 +45,13 @@ const StepperComponent = ({
   */
 
   const handleNextStep = () => {
-    setActiveStep((prevActiveStep) =>
+    setActiveStep(prevActiveStep =>
       prevActiveStep < steps.length - 1 ? prevActiveStep + 1 : 0
     );
   };
 
   const handlePrevStep = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
 
   // const resetSteps = () => {
@@ -73,7 +73,7 @@ const StepperComponent = ({
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((step) => {
+        {steps.map(step => {
           const { key, label } = step;
           return (
             <Step key={key}>

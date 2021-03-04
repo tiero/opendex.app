@@ -4,7 +4,7 @@ export default () => {
   const [isCopied, setCopied] = React.useState(false);
   const resetInterval = 20000; // 20 seconds
 
-  const handleCopy = (selector) => {
+  const handleCopy = selector => {
     let copyTextarea = document.querySelector(selector);
     copyTextarea.focus();
     copyTextarea.select();

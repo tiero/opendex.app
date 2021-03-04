@@ -5,7 +5,7 @@ const initialState = {
 };
 
 /* Action creators */
-export const setSigner = (data) => ({
+export const setSigner = data => ({
   data,
   type: SET_SIGNER,
 });

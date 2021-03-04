@@ -17,16 +17,21 @@ function SimpleDialog(props) {
   };
 
   return (
-    <Dialog fullScreen={fullScreen} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog
+      fullScreen={fullScreen}
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+    >
       <DialogTitle id="simple-dialog-title">
         {title}
         <Button
-            aria-controls={'menu-list-grow'}
-            aria-haspopup="true"
-            className="drawer-close-btn"
-            onClick={handleClose}
+          aria-controls={'menu-list-grow'}
+          aria-haspopup="true"
+          className="drawer-close-btn"
+          onClick={handleClose}
         >
-            <img src={svgIcons.close} alt="" />
+          <img src={svgIcons.close} alt="" />
         </Button>
       </DialogTitle>
       {props.children}

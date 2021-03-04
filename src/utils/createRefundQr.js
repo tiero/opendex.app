@@ -1,8 +1,6 @@
 import QRious from 'qrious';
 
-export default (
-  jsonData,
-) => {
+export default jsonData => {
   const qr = new QRious({
     size: 500,
     level: 'L',
