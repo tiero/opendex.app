@@ -8,7 +8,14 @@
 npm i
 ```
 
-## Start
+## Build for production
+```bash
+npm run build
+```
+
+## Development
+
+### Start
 ```bash
 `npm start`
 ```

@@ -17,7 +17,7 @@ const Layout = () => {
         <Typography variant="h3" component="h2" align="center">
           404 - Not Found
         </Typography>
-        <Typography variant="div" component="h2" align="center">
+        <Typography component="h2" align="center">
           The path you are trying to access does not exist
         </Typography>
       </div>
@@ -33,7 +33,7 @@ const Layout = () => {
       <Typography variant="h3" component="h2" align="center">
         Browser not supported!
       </Typography>
-      <Typography variant="div" component="h2" align="center">
+      <Typography component="h2" align="center">
         Please use one of the following browsers: Chrome, Firefox or Safari
       </Typography>
     </div>
