@@ -62,9 +62,6 @@ const EthereumAccount = props => {
         color: '#F7931A'
     },
     ethereumFooter: {
-      position: 'absolute',
-      bottom: '30px',
-      width: '100%'
     },
     viewOnEtherscanLink: {
       color: '#0095FF',
@@ -146,7 +143,7 @@ const EthereumAccount = props => {
           Therefore, we will show you a second invoice and after both are paid, the coins for the Swap will get locked and you will have some Ether in
           the wallet shown above.
         </div>}
-        <div className={!isMobileView && classes.ethereumFooter}>
+        <div className={classes.ethereumFooter}>
           <Divider />
           <Button className={classes.backButton} variant="outlined" onClick={handleBack}>
               <img src={svgIcons.leftArrow} alt="" />

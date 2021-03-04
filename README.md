@@ -12,3 +12,8 @@ npm i
 ```bash
 `npm start`
 ```
+
+### Develop view components
+```bash
+npm run storybook
+```
