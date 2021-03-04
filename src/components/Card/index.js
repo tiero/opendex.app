@@ -1,29 +1,30 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles({
   root: {
-    // width: 400,
-    height: 550,
-    borderRadius: 12,
+    height: 600,
+    borderRadius: '0.2rem',
   },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+  content: {
+    padding: 0,
+    height: '100%',
+    '&:last-child': {
+      'padding-bottom': 0,
+    }
+  }
 });
 
 const CardComponent = ({ children }) => {
-    const classes = useStyles();
-    return (
-        <Card className={classes.root}>
-            <CardContent>{children}</CardContent>
-        </Card>
-    )
+  const classes = useStyles();
+  return (
+    <Card className={classes.root}>
+      <CardContent className={classes.content}>{children}</CardContent>
+    </Card>
+  );
 };
 
 export default CardComponent;
+

@@ -10,10 +10,17 @@ import * as submarineActionCreators from "../../services/submarine/submarineDuck
 import { Grid } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     card: {
       flex: 1,
+      margin: "2rem 0",
+    },
+    refundContainer: {
+      marginTop: '1rem',
+    },
+    refundLabel: {
+      color: theme.palette.text.secondary,
     }
   })
 );
@@ -34,33 +41,31 @@ const Submarine = () => {
   return (
     <Grid
       container
-      justify="center"
+      justify="start"
       direction="column"
       alignItems="center"
       className={classes.card}
     >
-      <Wrapper>
-        <Grid item>
-          <div className="submarine">
-            <CardComponent>
-              <StepperComponent
-                steps={SubmarineSteps}
-                activeStep={submarineActiveStep}
-                changeActiveStep={setSubmarineActiveStep}
-              ></StepperComponent>
-            </CardComponent>
-          </div>
+      <Grid item container justify="center">
+        <Grid item xs={11} sm={9} md={6} lg={4} xl={3}>
+          <CardComponent>
+            <StepperComponent
+              steps={SubmarineSteps}
+              activeStep={submarineActiveStep}
+              changeActiveStep={setSubmarineActiveStep}
+            />
+          </CardComponent>
         </Grid>
-        <Grid item>
-          {showRefundLink ? (
-            <Link to="/refund" className={"modal-btn"}>
-              {refundLabel}
-            </Link>
-          ) : (
-            <span className={"modal-btn disabled"}>{refundLabel}</span>
-          )}
-        </Grid>
-      </Wrapper>
+      </Grid>
+      <Grid item className={classes.refundContainer}>
+        {showRefundLink ? (
+          <Link to="/refund" className={classes.refundLabel}>
+            {refundLabel}
+          </Link>
+        ) : (
+          <span className={"modal-btn disabled"}>{refundLabel}</span>
+        )}
+      </Grid>
     </Grid>
   );
 };

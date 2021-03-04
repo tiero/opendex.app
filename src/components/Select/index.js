@@ -1,4 +1,4 @@
-import { MenuItem, TextField } from "@material-ui/core";
+import { Box, MenuItem, TextField } from "@material-ui/core";
 import React from "react";
 
 const SelectComponent = ({
@@ -8,6 +8,8 @@ const SelectComponent = ({
   onChange,
   value,
   disabled,
+  disableUnderline,
+  className,
 }) => {
   const [option, setOption] = React.useState(
     value.id || defaultValue.id || options[0].id
@@ -27,9 +29,13 @@ const SelectComponent = ({
   };
 
   return (
-    <div>
+    <Box>
       <TextField
         select
+        InputProps={{
+          disableUnderline,
+        }}
+        className={className}
         value={option}
         onChange={handleChange}
         variant={variant}
@@ -42,7 +48,7 @@ const SelectComponent = ({
           </MenuItem>
         ))}
       </TextField>
-    </div>
+    </Box>
   );
 };
 

@@ -13,6 +13,7 @@ import Popover from "../../components/Popover";
 import SelectComponent from "../../components/Select";
 import SwapIcon from "../../components/SwapIcon";
 import TextInfo from "../../components/TextInfo";
+import AssetSelector from "../../components/AssetSelector";
 import {
   CurrencyOptions,
   CurrencyTypes,
@@ -31,11 +32,42 @@ import {
 import { roundToDecimals } from "../../utils/roundToDecimals";
 import { connectWeb3Modal } from "../../utils/web3modal";
 import { checkEtherBalance, checkTokenBalance } from "./balanceChecks";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      display: "flex",
+      "flex-direction": "column",
+      "justify-content": "space-between",
+      flex: 1,
+    },
+    content: {
+      padding: "2rem",
+    },
+    text: {
+      marginBottom: "1rem",
+    },
+    amount: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: '1rem'
+    },
+    right: {
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
+    amountsContainer: {
+      marginTop: '1rem',
+    },
+  })
+);
 
 const decimals = 100000000;
 let updateReceiveAmount = false;
 
 const PickCrypto = (props) => {
+  const classes = useStyles();
   const pairDetails = useSelector(selectPairDetails);
   const contractAddresses = useSelector(selectContracts);
   const [sendCurrencyType, handleSendCurrencyType] = useState(
@@ -233,6 +265,7 @@ const PickCrypto = (props) => {
     handleReceiveCurrencyValue(input);
   };
 
+  /*
   const renderCryptoInput = () => {
     return (
       <Grid container spacing={1}>
@@ -270,6 +303,78 @@ const PickCrypto = (props) => {
       </Grid>
     );
   };
+  */
+
+  /*
+  const selectSendAsset = () => {
+    return (
+      <Grid container className={classes.selectAsset}>
+        <Grid item xs={6}>
+          <TextField
+            label="You send"
+            defaultValue={2.3}
+            variant="outlined"
+            value={sendCurrencyValue}
+            onChange={onSendCurrencyChange}
+            type="number"
+            onKeyPress={onNumberInputKeyPress}
+            autoFocus
+            inputProps={{
+              min: 0,
+              step: 0.0000001,
+            }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <SelectComponent
+            options={CurrencyOptions}
+            variant="outlined"
+            onChange={(val) => {
+              handleSendCurrencyType(val);
+              updateReceiveAmount = true;
+            }}
+            value={sendCurrencyType}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
+  */
+
+  /*
+          <TextField
+            label="You receive"
+            defaultValue={2.3}
+            variant="outlined"
+            value={receiveCurrencyValue}
+            onChange={onReceiveCurrencyChange}
+            type="number"
+            onKeyPress={onNumberInputKeyPress}
+            inputProps={{
+              min: 0,
+              step: 0.0000001,
+            }}
+          />
+          <SelectComponent
+            options={CurrencyOptions}
+            variant="outlined"
+            onChange={(val) => {
+              handleReceiveCurrencyType(val);
+              updateReceiveAmount = true;
+            }}
+            value={receiveCurrencyType}
+          />
+    */
+
+  const onSendAssetChange = (asset) => {
+    handleSendCurrencyType(asset);
+    updateReceiveAmount = true;
+  };
+
+  const onReceiveAssetChange = (asset) => {
+    handleReceiveCurrencyType(asset);
+    updateReceiveAmount = true;
+  };
 
   const renderCryptoOptions = () => {
     return (
@@ -280,84 +385,90 @@ const PickCrypto = (props) => {
         direction="row"
         alignItems="center"
       >
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            <SelectComponent
-              options={CurrencyOptions}
-              variant="outlined"
-              onChange={(val) => {
-                handleSendCurrencyType(val);
-                updateReceiveAmount = true;
-              }}
-              value={sendCurrencyType}
-            />
-        </Grid>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+        <AssetSelector
+          label={"You send"}
+          defaultValue={2.3}
+          value={sendCurrencyValue}
+          onAmountChange={onSendCurrencyChange}
+          onAssetChange={onSendAssetChange}
+          onKeyPress={onNumberInputKeyPress}
+          selectedAsset={sendCurrencyType}
+        />
+        <Grid item xs={12}>
           <SwapIcon onClick={handleSwapClick} />
         </Grid>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            <SelectComponent
-              options={CurrencyOptions}
-              variant="outlined"
-              onChange={(val) => {
-                handleReceiveCurrencyType(val);
-                updateReceiveAmount = true;
-              }}
-              value={receiveCurrencyType}
-            />
+        <Grid item xs={12}>
+          <AssetSelector
+            label={"You receive"}
+            defaultValue={3.2}
+            value={receiveCurrencyValue}
+            onAmountChange={onReceiveCurrencyChange}
+            onAssetChange={onReceiveAssetChange}
+            onKeyPress={onNumberInputKeyPress}
+            selectedAsset={receiveCurrencyType}
+          />
         </Grid>
       </Grid>
     );
   };
 
   const renderMobileViewInputs = () => (
-    <div className={`submarine__pickcrypto-options`}>
-      <TextField
-        label="You send"
-        defaultValue={2.3}
-        variant="outlined"
-        value={sendCurrencyValue}
-        onChange={onSendCurrencyChange}
-        type="number"
-        autoFocus
-        onKeyPress={onNumberInputKeyPress}
-        inputProps={{
-          min: 0,
-        }}
-      />
-      <SelectComponent
-        options={CurrencyOptions}
-        variant="outlined"
-        onChange={(val) => {
-          handleSendCurrencyType(val);
-          updateReceiveAmount = true;
-        }}
-        className="currency-options"
-        value={sendCurrencyType}
-      />
+    <Grid container>
+      <Grid item>
+        <TextField
+          label="You send"
+          defaultValue={2.3}
+          variant="outlined"
+          value={sendCurrencyValue}
+          onChange={onSendCurrencyChange}
+          type="number"
+          autoFocus
+          onKeyPress={onNumberInputKeyPress}
+          inputProps={{
+            min: 0,
+          }}
+        />
+      </Grid>
       <SwapIcon onClick={handleSwapClick} className={"vertical"} />
-      <TextField
-        label="You receive"
-        defaultValue={2.3}
-        variant="outlined"
-        value={receiveCurrencyValue}
-        onChange={onReceiveCurrencyChange}
-        type="number"
-        onKeyPress={onNumberInputKeyPress}
-        inputProps={{
-          min: 0,
-        }}
-      />
-      <SelectComponent
-        options={CurrencyOptions}
-        variant="outlined"
-        onChange={(val) => {
-          handleReceiveCurrencyType(val);
-          updateReceiveAmount = true;
-        }}
-        className="currency-options"
-        value={receiveCurrencyType}
-      />
-    </div>
+      <Grid item>
+        <TextField
+          label="You receive"
+          defaultValue={2.3}
+          variant="outlined"
+          value={receiveCurrencyValue}
+          onChange={onReceiveCurrencyChange}
+          type="number"
+          onKeyPress={onNumberInputKeyPress}
+          inputProps={{
+            min: 0,
+          }}
+        />
+      </Grid>
+      <Grid item>
+        <SelectComponent
+          options={CurrencyOptions}
+          variant="outlined"
+          onChange={(val) => {
+            handleSendCurrencyType(val);
+            updateReceiveAmount = true;
+          }}
+          className="currency-options"
+          value={sendCurrencyType}
+        />
+      </Grid>
+      <Grid item>
+        <SelectComponent
+          options={CurrencyOptions}
+          variant="outlined"
+          onChange={(val) => {
+            handleReceiveCurrencyType(val);
+            updateReceiveAmount = true;
+          }}
+          className="currency-options"
+          value={receiveCurrencyType}
+        />
+      </Grid>
+    </Grid>
   );
 
   const renderAmounts = () => {
@@ -376,33 +487,43 @@ const PickCrypto = (props) => {
     }
 
     return (
-      <div className="submarine__pickcrypto-amounts">
-        <TextInfo
-          label="Min amount"
-          value={`${minimal} ${sendCurrencyType?.symbol}`}
-        />
-        <TextInfo
-          label="Max amount"
-          value={`${maximal} ${sendCurrencyType?.symbol}`}
-        />
-        <TextInfo
-          label="Rate"
-          value={`1 ${sendCurrencyType?.symbol} = ${roundToDecimals(
-            effectiveRate,
-            5
-          )} ${receiveCurrencyType?.symbol}`}
-          explanation={true}
-          onMouseEnterHandler={handleRatePopoverOpen}
-          onMouseLeaveHandler={handleRatePopoverClose}
-        />
-        <TextInfo
-          label="Miner fee"
-          value={`${minerFees()} ${sendCurrencyType?.symbol}`}
-          explanation={true}
-          onMouseEnterHandler={handleMinerFeePopoverOpen}
-          onMouseLeaveHandler={handleMinerFeePopoverClose}
-        />
-      </div>
+      <Grid container className={classes.amountsContainer} justify="center">
+        <Grid item className={classes.amount} xs={6}>
+          <TextInfo
+            label="Min amount"
+            value={`${minimal} ${sendCurrencyType?.symbol}`}
+          />
+        </Grid>
+        <Grid item className={classes.amount} xs={6}>
+          <TextInfo
+            label="Max amount"
+            value={`${maximal} ${sendCurrencyType?.symbol}`}
+            className={classes.right}
+          />
+        </Grid>
+        <Grid item className={classes.amount} xs={6}>
+          <TextInfo
+            label="Rate"
+            value={`1 ${sendCurrencyType?.symbol} = ${roundToDecimals(
+              effectiveRate,
+              5
+            )} ${receiveCurrencyType?.symbol}`}
+            explanation={true}
+            onMouseEnterHandler={handleRatePopoverOpen}
+            onMouseLeaveHandler={handleRatePopoverClose}
+          />
+        </Grid>
+        <Grid item className={classes.amount} xs={6}>
+          <TextInfo
+            label="Miner fee"
+            value={`${minerFees()} ${sendCurrencyType?.symbol}`}
+            explanation={true}
+            onMouseEnterHandler={handleMinerFeePopoverOpen}
+            onMouseLeaveHandler={handleMinerFeePopoverClose}
+            className={classes.right}
+          />
+        </Grid>
+      </Grid>
     );
   };
 
@@ -524,33 +645,10 @@ const PickCrypto = (props) => {
   const showConnectEthereumWalletButton =
     isSendCurrencyEthereum || isReceiveCurrencyEthereum;
 
-  return (
-    <div className="submarine__pickcrypto">
-      <Typography variant="div" component="h2" align="center">
-        What would you like to exchange?
-      </Typography>
-      {isMobileView && renderMobileViewInputs()}
-      {!isMobileView && (
-        <>
-          {renderCryptoInput()}
-          {renderCryptoOptions()}
-        </>
-      )}
-      {renderAmounts()}
-      <Divider />
-      <Button
-        disabled={error}
-        variant="contained"
-        color="primary"
-        onClick={
-          showConnectEthereumWalletButton
-            ? connectEthereumWallet
-            : handleNextStep
-        }
-        className="next-step-button"
-      >
-        {showConnectEthereumWalletButton ? "Connect wallet" : "Go to next step"}
-      </Button>
+  // {renderAmounts()}
+  // {isMobileView && renderMobileViewInputs()}
+  // {renderCryptoInput()}
+  /*
       {error && <div className={"error-msg"}>{error}</div>}
       <Popover
         id="rate-popover"
@@ -566,6 +664,34 @@ const PickCrypto = (props) => {
         onCloseHandler={handleMinerFeePopoverClose}
         text="Miner fee is an approximate amount charged by miners to include the transaction."
       />
+  */
+  return (
+    <div className={classes.root}>
+      <Grid container justify="center" className={classes.content}>
+        <Typography
+          className={classes.text}
+          variant="div"
+          component="h2"
+          align="center"
+        >
+          What would you like to exchange?
+        </Typography>
+        {renderCryptoOptions()}
+        {renderAmounts()}
+      </Grid>
+      <Button
+        disabled={error}
+        variant="contained"
+        color="primary"
+        onClick={
+          showConnectEthereumWalletButton
+            ? connectEthereumWallet
+            : handleNextStep
+        }
+        className="next-step-button"
+      >
+        {showConnectEthereumWalletButton ? "Connect wallet" : "Go to next step"}
+      </Button>
     </div>
   );
 };

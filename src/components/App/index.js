@@ -21,9 +21,11 @@ export const opendexTheme = createMuiTheme({
     type: "dark",
     text: {
       primary: '#f2f2f2', // whiteish
+      secondary: 'rgba(255, 255, 255, 0.7)', // lighter whiteish
     },
     background: {
       default: '#0c0c0c', // grayish
+      paper: "#1a1817", // light grayish
     },
     primary: {
       main: "#f15a24", // orange
