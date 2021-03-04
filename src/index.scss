@@ -1,41 +1,8 @@
-@import './styles/submarine.scss';
+@import './styles/global.scss';
 
-body {
-  margin: 0;
-  font-family: "Basier Circle", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 12px;
+// Web3Modal
+/* TODO(may): check if this is still required
+.web3modal-modal-lightbox {
+    z-index: 9999 !important;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.homepage_error_wrapper {
-  color: white;
-
-  height: 100vh;
-  flex-direction: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media only screen and (min-width: 2560px) {
-  .max-width {
-    max-width: 50%;
-    margin: auto;
-  }
-
-  .max-width-margin-left {
-    margin-left: 25% !important;
-  }
-
-  .max-width-margin-right {
-    margin-right: 25% !important;
-  }
-}
+*/

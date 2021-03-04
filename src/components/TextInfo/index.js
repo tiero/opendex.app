@@ -1,18 +1,29 @@
+import { Grid } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import './styles.scss';
-import svgIcons from '../../utils/svgIcons';
 
-const TextInfo = (props) => {
-    const { label, value, explanation = false, onMouseEnterHandler, onMouseLeaveHandler } = props;
-    return (
-       <div className="textinfo">
-            <div className="textinfo-label">
-                {label}
-                {explanation && <img className='question-icon' src={svgIcons.questionIcon} alt='question-icon' onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler} />}
-            </div>
-            <div className="textinfo-value">{value}</div>
-       </div>
-    )
-}
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      color: theme.palette.text.secondary,
+    },
+  })
+);
+
+const TextInfo = props => {
+  const classes = useStyles();
+  const { className, label, value, explanation = false } = props;
+  return (
+    <Grid container className={classes.container} justify="center">
+      <Grid item className={className} xs={12}>
+        {label}
+        {explanation}
+      </Grid>
+      <Grid item className={className} xs={12}>
+        {value}
+      </Grid>
+    </Grid>
+  );
+};
 
 export default TextInfo;

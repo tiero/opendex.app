@@ -22,7 +22,7 @@ class DownloadRefundFile extends React.Component {
       timeoutBlockHeight,
     } = this.props;
 
-    const isTorBrowser = detectTorBrowser()
+    const isTorBrowser = detectTorBrowser();
 
     let refundFile = JSON.stringify({
       id,
@@ -40,14 +40,14 @@ class DownloadRefundFile extends React.Component {
     }
 
     return (
-        // eslint-disable-next-line jsx-a11y/anchor-has-content
-        <a
-            target="_blank"
-            rel="noopener noreferrer"
-            ref={this.ref}
-            href={refundFile}
-            download={isTorBrowser ? 'refund.json' : 'refund.png'}
-        />
+      // eslint-disable-next-line jsx-a11y/anchor-has-content
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        ref={this.ref}
+        href={refundFile}
+        download={isTorBrowser ? 'refund.json' : 'refund.png'}
+      />
     );
   }
 }

@@ -1,11 +1,17 @@
-import { SwapUpdateEvent, LocalStorageState } from '../../constants/environment';
-import { RESET_STATE, setEthereumPrepayMinerFeePaid } from '../reverse/reverseDuck';
+import {
+  SwapUpdateEvent,
+  LocalStorageState,
+} from '../../constants/environment';
+import {
+  RESET_STATE,
+  setEthereumPrepayMinerFeePaid,
+} from '../reverse/reverseDuck';
 import {
   GET_PAIRS,
   CREATE_SWAP,
   STREAM_SWAP_STATUS,
   SWAP_STATUS as SWAP_STATUS_API,
-  GET_CONTRACTS
+  GET_CONTRACTS,
 } from '../../api/apiUrls';
 
 const FETCH_PAIRS = 'FETCH_PAIRS';
@@ -21,8 +27,11 @@ const SWAP_STATUS = 'SWAP_STATUS';
 const SET_CHANNEL_CREATION = 'SET_CHANNEL_CREATION';
 const CLEAR_CHANNEL_CREATION = 'CLEAR_CHANNEL_CREATION';
 
-const currentSubmarineState = JSON.parse(localStorage.getItem(LocalStorageState.CurrentSubmarineState));
-const initialState = {...{
+const currentSubmarineState = JSON.parse(
+  localStorage.getItem(LocalStorageState.CurrentSubmarineState)
+);
+const initialState = {
+  ...{
     pairs: {},
     contracts: {
       ethereum: {},
@@ -41,7 +50,9 @@ const initialState = {...{
     },
     swapStatus: {},
     channelCreation: undefined,
-}, ...currentSubmarineState};
+  },
+  ...currentSubmarineState,
+};
 
 /* Action Creators */
 export const fetchPairs = () => ({
@@ -52,41 +63,41 @@ export const fetchingPairs = () => ({
   type: FETCHING_PAIRS,
 });
 
-export const fetchedPairs = (data) => ({
+export const fetchedPairs = data => ({
   type: FETCHED_PAIRS,
   data,
 });
 
-export const fetchedContracts = (data) => ({
+export const fetchedContracts = data => ({
   type: FETCHED_CONTRACTS,
   data,
 });
 
-export const setPairValues = (data) => ({
+export const setPairValues = data => ({
   type: SET_PAIR_VALUES,
   data,
-})
+});
 
 export const errorFetchingPairs = () => ({
   type: ERROR_FETCHING_PAIRS,
 });
 
-export const updateInvoice = (data) => ({
+export const updateInvoice = data => ({
   type: UPDATE_INVOICE,
   data,
 });
 
-export const updateSwapDetails = (data) => ({
+export const updateSwapDetails = data => ({
   type: UPDATE_SWAP_DETAILS,
   data,
 });
 
-export const setSwapStatus = (status) => ({
+export const setSwapStatus = status => ({
   type: SWAP_STATUS,
   status,
 });
 
-export const setChannelCreation = (data) => ({
+export const setChannelCreation = data => ({
   type: SET_CHANNEL_CREATION,
   data,
 });
@@ -100,11 +111,14 @@ export const clearChannelCreation = () => ({
 export const submarineReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCHED_PAIRS:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        pairs: action.data,
-        loading: false,
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          pairs: action.data,
+          loading: false,
+        })
+      );
       return {
         ...state,
         pairs: action.data,
@@ -112,10 +126,13 @@ export const submarineReducer = (state = initialState, action) => {
       };
 
     case FETCHED_CONTRACTS:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        contracts: action.data,
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          contracts: action.data,
+        })
+      );
       return {
         ...state,
         contracts: action.data,
@@ -125,27 +142,33 @@ export const submarineReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-      }
+      };
 
     case SET_PAIR_VALUES:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        ...action.data,
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          ...action.data,
+        })
+      );
       return {
         ...state,
         ...action.data,
-      }
+      };
 
     case UPDATE_INVOICE:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        invoice: action.data
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          invoice: action.data,
+        })
+      );
       return {
         ...state,
         invoice: action.data,
-      }
+      };
 
     case FETCHING_SWAP_DETAILS:
       return {
@@ -153,34 +176,40 @@ export const submarineReducer = (state = initialState, action) => {
         swapDetails: {
           loading: true,
           data: {},
-        }
-      }
+        },
+      };
 
     case UPDATE_SWAP_DETAILS:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        swapDetails: {
-          loading: false,
-          data: action.data,
-        }
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          swapDetails: {
+            loading: false,
+            data: action.data,
+          },
+        })
+      );
       return {
         ...state,
         swapDetails: {
           loading: false,
           data: action.data,
         },
-      }
+      };
 
     case SWAP_STATUS:
-      localStorage.setItem(LocalStorageState.CurrentSubmarineState, JSON.stringify({
-        ...state,
-        swapStatus: action.status
-      }));
+      localStorage.setItem(
+        LocalStorageState.CurrentSubmarineState,
+        JSON.stringify({
+          ...state,
+          swapStatus: action.status,
+        })
+      );
       return {
         ...state,
-        swapStatus: action.status
-      }
+        swapStatus: action.status,
+      };
 
     case CLEAR_CHANNEL_CREATION:
       return {
@@ -214,34 +243,43 @@ export const submarineReducer = (state = initialState, action) => {
       return {
         ...state,
         channelCreation: action.data,
-      }
+      };
 
-    default: return state;
+    default:
+      return state;
   }
-}
+};
 
-export const getPairs = (dispatch) => {
+export const getPairs = dispatch => {
   dispatch(fetchPairs());
 
   const handleFailure = () => {
     dispatch(fetchedPairs(undefined));
   };
 
-  fetch(GET_PAIRS).then((pairsResponse) => {
-    fetch(GET_CONTRACTS).then((contractsResponse) => contractsResponse.json()).catch(handleFailure)
-      .then((contractsData) => {
-        dispatch(fetchedContracts(contractsData));
+  fetch(GET_PAIRS)
+    .then(pairsResponse => {
+      fetch(GET_CONTRACTS)
+        .then(contractsResponse => contractsResponse.json())
+        .catch(handleFailure)
+        .then(contractsData => {
+          dispatch(fetchedContracts(contractsData));
 
-        pairsResponse.json().then((pairsData) => {
-          dispatch(fetchedPairs(pairsData.pairs));
-        }).catch(handleFailure);
-      }).catch(handleFailure);
-  }).catch(handleFailure);
-}
+          pairsResponse
+            .json()
+            .then(pairsData => {
+              dispatch(fetchedPairs(pairsData.pairs));
+            })
+            .catch(handleFailure);
+        })
+        .catch(handleFailure);
+    })
+    .catch(handleFailure);
+};
 
 export const setPair = (dispatch, payload) => {
   return dispatch(setPairValues(payload));
-}
+};
 
 const handleSubmarineSwapStatus = (data, source, dispatch, callback) => {
   const closeSource = () => {
@@ -279,7 +317,7 @@ const handleSubmarineSwapStatus = (data, source, dispatch, callback) => {
         setChannelCreation({
           fundingTransactionId: data.channel.fundingTransactionId,
           fundingTransactionVout: data.channel.fundingTransactionVout,
-        }),
+        })
       );
       dispatch(
         setSwapStatus({
@@ -326,45 +364,65 @@ const handleSubmarineSwapStatus = (data, source, dispatch, callback) => {
   }
 };
 
-export const createSwap = (dispatch, payload, callback, nextStep, handleSwapStatus = handleSubmarineSwapStatus) => {
-    // In the frontend the second currency in the pair is the one we want to receive
-    // Which means that if the frontend ask for the "BTC/LTC" pair, we have to send
-    // a request with the pair "LTC/BTC" and the order side "buy" to the backend
-    if (payload.pairId === 'BTC/LTC') {
-        payload.pairId = 'LTC/BTC';
-        payload.orderSide = 'buy';
+export const createSwap = (
+  dispatch,
+  payload,
+  callback,
+  nextStep,
+  handleSwapStatus = handleSubmarineSwapStatus
+) => {
+  // In the frontend the second currency in the pair is the one we want to receive
+  // Which means that if the frontend ask for the "BTC/LTC" pair, we have to send
+  // a request with the pair "LTC/BTC" and the order side "buy" to the backend
+  if (payload.pairId === 'BTC/LTC') {
+    payload.pairId = 'LTC/BTC';
+    payload.orderSide = 'buy';
+  }
+
+  dispatch(clearChannelCreation());
+
+  dispatch(
+    setSwapStatus({
+      pending: true,
+      message: 'Waiting for transaction...',
+    })
+  );
+
+  fetch(CREATE_SWAP, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(payload),
+  }).then(async response => {
+    let data = await response.json();
+    dispatch(updateSwapDetails(data));
+
+    if (response.status === 201) {
+      startListening(
+        dispatch,
+        data.id,
+        nextStep,
+        handleSwapStatus,
+        payload,
+        data
+      );
+      callback(data);
+      return data;
     }
 
-    dispatch(clearChannelCreation());
-
-    dispatch(
-      setSwapStatus({
-        pending: true,
-        message: 'Waiting for transaction...',
-      }),
-    );
-
-    fetch(CREATE_SWAP, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(payload),
-    }).then(async (response) => {
-        let data = await response.json();
-        dispatch(updateSwapDetails(data));
-
-        if (response.status === 201) {
-            startListening(dispatch, data.id, nextStep, handleSwapStatus, payload, data);
-            callback(data);
-            return data;
-        }
-
-        alert('Error: ' + data.error);
-    });
+    alert('Error: ' + data.error);
+  });
 };
 
-export const startListening = (dispatch, swapId, callback, handleSwapStatus, swapInfo, response) => {
+export const startListening = (
+  dispatch,
+  swapId,
+  callback,
+  handleSwapStatus,
+  swapInfo,
+  response
+) => {
   const source = new EventSource(`${STREAM_SWAP_STATUS}?id=${swapId}`);
 
   source.onerror = () => {
@@ -375,53 +433,87 @@ export const startListening = (dispatch, swapId, callback, handleSwapStatus, swa
       fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json;charset=utf-8'
+          'Content-Type': 'application/json;charset=utf-8',
         },
         body: JSON.stringify({ id: swapId }),
-      })
-        .then(statusReponse => {
-          clearInterval(interval);
+      }).then(statusReponse => {
+        clearInterval(interval);
 
-          startListening(dispatch, swapId, callback);
+        startListening(dispatch, swapId, callback);
 
-          statusReponse.json().then((data) => {
-            handleSwapStatus(data, source, dispatch, callback, swapInfo, response);
-          });
+        statusReponse.json().then(data => {
+          handleSwapStatus(
+            data,
+            source,
+            dispatch,
+            callback,
+            swapInfo,
+            response
+          );
         });
+      });
     }, 1000);
   };
 
   source.onmessage = event => {
-    handleSwapStatus(JSON.parse(event.data), source, dispatch, callback, swapInfo, response);
+    handleSwapStatus(
+      JSON.parse(event.data),
+      source,
+      dispatch,
+      callback,
+      swapInfo,
+      response
+    );
   };
 };
 
-export const checkCurrentSwap = (swapDetails, dispatch, callback, handleSwapStatus = handleSubmarineSwapStatus) => {
+export const checkCurrentSwap = (
+  swapDetails,
+  dispatch,
+  callback,
+  handleSwapStatus = handleSubmarineSwapStatus
+) => {
   const url = SWAP_STATUS_API;
-  const swapId = swapDetails.id
+  const swapId = swapDetails.id;
   fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify({ id: swapId }),
   }).then(statusReponse => {
-    statusReponse.json().then((data) => {
+    statusReponse.json().then(data => {
       console.log('Fetched latest swap status', data);
-      if([
-        SwapUpdateEvent.TransactionClaimed,
-        SwapUpdateEvent.InvoiceSettled,
-        SwapUpdateEvent.TransactionMempool,
-        SwapUpdateEvent.TransactionConfirmed
-      ].indexOf(data.status) !== -1) {
-        handleSwapStatus(data, null, dispatch, callback, {}, {...data, redeemScript: swapDetails.redeemScript});
+      if (
+        [
+          SwapUpdateEvent.TransactionClaimed,
+          SwapUpdateEvent.InvoiceSettled,
+          SwapUpdateEvent.TransactionMempool,
+          SwapUpdateEvent.TransactionConfirmed,
+        ].indexOf(data.status) !== -1
+      ) {
+        handleSwapStatus(
+          data,
+          null,
+          dispatch,
+          callback,
+          {},
+          { ...data, redeemScript: swapDetails.redeemScript }
+        );
       } else {
         if (data.status === SwapUpdateEvent.MinerFeePaid) {
           dispatch(setEthereumPrepayMinerFeePaid(true));
         }
 
-        startListening(dispatch, swapId, callback, handleSwapStatus, {pairId: swapDetails.pairId}, {...data, redeemScript: swapDetails.redeemScript});
+        startListening(
+          dispatch,
+          swapId,
+          callback,
+          handleSwapStatus,
+          { pairId: swapDetails.pairId },
+          { ...data, redeemScript: swapDetails.redeemScript }
+        );
       }
     });
   });
-}
+};

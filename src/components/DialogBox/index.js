@@ -6,7 +6,6 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import svgIcons from '../../utils/svgIcons';
-import './styles.scss';
 
 function SimpleDialog(props) {
   const { onClose, open, title } = props;
@@ -18,16 +17,21 @@ function SimpleDialog(props) {
   };
 
   return (
-    <Dialog fullScreen={fullScreen} onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+    <Dialog
+      fullScreen={fullScreen}
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+    >
       <DialogTitle id="simple-dialog-title">
         {title}
         <Button
-            aria-controls={'menu-list-grow'}
-            aria-haspopup="true"
-            className="drawer-close-btn"
-            onClick={handleClose}
+          aria-controls={'menu-list-grow'}
+          aria-haspopup="true"
+          className="drawer-close-btn"
+          onClick={handleClose}
         >
-            <img src={svgIcons.close} alt="" />
+          <img src={svgIcons.close} alt="" />
         </Button>
       </DialogTitle>
       {props.children}

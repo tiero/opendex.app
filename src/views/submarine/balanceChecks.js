@@ -11,12 +11,14 @@ const decimals = 10 ** 8;
  * @param {number} expectedBalance how much the the signer is expected to have
  */
 export const checkEtherBalance = async (signer, expectedBalance) => {
-    const normalizedExpectedBalance = expectedBalance * decimals;
+  const normalizedExpectedBalance = expectedBalance * decimals;
 
-    const signerBalance = await signer.provider.getBalance(await signer.getAddress());
-    const normalizedBalance = normalizeTokenAmount(signerBalance, 18);
+  const signerBalance = await signer.provider.getBalance(
+    await signer.getAddress()
+  );
+  const normalizedBalance = normalizeTokenAmount(signerBalance, 18);
 
-    return normalizedExpectedBalance < normalizedBalance;
+  return normalizedExpectedBalance < normalizedBalance;
 };
 
 /**
@@ -26,17 +28,21 @@ export const checkEtherBalance = async (signer, expectedBalance) => {
  * @param {string} contractAddress address of the ERC20 token contract
  * @param {number} expectedBalance how much the the signer is expected to have
  */
-export const checkTokenBalance = async (signer, contractAddress, expectedBalance) => {
-    const normalizedExpectedBalance = expectedBalance * decimals;
+export const checkTokenBalance = async (
+  signer,
+  contractAddress,
+  expectedBalance
+) => {
+  const normalizedExpectedBalance = expectedBalance * decimals;
 
-    const contract = new Contract(contractAddress, ContractABIs.ERC20, signer);
+  const contract = new Contract(contractAddress, ContractABIs.ERC20, signer);
 
-    const [signerBalance, tokenDecimals] = await Promise.all([
-        await contract.balanceOf(await signer.getAddress()),
-        await contract.decimals(),
-    ])
+  const [signerBalance, tokenDecimals] = await Promise.all([
+    await contract.balanceOf(await signer.getAddress()),
+    await contract.decimals(),
+  ]);
 
-    const normalizedBalance = normalizeTokenAmount(signerBalance, tokenDecimals);
+  const normalizedBalance = normalizeTokenAmount(signerBalance, tokenDecimals);
 
-    return normalizedExpectedBalance < normalizedBalance;
+  return normalizedExpectedBalance < normalizedBalance;
 };

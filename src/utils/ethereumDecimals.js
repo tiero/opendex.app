@@ -14,7 +14,9 @@ export const formatTokenAmount = (amount, decimals) => {
   if (decimals === 8) {
     return amountBn;
   } else {
-    const exponent = BigNumber.from(10).pow(BigNumber.from(Math.abs(decimals - 8)));
+    const exponent = BigNumber.from(10).pow(
+      BigNumber.from(Math.abs(decimals - 8))
+    );
 
     if (decimals > 8) {
       return amountBn.mul(exponent);
@@ -36,7 +38,9 @@ export const normalizeTokenAmount = (amount, decimals) => {
   if (decimals === 8) {
     return amount.toNumber();
   } else {
-    const exponent = BigNumber.from(10).pow(BigNumber.from(Math.abs(decimals - 8)));
+    const exponent = BigNumber.from(10).pow(
+      BigNumber.from(Math.abs(decimals - 8))
+    );
 
     if (decimals > 8) {
       return amount.div(exponent).toNumber();
@@ -44,4 +48,4 @@ export const normalizeTokenAmount = (amount, decimals) => {
       return amount.mul(exponent).toNumber();
     }
   }
-}
+};

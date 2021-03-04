@@ -1,7 +1,6 @@
-
 {
-  "short_name": "Boltz",
-  "name": "Boltz Frontend",
+  "short_name": "OpenDEX",
+  "name": "OpenDEX.app",
   "icons": [
     {
       "src": "android-chrome-144x144.png",

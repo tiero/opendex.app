@@ -1,4 +1,4 @@
-import { boltzApi } from "../constants/environment";
+import { boltzApi } from '../constants/environment';
 
 export const GET_PAIRS = `${boltzApi}/getpairs`;
 export const GET_CONTRACTS = `${boltzApi}/getcontracts`;

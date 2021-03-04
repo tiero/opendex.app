@@ -8,6 +8,7 @@ import snap from '../assets/images/snap.svg';
 import clock from '../assets/images/Cameraclock.svg';
 import logo from '../assets/images/Shape.svg';
 import boltz from '../assets/images/Boltz.svg';
+import opendex from '../assets/images/OpenDEX.svg';
 import fast from '../assets/images/fast.svg';
 import safe from '../assets/images/safe.svg';
 import hacked from '../assets/images/hacked.svg';
@@ -24,28 +25,29 @@ import questionIcon from '../assets/images/question-icon.svg';
 import externalLinkIcon from '../assets/images/external-link.svg';
 
 export default {
-    leftArrow,
-    rightArrowPlain,
-    rightArrow,
-    camera,
-    greenTick,
-    swap,
-    snap,
-    clock,
-    logo,
-    boltz,
-    fast,
-    safe,
-    hacked,
-    medium,
-    media,
-    twitter,
-    demo,
-    homepage,
-    homepagemin,
-    oval,
-    close,
-    hamburger,
-    questionIcon,
-    externalLinkIcon
-}
+  leftArrow,
+  rightArrowPlain,
+  rightArrow,
+  camera,
+  greenTick,
+  swap,
+  snap,
+  clock,
+  logo,
+  boltz,
+  opendex,
+  fast,
+  safe,
+  hacked,
+  medium,
+  media,
+  twitter,
+  demo,
+  homepage,
+  homepagemin,
+  oval,
+  close,
+  hamburger,
+  questionIcon,
+  externalLinkIcon,
+};

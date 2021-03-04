@@ -8,17 +8,17 @@ export const StepsProvider = ({ children }) => {
   const [refundActiveStep, setRefundActiveStep] = React.useState(0);
 
   return (
-    <StepsContext.Provider value={{
-      reverseActiveStep,
-      setReverseActiveStep,
-      submarineActiveStep,
-      setSubmarineActiveStep,
-      refundActiveStep,
-      setRefundActiveStep
-    }}>
-      <>
-          {children}
-      </>
+    <StepsContext.Provider
+      value={{
+        reverseActiveStep,
+        setReverseActiveStep,
+        submarineActiveStep,
+        setSubmarineActiveStep,
+        refundActiveStep,
+        setRefundActiveStep,
+      }}
+    >
+      <>{children}</>
     </StepsContext.Provider>
   );
-}
+};
