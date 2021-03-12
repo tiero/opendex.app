@@ -1,10 +1,11 @@
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import AssetSelector from '../../components/AssetSelector';
 import CardComponent from '../../components/Card';
 import SwapButton from '../SwapButton';
 import { CurrencyOption } from '../../constants/swap';
+import Button from '../Button';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -34,9 +35,6 @@ const useStyles = makeStyles(() =>
     },
     amountscontainer: {
       marginTop: '1rem',
-    },
-    button: {
-      borderRadius: 0,
     },
   })
 );
@@ -108,7 +106,7 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
           </Typography>
           {renderCryptoOptions()}
         </Grid>
-        <Button className={classes.button} variant="contained" color="primary">
+        <Button variant="contained" color="primary">
           Next
         </Button>
       </div>

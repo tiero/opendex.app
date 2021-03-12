@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import svgIcons from '../../utils/svgIcons';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import Button from '../Button';
 
 export type SwapButtonProps = {
   onClick: () => void;
@@ -20,11 +20,6 @@ const useStyles = makeStyles(() =>
       minWidth: 48,
       height: 48,
       padding: 16,
-      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-      borderRadius: 0,
-      '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.07)',
-      },
     },
     icon: {
       transform: 'rotate(270deg)',
@@ -43,7 +38,7 @@ const SwapButton = ({ onClick }: SwapButtonProps): ReactElement => {
 
   return (
     <div className={classes.wrapper} onClick={onClick}>
-      <Button variant="contained" disableElevation className={classes.button}>
+      <Button variant="contained" className={classes.button}>
         <img
           src={svgIcons.rightArrowPlain}
           alt="Icon Up"

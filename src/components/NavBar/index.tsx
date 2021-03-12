@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Button,
   Grid,
   Grow,
   isWidthUp,
@@ -17,6 +16,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import svgIcons from '../../utils/svgIcons';
+import Button from '../Button';
 import Divider from '../Divider';
 import Logo from '../Logo/';
 
