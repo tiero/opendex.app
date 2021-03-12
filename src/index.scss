@@ -1,8 +1,14 @@
-@import './styles/global.scss';
-
-// Web3Modal
-/* TODO(may): check if this is still required
-.web3modal-modal-lightbox {
-    z-index: 9999 !important;
+@font-face {
+  font-family: 'ApercuProMedium';
+  src: url('./assets/fonts/AperecuProMedium.woff2') format('woff2');
 }
-*/
+
+// Removes the up/down arrows from text inputs
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}

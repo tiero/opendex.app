@@ -5,15 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import AssetSelector from '../../components/AssetSelector';
 import EthereumAccount from '../../components/EthereumAccount';
-import SwapIcon from '../../components/SwapIcon';
+import SwapButton from '../../components/SwapButton';
 import TextInfo from '../../components/TextInfo';
 import {
-  CurrencyOptions,
   CurrencyTypes,
-  getSelectedOption,
   isEthereumCurrencyType,
   isLightningCurrencyType,
 } from '../../constants/submarine';
+import { CurrencyOptions, getSelectedOption } from '../../constants/swap';
 import { UtilsContext } from '../../context/UtilsContext';
 import { setSigner } from '../../services/ethereum/ethereumDuck';
 import { calculateMinerFee } from '../../services/submarine/minerFees';
@@ -387,7 +386,7 @@ const PickCrypto = props => {
           selectedAsset={sendCurrencyType}
         />
         <Grid item xs={12}>
-          <SwapIcon onClick={handleSwapClick} />
+          <SwapButton onClick={handleSwapClick} />
         </Grid>
         <Grid item xs={12}>
           <AssetSelector
@@ -682,7 +681,6 @@ const PickCrypto = props => {
             ? connectEthereumWallet
             : handleNextStep
         }
-        className="next-step-button"
       >
         {showConnectEthereumWalletButton ? 'Connect wallet' : 'Go to next step'}
       </Button>

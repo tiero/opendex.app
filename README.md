@@ -17,7 +17,7 @@ npm run build
 
 ### Start
 ```bash
-`npm start`
+npm start
 ```
 
 ### Develop view components

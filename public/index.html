@@ -35,27 +35,79 @@
     <title>OpenDEX.app - Cross-chain DEX aggregator</title>
     <style>
       body {
+        background: #0c0c0c;
         padding: 0;
         margin: 0;
       }
+      .initial-bg {
+        background-image: radial-gradient(
+          circle at 30% 51%,
+          #ff4400,
+          #0a0e1a 73%
+        );
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        opacity: 0.1;
+      }
       .initial-loader {
-        color: white;
-        font-family: 'Basier Circle', -apple-system, BlinkMacSystemFont,
-          'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-          'Droid Sans', 'Helvetica Neue', sans-serif;
-        background-color: #0c0c0c;
-        width: 100vw;
-        height: 100vh;
+        position: fixed;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
-        justify-content: center;
+        top: 0;
+        z-index: 99999;
+        animation: bg-animation 3s linear infinite;
+      }
+      .initial-loader-inner {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        width: 50%;
+        height: 50%;
+        background: url(loading-logo.svg) no-repeat center center;
+        background-size: contain;
+        -webkit-animation: sk-bounce 2s infinite ease-in-out;
+        animation: sk-bounce 2s infinite ease-in-out;
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+      }
+      @keyframes bg-animation {
+        0% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-0.3%, -0.3%);
+        }
+        50% {
+          transform: translate(-0.3%, 0.3%);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes sk-bounce {
+        0%,
+        100% {
+          -webkit-transform: scale(0.9);
+        }
+        50% {
+          -webkit-transform: scale(1);
+        }
       }
     </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <div class="initial-loader">Loading...</div>
+      <div class="initial-bg"></div>
+      <div class="initial-loader">
+        <div class="initial-loader-inner"></div>
+      </div>
     </div>
   </body>
 </html>

@@ -4,6 +4,7 @@ import Litecoin from './Litecoin.svg';
 import Tether from './TetherLogo.svg';
 import LightningBitcoin from './LightningBitcoin.svg';
 import LightningLitecoin from './LightningLitecoin.svg';
+import Monero from './Monero.svg';
 
 export default {
   Ether,
@@ -12,4 +13,5 @@ export default {
   Litecoin,
   LightningBitcoin,
   LightningLitecoin,
+  Monero,
 };

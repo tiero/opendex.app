@@ -16,21 +16,12 @@ import { UtilsContext } from '../../context/UtilsContext';
 import { selectSendCurrency } from '../../services/submarine/submarineSelectors';
 import confirmAlert from '../../utils/confirmAlert';
 import svgIcons from '../../utils/svgIcons';
+import OpendexLogo from '../../components/Logo';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme =>
   createStyles({
     root: { padding: '1rem 2rem' },
-    logo: {
-      height: '2rem',
-    },
-    logoWrapper: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    network: {
-      paddingLeft: '0.5rem',
-    },
     navLink: {
       color: theme.palette.text.primary,
       fontSize: '1.25rem',
@@ -133,30 +124,7 @@ export default () => {
       alignItems="center"
       className={classes.root}
     >
-      <Grid
-        item
-        xs={3}
-        sm={3}
-        md={3}
-        lg={3}
-        xl={3}
-        onClick={onLogoClick}
-        className={classes.logoWrapper}
-      >
-        <img
-          className={classes.logo}
-          src={svgIcons.opendex}
-          alt="OpenDEX Logo"
-        />
-        <span
-          className={classes.network}
-          style={{
-            visibility: network === 'mainnet' ? 'hidden' : 'visible',
-          }}
-        >
-          {network.toUpperCase()}
-        </span>
-      </Grid>
+      <OpendexLogo network={network} onClick={onLogoClick} />
       <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
         {!isMobileView ? (
           <Grid

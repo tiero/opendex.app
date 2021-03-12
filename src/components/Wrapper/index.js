@@ -3,11 +3,11 @@ import Drawer from '@material-ui/core/Drawer';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import { CurrencyOptions, getSelectedOption } from '../../constants/submarine';
 import SelectComponent from '../Select';
-import SwapIcon from '../../components/SwapIcon';
+import SwapButton from '../SwapButton';
 import DrawerContext from './DrawerContext';
 import { UtilsContext } from '../../context/UtilsContext';
+import { CurrencyOptions, getSelectedOption } from '../../constants/swap';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -131,7 +131,7 @@ const Wrapper = props => {
           value={getSelectedOption(CurrencyOptions, 'USD Tether')}
           disabled
         />
-        <SwapIcon />
+        <SwapButton />
         <SelectComponent
           options={CurrencyOptions}
           variant="outlined"

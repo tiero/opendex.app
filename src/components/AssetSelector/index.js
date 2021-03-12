@@ -1,7 +1,7 @@
 import { TextField } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { CurrencyOptions } from '../../constants/submarine';
+import { CurrencyOptions } from '../../constants/swap';
 import SelectComponent from '../Select';
 
 const useStyles = makeStyles(() =>

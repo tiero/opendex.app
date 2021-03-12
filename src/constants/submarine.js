@@ -1,8 +1,7 @@
+import Destination from '../views/submarine/destination';
+import PickCrypto from '../views/submarine/pickCrypto';
 import Send from '../views/submarine/send';
 import Status from '../views/submarine/status';
-import PickCrypto from '../views/submarine/pickCrypto';
-import Destination from '../views/submarine/destination';
-import getCurrencyLabel from '../utils/getCurrencyLabel';
 
 export const SwapTypes = {
   Submarine: 'Submarine',
@@ -50,67 +49,6 @@ export const SubmarineSteps = [
     key: 3,
     label: 'Status',
     component: Status,
-  },
-];
-
-export const getSelectedOption = (options, value) => {
-  return options.filter(option => option.id === value)[0];
-};
-
-export const CurrencyOptions = [
-  {
-    id: 'BTC',
-    symbol: 'BTC',
-    label: getCurrencyLabel('Bitcoin', 'Bitcoin'),
-    swapValues: {
-      label: 'Bitcoin',
-      type: CurrencyTypes.BitcoinLike,
-    },
-  },
-  {
-    symbol: 'BTC',
-    id: 'Lightning BTC',
-    label: getCurrencyLabel('LN-BTC', 'LightningBitcoin'),
-    swapValues: {
-      label: 'Bitcoin Lightning',
-      type: CurrencyTypes.Lightning,
-    },
-  },
-  {
-    symbol: 'USDT',
-    id: 'USD Tether',
-    label: getCurrencyLabel('USDT', 'Tether'),
-    swapValues: {
-      label: 'Tether',
-      type: CurrencyTypes.ERC20,
-    },
-  },
-  {
-    symbol: 'ETH',
-    id: 'ETH',
-    label: getCurrencyLabel('Ether', 'Ether'),
-    swapValues: {
-      label: 'Ether',
-      type: CurrencyTypes.Ether,
-    },
-  },
-  {
-    symbol: 'LTC',
-    id: 'LTC',
-    label: getCurrencyLabel('Litecoin', 'Litecoin'),
-    swapValues: {
-      label: 'Litecoin',
-      type: CurrencyTypes.BitcoinLike,
-    },
-  },
-  {
-    symbol: 'LTC',
-    id: 'Lightning LTC',
-    label: getCurrencyLabel('LN-LTC', 'LightningLitecoin'),
-    swapValues: {
-      label: 'Litecoin Lightning',
-      type: CurrencyTypes.Lightning,
-    },
   },
 ];
 
