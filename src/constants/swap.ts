@@ -91,3 +91,9 @@ export const getSelectedOption = (
 ) => {
   return options.filter(option => option.id === value.id)[0];
 };
+
+export enum SwapProvider {
+  BOLTZ = 'Boltz',
+  COMIT = 'Comit',
+  TDEX = 'TDex',
+}

@@ -23,6 +23,9 @@ import close from '../assets/images/close.svg';
 import hamburger from '../assets/images/hamburger.svg';
 import questionIcon from '../assets/images/question-icon.svg';
 import externalLinkIcon from '../assets/images/external-link.svg';
+import comitLogo from '../assets/images/comit-logo.svg';
+import comitLogoBlack from '../assets/images/comit-logo-black.svg';
+import tdexLogo from '../assets/images/tdex-logo.svg';
 
 export default {
   leftArrow,
@@ -50,4 +53,7 @@ export default {
   hamburger,
   questionIcon,
   externalLinkIcon,
+  comitLogo,
+  comitLogoBlack,
+  tdexLogo,
 };

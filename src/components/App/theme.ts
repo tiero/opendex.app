@@ -1,6 +1,7 @@
 export const defaultBackground = '#0c0c0c'; // grayish
 export const defaultBackgroundLight = '#1a1817'; // light grayish
 export const primaryTextColor = '#f2f2f2'; // whiteish
+export const ternaryTextColor = '#636363';
 
 export const theme = {
   typography: {

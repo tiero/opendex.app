@@ -3,6 +3,11 @@
   src: url('./assets/fonts/AperecuProMedium.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'ApercuProRegular';
+  src: url('./assets/fonts/ApercuProRegular.woff2') format('woff2');
+}
+
 // Removes the up/down arrows from text inputs
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
