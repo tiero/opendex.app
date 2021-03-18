@@ -3,7 +3,7 @@ import { default as React } from 'react';
 import ChooseTradingPair from '../components/ChooseTradingPair';
 import SwapProvider from '../components/SwapProvider';
 import Title from '../components/Title';
-import { CurrencyOptions, SwapProvider as Provider } from '../constants/swap';
+import { SwapProvider as Provider } from '../constants/swap';
 import Layout from '../layout/main';
 
 export type HomePageProps = {};
@@ -15,14 +15,10 @@ const HomePage = (_props: HomePageProps) => {
         <Title>CROSS-CHAIN DEX AGGREGATOR</Title>
         <Grid item container direction="column" wrap="nowrap">
           <ChooseTradingPair
-            sendCurrencyType={CurrencyOptions[0]}
-            receiveCurrencyType={CurrencyOptions[3]}
             sendCurrencyValue={1}
             receiveCurrencyValue={0}
             onSendCurrencyChange={() => {}}
-            onSendAssetChange={() => {}}
-            onReceiveCurrencyChange={() => {}}
-            onReceiveAssetChange={() => {}}
+            onReceiveAmountChange={() => {}}
             onNumberInputKeyPress={() => {}}
             handleSwapClick={() => {}}
           />

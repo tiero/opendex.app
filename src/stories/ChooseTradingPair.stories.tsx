@@ -4,6 +4,7 @@ import ChooseTradingPair, {
   ChooseTradingPairProps,
 } from '../components/ChooseTradingPair';
 import { CurrencyOptions } from '../constants/swap';
+import { storybookStore } from './storybook.store';
 
 export default {
   title: 'Choose Trading Pair',
@@ -15,6 +16,7 @@ export default {
     receiveCurrencyValue: { defaultValue: 0 },
     handleSwapClick: { defaultValue: () => {} },
   },
+  decorators: [storybookStore],
 };
 
 const Template: Story<ChooseTradingPairProps> = (

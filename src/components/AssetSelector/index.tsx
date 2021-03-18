@@ -23,7 +23,6 @@ const AssetSelector = props => {
   const classes = useStyles();
   const {
     label,
-    defaultValue,
     value,
     onAmountChange,
     onKeyPress,
@@ -34,7 +33,6 @@ const AssetSelector = props => {
   return (
     <TextField
       label={label}
-      defaultValue={defaultValue}
       value={value}
       onChange={onAmountChange}
       type="number"

@@ -1,13 +1,12 @@
 import React from 'react';
 import AssetSelector from '../components/AssetSelector';
-import { CurrencyOptions } from '../constants/submarine';
+import { CurrencyOptions } from '../constants/swap';
 
 export default {
   title: 'AssetSelector',
   component: AssetSelector,
   argTypes: {
     label: { defaultValue: 'You send' },
-    defaultValue: { defaultValue: undefined },
     value: { defaultValue: undefined },
     selectedAsset: { defaultValue: CurrencyOptions[0] },
     onAmountChange: { defaultValue: () => {} },

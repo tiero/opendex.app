@@ -6,7 +6,7 @@ const getCurrencyLabel = (text, icon) => {
     <>
       <span className="label-icon">
         <img
-          style={{ width: '2rem', 'margin-right': '0.5rem' }}
+          style={{ width: '2rem', marginRight: '0.5rem' }}
           src={currencyIcons[icon]}
           alt={text}
         />

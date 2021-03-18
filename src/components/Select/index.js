@@ -1,16 +1,17 @@
 import { Box, MenuItem, TextField } from '@material-ui/core';
 import React from 'react';
 
-const SelectComponent = ({
-  options,
-  variant,
-  defaultValue,
-  onChange,
-  value,
-  disabled,
-  disableUnderline,
-  className,
-}) => {
+const SelectComponent = props => {
+  const {
+    options,
+    variant,
+    defaultValue,
+    onChange,
+    value,
+    disabled,
+    disableUnderline,
+    className,
+  } = props;
   const [option, setOption] = React.useState(
     value.id || defaultValue.id || options[0].id
   );
