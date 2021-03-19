@@ -7,8 +7,13 @@ import SwapButton from '../SwapButton';
 import { CurrencyOption, CurrencyOptions } from '../../constants/swap';
 import Button from '../Button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setBaseAsset, setQuoteAsset } from '../../store/swaps-slice';
-import Skeleton from '@material-ui/lab/Skeleton';
+import {
+  isRatesLoaded,
+  selectBaseAsset,
+  selectQuoteAsset,
+  setBaseAsset,
+  setQuoteAsset,
+} from '../../store/swaps-slice';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -61,8 +66,9 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
     onReceiveAmountChange,
   } = props;
   const dispatch = useAppDispatch();
-  const baseAsset = useAppSelector(state => state.swaps.baseAsset);
-  const quoteAsset = useAppSelector(state => state.swaps.quoteAsset);
+  const baseAsset = useAppSelector(selectBaseAsset);
+  const quoteAsset = useAppSelector(selectQuoteAsset);
+  const ratesLoaded = useAppSelector(isRatesLoaded);
 
   const baseCurrency = CurrencyOptions.find(
     currency => currency.id === baseAsset
@@ -74,21 +80,21 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
   const renderCryptoOptions = () => {
     return (
       <Grid container justify="center" direction="row" alignItems="center">
-        <AssetSelector
-          label={'You send'}
-          value={sendCurrencyValue}
-          onAmountChange={() => {}}
-          onAssetChange={(currency: CurrencyOption) =>
-            dispatch(setBaseAsset(currency.id))
-          }
-          onKeyPress={onNumberInputKeyPress}
-          selectedAsset={baseCurrency}
-        />
         <Grid item xs={12}>
-          <Skeleton variant="text" height={40} animation={'wave'} />
+          <AssetSelector
+            label={'You send'}
+            value={sendCurrencyValue}
+            onAmountChange={() => {}}
+            onAssetChange={(currency: CurrencyOption) =>
+              dispatch(setBaseAsset(currency.id))
+            }
+            onKeyPress={onNumberInputKeyPress}
+            selectedAsset={baseCurrency}
+            loading={!ratesLoaded}
+          />
         </Grid>
         <Grid item xs={12}>
-          <SwapButton onClick={handleSwapClick} />
+          <SwapButton onClick={handleSwapClick} disabled={!ratesLoaded} />
         </Grid>
         <Grid item xs={12}>
           <AssetSelector
@@ -100,6 +106,7 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
             }
             onKeyPress={onNumberInputKeyPress}
             selectedAsset={quoteCurrency}
+            loading={!ratesLoaded}
           />
         </Grid>
       </Grid>
@@ -115,7 +122,7 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
           </Typography>
           {renderCryptoOptions()}
         </Grid>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" disabled={!ratesLoaded}>
           Next
         </Button>
       </div>

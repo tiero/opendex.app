@@ -5,6 +5,7 @@ import Button from '../Button';
 
 export type SwapButtonProps = {
   onClick: () => void;
+  disabled?: boolean;
 };
 
 const useStyles = makeStyles(() =>
@@ -31,14 +32,18 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const SwapButton = ({ onClick }: SwapButtonProps): ReactElement => {
+const SwapButton = ({ onClick, disabled }: SwapButtonProps): ReactElement => {
   const classes = useStyles();
 
   const upIconClass = `${classes.icon} ${classes.upIcon}`;
 
   return (
     <div className={classes.wrapper} onClick={onClick}>
-      <Button variant="contained" className={classes.button}>
+      <Button
+        variant="contained"
+        className={classes.button}
+        disabled={disabled}
+      >
         <img
           src={svgIcons.rightArrowPlain}
           alt="Icon Up"

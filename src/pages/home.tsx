@@ -5,10 +5,14 @@ import SwapProvider from '../components/SwapProvider';
 import Title from '../components/Title';
 import { SwapProvider as Provider } from '../constants/swap';
 import Layout from '../layout/main';
+import { useAppSelector } from '../store/hooks';
+import { isRatesLoaded } from '../store/swaps-slice';
 
 export type HomePageProps = {};
 
 const HomePage = (_props: HomePageProps) => {
+  const ratesLoaded = useAppSelector(isRatesLoaded);
+
   return (
     <Layout>
       <Grid container direction="column" wrap="nowrap">
@@ -22,7 +26,7 @@ const HomePage = (_props: HomePageProps) => {
             onNumberInputKeyPress={() => {}}
             handleSwapClick={() => {}}
           />
-          <SwapProvider provider={Provider.BOLTZ} />
+          {ratesLoaded && <SwapProvider provider={Provider.BOLTZ} />}
         </Grid>
       </Grid>
     </Layout>

@@ -8,6 +8,7 @@ const store = {
       swaps: {
         baseAsset: 'ETH',
         quoteAsset: 'BTC',
+        rates: {},
       },
     };
   },
