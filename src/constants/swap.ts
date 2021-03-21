@@ -9,8 +9,19 @@ export enum CurrencyType {
   Liquid = 'Liquid',
 }
 
+export enum Currency {
+  BTC = 'BTC',
+  LIGHTNING_BTC = 'Lightning BTC',
+  L_BTC = 'Liquid BTC',
+  LTC = 'LTC',
+  LIGHTNING_LTC = 'Lightning LTC',
+  USD_TETHER = 'USD Tether',
+  ETH = 'ETH',
+  MONERO = 'Monero',
+}
+
 export type CurrencyOption = {
-  id: string;
+  id: Currency;
   symbol: string;
   label: ReturnType<typeof getCurrencyLabel>;
   swapValues: {
@@ -21,7 +32,7 @@ export type CurrencyOption = {
 
 export const CurrencyOptions: CurrencyOption[] = [
   {
-    id: 'BTC',
+    id: Currency.BTC,
     symbol: 'BTC',
     label: getCurrencyLabel('Bitcoin', 'Bitcoin'),
     swapValues: {
@@ -30,8 +41,8 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.LIGHTNING_BTC,
     symbol: 'BTC',
-    id: 'Lightning BTC',
     label: getCurrencyLabel('LN-BTC', 'LightningBitcoin'),
     swapValues: {
       label: 'Bitcoin Lightning',
@@ -39,8 +50,17 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.L_BTC,
+    symbol: 'L-BTC',
+    label: getCurrencyLabel('L-BTC', 'Bitcoin'),
+    swapValues: {
+      label: 'Bitcoin Liquid',
+      type: CurrencyType.Liquid,
+    },
+  },
+  {
+    id: Currency.USD_TETHER,
     symbol: 'USDT',
-    id: 'USD Tether',
     label: getCurrencyLabel('USDT', 'Tether'),
     swapValues: {
       label: 'Tether',
@@ -48,8 +68,8 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.ETH,
     symbol: 'ETH',
-    id: 'ETH',
     label: getCurrencyLabel('Ether', 'Ether'),
     swapValues: {
       label: 'Ether',
@@ -57,8 +77,8 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.LTC,
     symbol: 'LTC',
-    id: 'LTC',
     label: getCurrencyLabel('Litecoin', 'Litecoin'),
     swapValues: {
       label: 'Litecoin',
@@ -66,8 +86,8 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.LIGHTNING_LTC,
     symbol: 'LTC',
-    id: 'Lightning LTC',
     label: getCurrencyLabel('LN-LTC', 'LightningLitecoin'),
     swapValues: {
       label: 'Litecoin Lightning',
@@ -75,8 +95,8 @@ export const CurrencyOptions: CurrencyOption[] = [
     },
   },
   {
+    id: Currency.MONERO,
     symbol: 'XMR',
-    id: 'Monero',
     label: getCurrencyLabel('Monero', 'Monero'),
     swapValues: {
       label: 'Monero',
@@ -96,4 +116,22 @@ export enum SwapProvider {
   BOLTZ = 'Boltz',
   COMIT = 'Comit',
   TDEX = 'TDex',
+}
+
+export const swapProviders = {
+  [SwapProvider.BOLTZ]: [
+    [Currency.BTC, Currency.LIGHTNING_BTC],
+    [Currency.BTC, Currency.LIGHTNING_LTC],
+    [Currency.ETH, Currency.LIGHTNING_BTC],
+    [Currency.USD_TETHER, Currency.LIGHTNING_BTC],
+    [Currency.LTC, Currency.LIGHTNING_BTC],
+    [Currency.LTC, Currency.LIGHTNING_LTC],
+  ],
+  [SwapProvider.COMIT]: [[Currency.BTC, Currency.MONERO]],
+  [SwapProvider.TDEX]: [[Currency.BTC, Currency.L_BTC]],
+};
+
+export enum SwapStep {
+  CHOOSE_PAIR,
+  SWAP_FLOW,
 }
