@@ -1,11 +1,16 @@
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import AssetSelector from '../../components/AssetSelector';
-import CardComponent from '../../components/Card';
-import SwapButton from '../SwapButton';
-import { CurrencyOption, CurrencyOptions } from '../../constants/swap';
+import AssetSelector from '../AssetSelector';
 import Button from '../Button';
+import CardComponent from '../Card';
+import ErrorMessage from '../ErrorMessage';
+import SwapButton from '../SwapButton';
+import {
+  CurrencyOption,
+  CurrencyOptions,
+  SwapStep,
+} from '../../constants/swap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   isRatesLoaded,
@@ -13,11 +18,15 @@ import {
   selectBaseAsset,
   selectQuoteAmount,
   selectQuoteAsset,
+  selectSwapProvider,
   setBaseAmount,
   setBaseAsset,
   setQuoteAmount,
   setQuoteAsset,
+  setRates,
+  setSwapStep,
 } from '../../store/swaps-slice';
+import { timer } from 'rxjs';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -48,18 +57,23 @@ const useStyles = makeStyles(() =>
     amountscontainer: {
       marginTop: '1rem',
     },
+    errorMessageContainer: {
+      minHeight: '1.5rem',
+      marginTop: '1rem',
+    },
   })
 );
 
 export type ChooseTradingPairProps = {};
 
-const ChooseTradingPair = (props: ChooseTradingPairProps) => {
+const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const baseAsset = useAppSelector(selectBaseAsset);
   const quoteAsset = useAppSelector(selectQuoteAsset);
   const baseAmount = useAppSelector(selectBaseAmount);
   const quoteAmount = useAppSelector(selectQuoteAmount);
+  const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
   const baseCurrency = CurrencyOptions.find(
@@ -69,8 +83,12 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
     currency => currency.id === quoteAsset
   )!;
 
+  timer(1000).subscribe(() => dispatch(setRates({})));
   const nextDisabled =
-    !ratesLoaded || Number(baseAmount) === 0 || Number(quoteAmount) === 0;
+    !ratesLoaded ||
+    Number(baseAmount) === 0 ||
+    Number(quoteAmount) === 0 ||
+    !swapProvider;
 
   const renderCryptoOptions = () => {
     return (
@@ -126,8 +144,23 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
             Swap
           </Typography>
           {renderCryptoOptions()}
+          <Grid
+            item
+            container
+            justify="center"
+            className={classes.errorMessageContainer}
+          >
+            {!swapProvider && ratesLoaded && (
+              <ErrorMessage message="Trading pair not supported" />
+            )}
+          </Grid>
         </Grid>
-        <Button variant="contained" color="primary" disabled={nextDisabled}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={nextDisabled}
+          onClick={() => dispatch(setSwapStep(SwapStep.SWAP_FLOW))}
+        >
           Next
         </Button>
       </div>
