@@ -9,9 +9,13 @@ import Button from '../Button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   isRatesLoaded,
+  selectBaseAmount,
   selectBaseAsset,
+  selectQuoteAmount,
   selectQuoteAsset,
+  setBaseAmount,
   setBaseAsset,
+  setQuoteAmount,
   setQuoteAsset,
 } from '../../store/swaps-slice';
 
@@ -47,27 +51,15 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export type ChooseTradingPairProps = {
-  sendCurrencyValue: number;
-  receiveCurrencyValue: number;
-  onSendCurrencyChange: () => void;
-  onNumberInputKeyPress: () => void;
-  handleSwapClick: () => void;
-  onReceiveAmountChange: () => void;
-};
+export type ChooseTradingPairProps = {};
 
 const ChooseTradingPair = (props: ChooseTradingPairProps) => {
   const classes = useStyles();
-  const {
-    sendCurrencyValue,
-    onNumberInputKeyPress,
-    handleSwapClick,
-    receiveCurrencyValue,
-    onReceiveAmountChange,
-  } = props;
   const dispatch = useAppDispatch();
   const baseAsset = useAppSelector(selectBaseAsset);
   const quoteAsset = useAppSelector(selectQuoteAsset);
+  const baseAmount = useAppSelector(selectBaseAmount);
+  const quoteAmount = useAppSelector(selectQuoteAmount);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
   const baseCurrency = CurrencyOptions.find(
@@ -77,34 +69,47 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
     currency => currency.id === quoteAsset
   )!;
 
+  const nextDisabled =
+    !ratesLoaded || Number(baseAmount) === 0 || Number(quoteAmount) === 0;
+
   const renderCryptoOptions = () => {
     return (
       <Grid container justify="center" direction="row" alignItems="center">
         <Grid item xs={12}>
           <AssetSelector
             label={'You send'}
-            value={sendCurrencyValue}
-            onAmountChange={() => {}}
+            value={baseAmount}
+            placeholder={'0.00'}
+            onAmountChange={(
+              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+            ) => dispatch(setBaseAmount(e.target.value))}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setBaseAsset(currency.id))
             }
-            onKeyPress={onNumberInputKeyPress}
             selectedAsset={baseCurrency}
             loading={!ratesLoaded}
           />
         </Grid>
         <Grid item xs={12}>
-          <SwapButton onClick={handleSwapClick} disabled={!ratesLoaded} />
+          <SwapButton
+            onClick={() => {
+              dispatch(setBaseAsset(quoteCurrency.id));
+              dispatch(setQuoteAsset(baseCurrency.id));
+            }}
+            disabled={!ratesLoaded}
+          />
         </Grid>
         <Grid item xs={12}>
           <AssetSelector
             label={'You receive'}
-            value={receiveCurrencyValue}
-            onAmountChange={onReceiveAmountChange}
+            value={quoteAmount}
+            placeholder={'0.00'}
+            onAmountChange={(
+              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+            ) => dispatch(setQuoteAmount(e.target.value))}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setQuoteAsset(currency.id))
             }
-            onKeyPress={onNumberInputKeyPress}
             selectedAsset={quoteCurrency}
             loading={!ratesLoaded}
           />
@@ -122,7 +127,7 @@ const ChooseTradingPair = (props: ChooseTradingPairProps) => {
           </Typography>
           {renderCryptoOptions()}
         </Grid>
-        <Button variant="contained" color="primary" disabled={!ratesLoaded}>
+        <Button variant="contained" color="primary" disabled={nextDisabled}>
           Next
         </Button>
       </div>

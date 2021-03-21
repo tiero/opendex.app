@@ -18,14 +18,7 @@ const HomePage = (_props: HomePageProps) => {
       <Grid container direction="column" wrap="nowrap">
         <Title>CROSS-CHAIN DEX AGGREGATOR</Title>
         <Grid item container direction="column" wrap="nowrap">
-          <ChooseTradingPair
-            sendCurrencyValue={1}
-            receiveCurrencyValue={0}
-            onSendCurrencyChange={() => {}}
-            onReceiveAmountChange={() => {}}
-            onNumberInputKeyPress={() => {}}
-            handleSwapClick={() => {}}
-          />
+          <ChooseTradingPair />
           {ratesLoaded && <SwapProvider provider={Provider.BOLTZ} />}
         </Grid>
       </Grid>

@@ -1,9 +1,9 @@
-import { TextField } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 import React from 'react';
 import { CurrencyOptions } from '../../constants/swap';
 import SelectComponent from '../Select';
+import NumberField from '../NumberField';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,23 +26,22 @@ const AssetSelector = props => {
     label,
     value,
     onAmountChange,
-    onKeyPress,
     onAssetChange,
     selectedAsset,
+    placeholder,
     loading,
   } = props;
 
   return loading ? (
     <Skeleton variant="text" height={58} animation={'wave'} />
   ) : (
-    <TextField
+    <NumberField
       label={label}
       value={value}
       onChange={onAmountChange}
-      type="number"
-      onKeyPress={onKeyPress}
       autoFocus
       fullWidth
+      placeholder={placeholder}
       InputProps={{
         endAdornment: (
           <SelectComponent
@@ -53,6 +52,9 @@ const AssetSelector = props => {
             value={selectedAsset}
           />
         ),
+      }}
+      InputLabelProps={{
+        shrink: true,
       }}
     />
   );
