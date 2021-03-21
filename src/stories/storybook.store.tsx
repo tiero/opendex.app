@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { action } from '@storybook/addon-actions';
+import { initialState } from '../store/swaps-slice';
 
 const store = {
   getState: () => {
     return {
       swaps: {
-        baseAsset: 'ETH',
-        quoteAsset: 'BTC',
+        ...initialState,
         baseAmount: '0.01',
         quoteAmount: '0.002',
         rates: {},

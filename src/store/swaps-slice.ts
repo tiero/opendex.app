@@ -14,7 +14,7 @@ interface SwapsState {
 }
 
 // Define the initial state using that type
-const initialState: SwapsState = {
+export const initialState: SwapsState = {
   swapStep: SwapStep.CHOOSE_PAIR,
   baseAsset: Currency.LIGHTNING_BTC,
   quoteAsset: Currency.ETH,
