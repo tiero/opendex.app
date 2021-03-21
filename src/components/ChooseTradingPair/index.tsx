@@ -23,8 +23,10 @@ import {
   setBaseAsset,
   setQuoteAmount,
   setQuoteAsset,
+  setRates,
   setSwapStep,
 } from '../../store/swaps-slice';
+import { timer } from 'rxjs';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -81,6 +83,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     currency => currency.id === quoteAsset
   )!;
 
+  timer(1000).subscribe(() => dispatch(setRates({})));
   const nextDisabled =
     !ratesLoaded ||
     Number(baseAmount) === 0 ||
@@ -147,7 +150,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             justify="center"
             className={classes.errorMessageContainer}
           >
-            {!swapProvider && (
+            {!swapProvider && ratesLoaded && (
               <ErrorMessage message="Trading pair not supported" />
             )}
           </Grid>
