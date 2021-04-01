@@ -18,6 +18,7 @@
     "boltz-core": "^0.4.0",
     "ethers": "^5.0.31",
     "is_js": "^0.9.0",
+    "ldk": "^0.2.12",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "qrcode-parser": "^1.2.0",
@@ -40,7 +41,7 @@
     "web3modal": "^1.9.3"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "BROWSER=none PORT=8080 react-scripts start",
     "build": "react-scripts build",
     "test": "npm run prettier:check && react-scripts test",
     "eject": "react-scripts eject",

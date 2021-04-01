@@ -1,7 +1,29 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
+import { useAppSelector } from '../../store/hooks';
+import { RootState } from '../../store';
 
-const TdexSwapFlow = (): ReactElement => {
-  return <div>TDex swap flow</div>;
+interface Props { }
+
+const TdexSwapFlow: React.FC<Props> = () => {
+  const {
+    baseAmount,
+    baseAsset,
+    quoteAmount,
+    quoteAsset
+  } = useAppSelector((state: RootState) => state.swaps);
+
+  return (
+    <>
+      <TdexSteps>
+
+      </TdexSteps>
+      <button onClick={console.log}> Connect with Marina </button>
+      <p>or</p>
+      <button onClick={console.log}> In-Browser wallet (not reccomended)</button>
+
+    </>
+  );
+
 };
 
 export default TdexSwapFlow;
