@@ -7,9 +7,7 @@ import { fetchAndUnblindUtxos, greedyCoinSelector, IdentityType } from 'ldk';
 import BrowserInjectOpenDex from './browserInject';
 import { TradeType, Trade } from 'tdex-sdk';
 
-
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     display: 'flex',
@@ -25,17 +23,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
     fontSize: '1.5rem',
-    lineHeight: 'normal'
+    lineHeight: 'normal',
   },
   buttons: {
     marginTop: theme.spacing(6),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-  }
+  },
 }));
-
-
 
 interface Props {
   installed: boolean;
@@ -45,27 +41,34 @@ interface Props {
   onReject(): void;
 }
 
-const Review: React.FC<Props> = ({ onTrade, onReject, installed, connected, chain }) => {
+const Review: React.FC<Props> = ({
+  onTrade,
+  onReject,
+  installed,
+  connected,
+  chain,
+}) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = async () => {
-
     if (!installed) {
-      return alert('Marina is not installed')
+      return alert('Marina is not installed');
     }
 
     if (!connected) {
-      return alert('User must enable this website to proceed')
+      return alert('User must enable this website to proceed');
     }
 
     const ESPLORA_API_URL = 'http://localhost:3001';
     const TDEX_PROVIDER_URL = 'http://localhost:9945';
 
     const market = {
-      baseAsset: "5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225",
-      quoteAsset: "4e10f035e3127235c4842cc9ba7bc9cf4fe9be350edf940dc78f46d7efea5850"
+      baseAsset:
+        '5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225',
+      quoteAsset:
+        '4e10f035e3127235c4842cc9ba7bc9cf4fe9be350edf940dc78f46d7efea5850',
     };
 
     try {
@@ -75,8 +78,8 @@ const Review: React.FC<Props> = ({ onTrade, onReject, installed, connected, chai
         chain,
         type: IdentityType.Inject,
         value: {
-          windowProvider: 'marina'
-        }
+          windowProvider: 'marina',
+        },
       });
 
       const addrs = await identity.getAddresses();
@@ -93,48 +96,39 @@ const Review: React.FC<Props> = ({ onTrade, onReject, installed, connected, chai
         market,
         amount: 6000,
         asset: market.baseAsset,
-        identity
+        identity,
       });
 
       setIsLoading(false);
       onTrade(txid);
     } catch (error) {
       setIsLoading(false);
-      console.error(error)
+      console.error(error);
     }
-  }
-
+  };
 
   return (
     <div className={classes.root}>
       <Typography className={classes.instructions}>
         Review the terms of the trade before confirming
       </Typography>
-      <Typography className={classes.terms}>
-        📤 You send X of LBTC
-      </Typography>
+      <Typography className={classes.terms}>📤 You send X of LBTC</Typography>
       <br />
       <Typography className={classes.terms}>
         📥 You receive X of USDT
       </Typography>
-      {
-        !isLoading ? (
-          <div className={classes.buttons}>
-            <Button onClick={onReject}>
-              Reject
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleConfirm}>
-              Accept
-            </Button>
-          </div>
-        ) : (
-          <CircularProgress />
-        )
-      }
-    </div >
+      {!isLoading ? (
+        <div className={classes.buttons}>
+          <Button onClick={onReject}>Reject</Button>
+          <Button variant="contained" color="primary" onClick={handleConfirm}>
+            Accept
+          </Button>
+        </div>
+      ) : (
+        <CircularProgress />
+      )}
+    </div>
   );
-}
-
-
+};
 
 export default Review;

@@ -4,7 +4,6 @@ import { MarinaProvider } from 'marina-provider';
 export default class BrowserInjectOpenDex extends BrowserInject {
   private _provider: MarinaProvider;
 
-
   constructor(args: IdentityOpts) {
     super(args);
     this._provider = (window as any)[args.value.windowProvider];
@@ -26,8 +25,7 @@ export default class BrowserInjectOpenDex extends BrowserInject {
         }
       });
 
-      if (!found)
-        throw new Error("no blinding key for script " + script);
+      if (!found) throw new Error('no blinding key for script ' + script);
 
       return found.blindingPrivateKey;
     } catch (e) {

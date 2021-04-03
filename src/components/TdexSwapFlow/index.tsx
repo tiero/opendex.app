@@ -9,13 +9,12 @@ import Connect from './components/connect';
 import Review from './components/review';
 import Summary from './components/summary';
 
-
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-interface Props { }
+interface Props {}
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     wrapper: {
       display: 'flex',
@@ -32,23 +31,19 @@ const useStyles = makeStyles((theme) =>
     info: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(3),
-    }
+    },
   })
 );
 
-const steps = ["Connect", "Review & Confirm", "Summary"];
+const steps = ['Connect', 'Review & Confirm', 'Summary'];
 
 const TdexSwapFlow: React.FC<Props> = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const {
-    baseAmount,
-    baseAsset,
-    quoteAmount,
-    quoteAsset
-  } = useAppSelector((state: RootState) => state.swaps);
-
+  const { baseAmount, baseAsset, quoteAmount, quoteAsset } = useAppSelector(
+    (state: RootState) => state.swaps
+  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [installed, setInstalled] = useState(false);
@@ -56,20 +51,17 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
 
-
   let isCheckingMarina: boolean = false;
   let interval: any;
 
   useEffect(() => {
-
     if (typeof (window as any).marina === 'undefined') {
       return;
     }
 
     interval = setInterval(async () => {
       try {
-        if (isCheckingMarina)
-          return;
+        if (isCheckingMarina) return;
 
         isCheckingMarina = true;
 
@@ -84,23 +76,20 @@ const TdexSwapFlow: React.FC<Props> = () => {
 
         setIsLoading(false);
         isCheckingMarina = false;
-
       } catch (_) {
         setIsLoading(false);
         isCheckingMarina = false;
       }
-
     }, 5000);
 
     //Clean up
     return () => {
       clearInterval(interval);
     };
-
-  }, [])
+  }, []);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
   const handleReset = () => {
@@ -110,7 +99,13 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const getStepContent = () => {
     switch (activeStep) {
       case 0:
-        return <Connect installed={installed} connected={connected} onConnect={handleNext} />
+        return (
+          <Connect
+            installed={installed}
+            connected={connected}
+            onConnect={handleNext}
+          />
+        );
       case 1:
         return (
           <Review
@@ -125,28 +120,27 @@ const TdexSwapFlow: React.FC<Props> = () => {
           />
         );
       case 2:
-        return <Summary chain={chain} txid={txid} onReset={handleReset} />
+        return <Summary chain={chain} txid={txid} onReset={handleReset} />;
       default:
         return null;
     }
-  }
+  };
 
   if (isLoading) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
 
   return (
     <div className={classes.wrapper}>
       <TdexSteps steps={steps} activeStep={activeStep} />
-      <div>
-        {getStepContent()}
-      </div>
-      <div className={classes.info} >
-        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`}`}
+      <div>{getStepContent()}</div>
+      <div className={classes.info}>
+        {`Status: ${
+          connected ? `Connected - Network: ${chain}` : `Not Connected`
+        }`}
       </div>
     </div>
   );
-
 };
 
 export default TdexSwapFlow;

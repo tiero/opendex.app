@@ -4,7 +4,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
   },
@@ -14,10 +14,8 @@ const useStyles = makeStyles((theme) => ({
   instructions: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-  }
+  },
 }));
-
-
 
 interface Props {
   steps: string[];
@@ -30,7 +28,7 @@ const TdexStepper: React.FC<Props> = ({ steps, activeStep }) => {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
+        {steps.map(label => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
@@ -38,8 +36,6 @@ const TdexStepper: React.FC<Props> = ({ steps, activeStep }) => {
       </Stepper>
     </div>
   );
-}
-
-
+};
 
 export default TdexStepper;
