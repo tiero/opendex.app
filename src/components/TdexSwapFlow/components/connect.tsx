@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { MarinaProvider } from 'marina-provider';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,55 +25,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 interface Props {
+  installed: boolean;
+  connected: boolean;
   onConnect(): void;
 }
 
 
-const Connect: React.FC<Props> = ({ onConnect }) => {
+const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
   const classes = useStyles();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [installed, setInstalled] = useState(false);
-  const [connected, setConnected] = useState(false);
-
-  let isCheckingMarina: boolean = false;
-  let interval: any;
-
-  useEffect(() => {
-
-    if (typeof (window as any).marina === 'undefined') {
-      return;
-    }
-
-    interval = setInterval(async () => {
-      try {
-        if (isCheckingMarina)
-          return;
-
-        isCheckingMarina = true;
-
-        const marina: MarinaProvider = (window as any).marina;
-        setInstalled(true);
-
-        const isEnabled = await marina.isEnabled();
-        setConnected(isEnabled);
-
-        setIsLoading(false);
-        isCheckingMarina = false;
-      } catch (_) {
-        setIsLoading(false);
-        isCheckingMarina = false;
-      }
-
-    }, 1000);
-
-    //Clean up
-    return () => {
-      clearInterval(interval);
-    };
-
-  }, [])
-
 
   const handleConnect = async () => {
     if (!installed) {
@@ -94,10 +52,6 @@ const Connect: React.FC<Props> = ({ onConnect }) => {
     }
 
     onConnect()
-  }
-
-  if (isLoading) {
-    return <CircularProgress />
   }
 
   return (
