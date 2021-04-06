@@ -1,4 +1,5 @@
-import { Currency, SwapProvider, swapProviders } from '../constants/swap';
+import { SwapProvider, swapProviders } from '../constants/swap';
+import Currency from '../constants/currency';
 
 export const getSwapProvider = (
   baseAsset: Currency,

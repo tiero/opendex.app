@@ -7,7 +7,10 @@ import SelectComponent from '../Select';
 import SwapButton from '../SwapButton';
 import DrawerContext from './DrawerContext';
 import { UtilsContext } from '../../context/UtilsContext';
-import { CurrencyOptions, getSelectedOption } from '../../constants/swap';
+import CurrencyID, {
+  CurrencyOptions,
+  CurrencyByID,
+} from '../../constants/currency';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -128,7 +131,7 @@ const Wrapper = props => {
           options={CurrencyOptions}
           variant="outlined"
           className="currency-options"
-          value={getSelectedOption(CurrencyOptions, 'USD Tether')}
+          value={CurrencyByID[CurrencyID.ETH_USDT]}
           disabled
         />
         <SwapButton />
@@ -136,7 +139,7 @@ const Wrapper = props => {
           options={CurrencyOptions}
           variant="outlined"
           className="currency-options"
-          value={getSelectedOption(CurrencyOptions, 'Lightning BTC')}
+          value={CurrencyByID[CurrencyID.LIGHTNING_BTC]}
           disabled
         />
       </div>
