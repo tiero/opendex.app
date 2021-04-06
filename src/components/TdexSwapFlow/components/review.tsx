@@ -7,6 +7,9 @@ import { fetchAndUnblindUtxos, greedyCoinSelector, IdentityType } from 'ldk';
 import BrowserInjectOpenDex from './browserInject';
 import { TradeType, Trade } from 'tdex-sdk';
 
+import { ProviderByChain, ExplorerByChain, CurrencyToAssetByChain } from '../constants'
+import CurrencyID from '../../../constants/currency';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -33,10 +36,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
+
+interface SwapTerms {
+  assetToBeSent: string;
+  amountToBeSent: number;
+  assetToReceive: string;
+  amountToReceive: number;
+}
+
 interface Props {
   installed: boolean;
   connected: boolean;
   chain: 'liquid' | 'regtest';
+  terms: SwapTerms
   onTrade(txid: string): void;
   onReject(): void;
 }
@@ -47,6 +60,7 @@ const Review: React.FC<Props> = ({
   installed,
   connected,
   chain,
+  terms,
 }) => {
   const classes = useStyles();
 
@@ -61,18 +75,11 @@ const Review: React.FC<Props> = ({
       return alert('User must enable this website to proceed');
     }
 
-    const ESPLORA_API_URL = 'http://localhost:3001';
-    const TDEX_PROVIDER_URL = 'http://localhost:9945';
-
-    const market = {
-      baseAsset:
-        '5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225',
-      quoteAsset:
-        '4e10f035e3127235c4842cc9ba7bc9cf4fe9be350edf940dc78f46d7efea5850',
-    };
-
     try {
       setIsLoading(true);
+
+      const explorer = ExplorerByChain[chain];
+      const [provider] = ProviderByChain[chain];
 
       const identity = new BrowserInjectOpenDex({
         chain,
@@ -83,27 +90,34 @@ const Review: React.FC<Props> = ({
       });
 
       const addrs = await identity.getAddresses();
-      const utxos = await fetchAndUnblindUtxos(addrs, ESPLORA_API_URL);
+      const utxos = await fetchAndUnblindUtxos(addrs, explorer);
 
       const trade = new Trade({
-        providerUrl: TDEX_PROVIDER_URL,
-        explorerUrl: ESPLORA_API_URL,
+        providerUrl: provider,
+        explorerUrl: explorer,
         coinSelector: greedyCoinSelector(),
         utxos,
       });
 
+
+      const market = {
+        baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC],
+        quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT]
+      };
+      const makeTrade = terms.assetToBeSent === CurrencyID.LIQUID_BTC ? (req) => trade.sell(req) : (req) => trade.buy(req);
+
       const txid = await trade.sell({
         market,
-        amount: 6000,
-        asset: market.baseAsset,
+        amount: terms.amountToBeSent,
+        asset: CurrencyToAssetByChain[chain][terms.assetToBeSent],
         identity,
       });
 
-      setIsLoading(false);
       onTrade(txid);
     } catch (error) {
-      setIsLoading(false);
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,10 +126,10 @@ const Review: React.FC<Props> = ({
       <Typography className={classes.instructions}>
         Review the terms of the trade before confirming
       </Typography>
-      <Typography className={classes.terms}>📤 You send X of LBTC</Typography>
+      <Typography className={classes.terms}>📤 You send {terms.amountToBeSent} of {terms.assetToBeSent}</Typography>
       <br />
       <Typography className={classes.terms}>
-        📥 You receive X of USDT
+        📥 You receive {terms.amountToReceive} of {terms.assetToReceive}
       </Typography>
       {!isLoading ? (
         <div className={classes.buttons}>

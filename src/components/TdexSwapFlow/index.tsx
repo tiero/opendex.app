@@ -59,34 +59,40 @@ const TdexSwapFlow: React.FC<Props> = () => {
       return;
     }
 
-    interval = setInterval(async () => {
-      try {
-        if (isCheckingMarina) return;
-
-        isCheckingMarina = true;
-
-        const marina: MarinaProvider = (window as any).marina;
-        setInstalled(true);
-
-        const isEnabled = await marina.isEnabled();
-        setConnected(isEnabled);
-
-        const net = await marina.getNetwork();
-        setChain(net);
-
-        setIsLoading(false);
-        isCheckingMarina = false;
-      } catch (_) {
-        setIsLoading(false);
-        isCheckingMarina = false;
-      }
-    }, 5000);
+    interval = setInterval(checkIfMarinaConnected, 2000);
 
     //Clean up
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+
+  const checkIfMarinaConnected = async () => {
+    try {
+      if (isCheckingMarina) return;
+      isCheckingMarina = true;
+
+      const marina: MarinaProvider = (window as any).marina;
+      setInstalled(true);
+
+      const isEnabled = await marina.isEnabled();
+      setConnected(isEnabled);
+
+      const net = await marina.getNetwork();
+      setChain(net);
+
+      if (isEnabled) {
+        // skip directly to Review step
+        setActiveStep(1)
+      }
+
+    } finally {
+      setIsLoading(false);
+      isCheckingMarina = false;
+    }
+  }
+
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -112,6 +118,12 @@ const TdexSwapFlow: React.FC<Props> = () => {
             installed={installed}
             connected={connected}
             chain={chain}
+            terms={{
+              assetToBeSent: baseAsset,
+              amountToBeSent: Number(baseAmount),
+              assetToReceive: quoteAsset,
+              amountToReceive: Number(quoteAmount),
+            }}
             onTrade={(txid: string) => {
               setTxid(txid);
               handleNext();
