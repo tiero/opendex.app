@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Currency, SwapStep } from '../constants/swap';
+import { SwapStep } from '../constants/swap';
+import Currency from '../constants/currency';
 import { getSwapProvider } from '../utils/swapProvider';
 import { RootState } from './index';
 

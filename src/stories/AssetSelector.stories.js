@@ -1,6 +1,6 @@
 import React from 'react';
 import AssetSelector from '../components/AssetSelector';
-import { CurrencyOptions } from '../constants/swap';
+import { CurrencyOptions } from '../constants/currency';
 
 export default {
   title: 'AssetSelector',

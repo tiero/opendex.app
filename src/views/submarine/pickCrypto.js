@@ -12,7 +12,7 @@ import {
   isEthereumCurrencyType,
   isLightningCurrencyType,
 } from '../../constants/submarine';
-import { CurrencyOptions, getSelectedOption } from '../../constants/swap';
+import CurrencyID, { CurrencyByID } from '../../constants/currency';
 import { UtilsContext } from '../../context/UtilsContext';
 import { setSigner } from '../../services/ethereum/ethereumDuck';
 import { calculateMinerFee } from '../../services/submarine/minerFees';
@@ -62,10 +62,10 @@ const PickCrypto = props => {
   const pairDetails = useSelector(selectPairDetails);
   const contractAddresses = useSelector(selectContracts);
   const [sendCurrencyType, handleSendCurrencyType] = useState(
-    getSelectedOption(CurrencyOptions, 'USD Tether')
+    CurrencyByID[CurrencyID.ETH_USDT]
   );
   const [receiveCurrencyType, handleReceiveCurrencyType] = useState(
-    getSelectedOption(CurrencyOptions, 'Lightning BTC')
+    CurrencyByID[CurrencyID.LIGHTNING_BTC]
   );
   const [sendCurrencyValue, handleSendCurrencyValue] = useState('');
   const [receiveCurrencyValue, handleReceiveCurrencyValue] = useState('');
@@ -102,10 +102,8 @@ const PickCrypto = props => {
     if (isDrawerClosed) {
       handleSendCurrencyValue('');
       handleReceiveCurrencyValue('');
-      handleSendCurrencyType(getSelectedOption(CurrencyOptions, 'USD Tether'));
-      handleReceiveCurrencyType(
-        getSelectedOption(CurrencyOptions, 'Lightning BTC')
-      );
+      handleSendCurrencyType(CurrencyByID[CurrencyID.ETH_USDT]);
+      handleReceiveCurrencyType(CurrencyByID[CurrencyID.LIGHTNING_BTC]);
     }
   }, [isDrawerClosed]);
 
@@ -609,9 +607,7 @@ const PickCrypto = props => {
   };
 
   const handleSwapClick = () => {
-    const prevSendCurrencyType = CurrencyOptions.find(
-      ({ id }) => id === sendCurrencyType.id
-    );
+    const prevSendCurrencyType = CurrencyByID[sendCurrencyType.id];
     handleSendCurrencyType(receiveCurrencyType);
     handleReceiveCurrencyType(prevSendCurrencyType);
   };

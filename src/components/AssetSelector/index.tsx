@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 import React from 'react';
-import { CurrencyOptions } from '../../constants/swap';
+import { CurrencyOptions } from '../../constants/currency';
 import SelectComponent from '../Select';
 import NumberField from '../NumberField';
 

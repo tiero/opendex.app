@@ -6,11 +6,8 @@ import Button from '../Button';
 import CardComponent from '../Card';
 import ErrorMessage from '../ErrorMessage';
 import SwapButton from '../SwapButton';
-import {
-  CurrencyOption,
-  CurrencyOptions,
-  SwapStep,
-} from '../../constants/swap';
+import { SwapStep } from '../../constants/swap';
+import { CurrencyOptions, CurrencyOption } from '../../constants/currency';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   isRatesLoaded,
