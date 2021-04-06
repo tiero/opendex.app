@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Netlify hosting
 .netlify
+
+# tdex stuff
+/tdexd/
