@@ -5,10 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { fetchAndUnblindUtxos, greedyCoinSelector, IdentityType } from 'ldk';
 import BrowserInjectOpenDex from './browserInject';
-import { TradeType, Trade } from 'tdex-sdk';
+import { Trade } from 'tdex-sdk';
 
-import { ProviderByChain, ExplorerByChain, CurrencyToAssetByChain } from '../constants'
+import {
+  ProviderByChain,
+  ExplorerByChain,
+  CurrencyToAssetByChain,
+} from '../constants';
 import CurrencyID from '../../../constants/currency';
+import { toSatoshi } from '../../../utils/format';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,12 +41,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-
 interface SwapTerms {
-  assetToBeSent: string;
+  assetToBeSent: CurrencyID;
   amountToBeSent: number;
-  assetToReceive: string;
+  assetToReceive: CurrencyID;
   amountToReceive: number;
 }
 
@@ -49,7 +52,7 @@ interface Props {
   installed: boolean;
   connected: boolean;
   chain: 'liquid' | 'regtest';
-  terms: SwapTerms
+  terms: SwapTerms;
   onTrade(txid: string): void;
   onReject(): void;
 }
@@ -59,8 +62,8 @@ const Review: React.FC<Props> = ({
   onReject,
   installed,
   connected,
-  chain,
   terms,
+  chain,
 }) => {
   const classes = useStyles();
 
@@ -99,25 +102,28 @@ const Review: React.FC<Props> = ({
         utxos,
       });
 
-
       const market = {
-        baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC],
-        quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT]
+        baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC].hash,
+        quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT].hash,
       };
-      const makeTrade = terms.assetToBeSent === CurrencyID.LIQUID_BTC ? (req) => trade.sell(req) : (req) => trade.buy(req);
 
+      const amountInSatoshis = toSatoshi(
+        terms.amountToBeSent,
+        CurrencyToAssetByChain[chain][terms.assetToBeSent].precision
+      );
       const txid = await trade.sell({
         market,
-        amount: terms.amountToBeSent,
-        asset: CurrencyToAssetByChain[chain][terms.assetToBeSent],
+        amount: amountInSatoshis,
+        asset: CurrencyToAssetByChain[chain][terms.assetToBeSent].hash,
         identity,
       });
 
+      setIsLoading(false);
+
       onTrade(txid);
     } catch (error) {
-      console.error(error);
-    } finally {
       setIsLoading(false);
+      console.error(error);
     }
   };
 
@@ -126,7 +132,9 @@ const Review: React.FC<Props> = ({
       <Typography className={classes.instructions}>
         Review the terms of the trade before confirming
       </Typography>
-      <Typography className={classes.terms}>📤 You send {terms.amountToBeSent} of {terms.assetToBeSent}</Typography>
+      <Typography className={classes.terms}>
+        📤 You send {terms.amountToBeSent} of {terms.assetToBeSent}
+      </Typography>
       <br />
       <Typography className={classes.terms}>
         📥 You receive {terms.amountToReceive} of {terms.assetToReceive}

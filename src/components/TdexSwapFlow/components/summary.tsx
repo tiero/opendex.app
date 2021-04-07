@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
+import { EsploraByChain } from '../constants';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -23,18 +25,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const esploraURL: Record<string, string> = {
-  regtest: 'http://localhost:5001',
-  liquid: 'https://blockstream.info/liquid',
-};
-
 interface Props {
   chain: 'liquid' | 'regtest';
   txid: string;
-  onReset(): void;
 }
 
-const Summary: React.FC<Props> = ({ chain, txid, onReset }) => {
+const Summary: React.FC<Props> = ({ chain, txid }) => {
   const classes = useStyles();
 
   const openInNewTab = url => {
@@ -47,11 +43,10 @@ const Summary: React.FC<Props> = ({ chain, txid, onReset }) => {
       <Typography className={classes.result}>Trade completed</Typography>
       <Button
         variant="contained"
-        onClick={() => openInNewTab(`${esploraURL[chain]}/tx/${txid}`)}
+        onClick={() => openInNewTab(`${EsploraByChain[chain]}/tx/${txid}`)}
       >
         Open in explorer
       </Button>
-      <Button onClick={onReset}>Go to home</Button>
     </div>
   );
 };

@@ -12,7 +12,7 @@ import Summary from './components/summary';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-interface Props { }
+interface Props {}
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -51,15 +51,14 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
 
-  let isCheckingMarina: boolean = false;
-  let interval: any;
+  const [isCheckingMarina, setIsCheckingMarina] = useState(false);
 
   useEffect(() => {
     if (typeof (window as any).marina === 'undefined') {
       return;
     }
 
-    interval = setInterval(checkIfMarinaConnected, 2000);
+    const interval = setInterval(checkIfMarinaConnected, 2000);
 
     //Clean up
     return () => {
@@ -67,11 +66,10 @@ const TdexSwapFlow: React.FC<Props> = () => {
     };
   }, []);
 
-
   const checkIfMarinaConnected = async () => {
     try {
       if (isCheckingMarina) return;
-      isCheckingMarina = true;
+      setIsCheckingMarina(true);
 
       const marina: MarinaProvider = (window as any).marina;
       setInstalled(true);
@@ -82,17 +80,20 @@ const TdexSwapFlow: React.FC<Props> = () => {
       const net = await marina.getNetwork();
       setChain(net);
 
-      if (isEnabled) {
+      /* if (isEnabled && activeStep === 0) {
         // skip directly to Review step
         setActiveStep(1)
-      }
-
+      } */
     } finally {
       setIsLoading(false);
-      isCheckingMarina = false;
+      setIsCheckingMarina(false);
     }
-  }
+  };
 
+  const handleTradeCompleted = (txid: string) => {
+    setTxid(txid);
+    setActiveStep(2);
+  };
 
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -124,15 +125,12 @@ const TdexSwapFlow: React.FC<Props> = () => {
               assetToReceive: quoteAsset,
               amountToReceive: Number(quoteAmount),
             }}
-            onTrade={(txid: string) => {
-              setTxid(txid);
-              handleNext();
-            }}
+            onTrade={handleTradeCompleted}
             onReject={handleReset}
           />
         );
       case 2:
-        return <Summary chain={chain} txid={txid} onReset={handleReset} />;
+        return <Summary chain={chain} txid={txid} />;
       default:
         return null;
     }
@@ -147,8 +145,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
-          }`}
+        {`Status: ${
+          connected ? `Connected - Network: ${chain}` : `Not Connected`
+        }`}
       </div>
     </div>
   );

@@ -38,14 +38,14 @@ addressmarket=$($tdex depositmarket | jq -r '.addresses[0]')
 echo ""
 echo "market address: ${addressmarket}"
 
-btctxid=$(nigiri faucet --liquid $addressmarket | grep '^txId: ' | cut -d ':' -f 2 | tr -d ' ')
+btctxid=$(nigiri faucet --liquid $addressmarket 10 | grep '^txId: ' | cut -d ':' -f 2 | tr -d ' ')
 sleep 5
 
 btcvout=$(nigiri rpc --liquid gettransaction $btctxid | jq -r '.details[0].vout')
 
 echo "market base outpoint: ${btctxid} ${btcvout}"
 
-mintresponse=$(curl -s -X POST -H 'Content-Type: application/json' -d '{"address":"'$addressmarket'", "quantity": 100}' "http://localhost:3001/mint")
+mintresponse=$(curl -s -X POST -H 'Content-Type: application/json' -d '{"address":"'$addressmarket'", "quantity": 500000}' "http://localhost:3001/mint")
 sleep 5
 
 shitcoin=$(echo $mintresponse | jq -r '.asset')
@@ -66,3 +66,7 @@ sleep 1
 echo ""
 echo "opening market"
 $tdex open
+
+echo ""
+echo "You should run the app with the following exported variable"
+echo "export REACT_APP_LIQUID_USDT_REGTEST='${shitcoin}'\nnpm start"

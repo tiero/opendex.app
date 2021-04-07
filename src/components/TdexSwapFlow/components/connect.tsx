@@ -38,7 +38,7 @@ const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
     await (window as any).marina.enable();
   };
 
-  const handleGetAddress = async () => {
+  const goAhead = async () => {
     if (!installed) {
       return alert('Marina is not installed');
     }
@@ -55,11 +55,7 @@ const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
       {installed && connected ? (
         <>
           <Typography className={classes.instructions}>🎉 Connected</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleGetAddress}
-          >
+          <Button variant="contained" color="primary" onClick={goAhead}>
             Go ahead
           </Button>
         </>
