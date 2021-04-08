@@ -12,7 +12,7 @@ import Summary from './components/summary';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-interface Props { }
+interface Props {}
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -51,9 +51,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
 
-
   useEffect(() => {
-
     let isCheckingMarina = false;
     const interval = setInterval(async () => {
       try {
@@ -73,10 +71,10 @@ const TdexSwapFlow: React.FC<Props> = () => {
 
         if (isEnabled && activeStep === 0) {
           // skip directly to Review step
-          setActiveStep(1)
+          setActiveStep(1);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
         setIsLoading(false);
         isCheckingMarina = false;
@@ -146,8 +144,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
-          }`}
+        {`Status: ${
+          connected ? `Connected - Network: ${chain}` : `Not Connected`
+        }`}
       </div>
     </div>
   );

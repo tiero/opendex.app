@@ -55,12 +55,7 @@ interface Props {
   onReject(): void;
 }
 
-const Review: React.FC<Props> = ({
-  onTrade,
-  onReject,
-  terms,
-  chain,
-}) => {
+const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -96,9 +91,13 @@ const Review: React.FC<Props> = ({
         utxos,
       });
 
-
-      const { precision, hash } = CurrencyToAssetByChain[chain][terms.assetToBeSent];
-      const amountToBeSentInSatoshis = toSatoshi(terms.amountToBeSent, precision);
+      const { precision, hash } = CurrencyToAssetByChain[chain][
+        terms.assetToBeSent
+      ];
+      const amountToBeSentInSatoshis = toSatoshi(
+        terms.amountToBeSent,
+        precision
+      );
 
       let txid;
       if (isBuy) {
@@ -116,7 +115,6 @@ const Review: React.FC<Props> = ({
           identity,
         });
       }
-
 
       setIsLoading(false);
       onTrade(txid);
