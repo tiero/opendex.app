@@ -14,7 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
 import { SwapStep } from '../../constants/swap';
 
-interface Props { }
+interface Props {}
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -147,8 +147,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
-          }`}
+        {`Status: ${
+          connected ? `Connected - Network: ${chain}` : `Not Connected`
+        }`}
       </div>
     </div>
   );
