@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MarinaProvider } from 'marina-provider';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store';
 
 import TdexSteps from './components/steps';
@@ -11,8 +11,10 @@ import Summary from './components/summary';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { setSwapStep } from '../../store/swaps-slice';
+import { SwapStep } from '../../constants/swap';
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -96,8 +98,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const dispatch = useAppDispatch();
+  const handleGoBack = () => {
+    dispatch(setSwapStep(SwapStep.CHOOSE_PAIR));
   };
 
   const getStepContent = () => {
@@ -121,7 +124,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
               amountToReceive: Number(quoteAmount),
             }}
             onTrade={handleTradeCompleted}
-            onReject={handleReset}
+            onReject={handleGoBack}
           />
         );
       case 2:
@@ -144,9 +147,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${
-          connected ? `Connected - Network: ${chain}` : `Not Connected`
-        }`}
+        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
       </div>
     </div>
   );
