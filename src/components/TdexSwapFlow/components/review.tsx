@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   terms: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
     lineHeight: 'normal',
   },
   buttons: {
@@ -49,8 +49,6 @@ interface SwapTerms {
 }
 
 interface Props {
-  installed: boolean;
-  connected: boolean;
   chain: 'liquid' | 'regtest';
   terms: SwapTerms;
   onTrade(txid: string): void;
@@ -60,8 +58,6 @@ interface Props {
 const Review: React.FC<Props> = ({
   onTrade,
   onReject,
-  installed,
-  connected,
   terms,
   chain,
 }) => {
@@ -69,30 +65,28 @@ const Review: React.FC<Props> = ({
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const LBTC_USDT_MARKET = {
+    baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC].hash,
+    quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT].hash,
+  };
+  const isBuy = terms.assetToBeSent === CurrencyID.LIQUID_USDT;
+
+  const explorer = ExplorerByChain[chain];
+  const [provider] = ProviderByChain[chain];
+
+  const identity = new BrowserInjectOpenDex({
+    chain,
+    type: IdentityType.Inject,
+    value: {
+      windowProvider: 'marina',
+    },
+  });
+
   const handleConfirm = async () => {
-    if (!installed) {
-      return alert('Marina is not installed');
-    }
-
-    if (!connected) {
-      return alert('User must enable this website to proceed');
-    }
-
     try {
       setIsLoading(true);
 
-      const explorer = ExplorerByChain[chain];
-      const [provider] = ProviderByChain[chain];
-
-      const identity = new BrowserInjectOpenDex({
-        chain,
-        type: IdentityType.Inject,
-        value: {
-          windowProvider: 'marina',
-        },
-      });
-
-      const addrs = await identity.getAddresses();
+      const addrs = await (window as any).marina.getAddresses();
       const utxos = await fetchAndUnblindUtxos(addrs, explorer);
 
       const trade = new Trade({
@@ -102,24 +96,29 @@ const Review: React.FC<Props> = ({
         utxos,
       });
 
-      const market = {
-        baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC].hash,
-        quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT].hash,
-      };
 
-      const amountInSatoshis = toSatoshi(
-        terms.amountToBeSent,
-        CurrencyToAssetByChain[chain][terms.assetToBeSent].precision
-      );
-      const txid = await trade.sell({
-        market,
-        amount: amountInSatoshis,
-        asset: CurrencyToAssetByChain[chain][terms.assetToBeSent].hash,
-        identity,
-      });
+      const { precision, hash } = CurrencyToAssetByChain[chain][terms.assetToBeSent];
+      const amountToBeSentInSatoshis = toSatoshi(terms.amountToBeSent, precision);
+
+      let txid;
+      if (isBuy) {
+        txid = await trade.buy({
+          market: LBTC_USDT_MARKET,
+          amount: amountToBeSentInSatoshis,
+          asset: hash,
+          identity,
+        });
+      } else {
+        txid = await trade.sell({
+          market: LBTC_USDT_MARKET,
+          amount: amountToBeSentInSatoshis,
+          asset: hash,
+          identity,
+        });
+      }
+
 
       setIsLoading(false);
-
       onTrade(txid);
     } catch (error) {
       setIsLoading(false);

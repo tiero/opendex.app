@@ -68,5 +68,6 @@ echo "opening market"
 $tdex open
 
 echo ""
-echo "You should run the app with the following exported variable"
-echo "export REACT_APP_LIQUID_USDT_REGTEST='${shitcoin}'\nnpm start"
+echo "You should start the app with the following exported variable"
+echo ""
+echo "export REACT_APP_LIQUID_USDT_REGTEST='${shitcoin}'"

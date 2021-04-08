@@ -12,7 +12,7 @@ import Summary from './components/summary';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -51,44 +51,43 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
 
-  const [isCheckingMarina, setIsCheckingMarina] = useState(false);
 
   useEffect(() => {
-    if (typeof (window as any).marina === 'undefined') {
-      return;
-    }
 
-    const interval = setInterval(checkIfMarinaConnected, 2000);
+    let isCheckingMarina = false;
+    const interval = setInterval(async () => {
+      try {
+        if (isCheckingMarina) return;
+        isCheckingMarina = true;
+
+        if (activeStep > 0) return;
+
+        const marina: MarinaProvider = (window as any).marina;
+        setInstalled(true);
+
+        const isEnabled = await marina.isEnabled();
+        setConnected(isEnabled);
+
+        const net = await marina.getNetwork();
+        setChain(net);
+
+        if (isEnabled && activeStep === 0) {
+          // skip directly to Review step
+          setActiveStep(1)
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false);
+        isCheckingMarina = false;
+      }
+    }, 2000);
 
     //Clean up
     return () => {
       clearInterval(interval);
     };
-  }, []);
-
-  const checkIfMarinaConnected = async () => {
-    try {
-      if (isCheckingMarina) return;
-      setIsCheckingMarina(true);
-
-      const marina: MarinaProvider = (window as any).marina;
-      setInstalled(true);
-
-      const isEnabled = await marina.isEnabled();
-      setConnected(isEnabled);
-
-      const net = await marina.getNetwork();
-      setChain(net);
-
-      /* if (isEnabled && activeStep === 0) {
-        // skip directly to Review step
-        setActiveStep(1)
-      } */
-    } finally {
-      setIsLoading(false);
-      setIsCheckingMarina(false);
-    }
-  };
+  }, [activeStep]);
 
   const handleTradeCompleted = (txid: string) => {
     setTxid(txid);
@@ -116,8 +115,6 @@ const TdexSwapFlow: React.FC<Props> = () => {
       case 1:
         return (
           <Review
-            installed={installed}
-            connected={connected}
             chain={chain}
             terms={{
               assetToBeSent: baseAsset,
@@ -137,7 +134,11 @@ const TdexSwapFlow: React.FC<Props> = () => {
   };
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div className={classes.wrapper}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
@@ -145,9 +146,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${
-          connected ? `Connected - Network: ${chain}` : `Not Connected`
-        }`}
+        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
       </div>
     </div>
   );
