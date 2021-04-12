@@ -6,10 +6,10 @@ import { RootState } from './index';
 
 // Define a type for the slice state
 interface SwapsState {
-  baseAsset: Currency;
-  quoteAsset: Currency;
-  baseAmount: string;
-  quoteAmount: string;
+  sendAsset: Currency;
+  receiveAsset: Currency;
+  sendAmount: string;
+  receiveAmount: string;
   swapStep: SwapStep;
   rates?: any;
 }
@@ -17,10 +17,10 @@ interface SwapsState {
 // Define the initial state using that type
 export const initialState: SwapsState = {
   swapStep: SwapStep.CHOOSE_PAIR,
-  baseAsset: Currency.LIGHTNING_BTC,
-  quoteAsset: Currency.ETH,
-  baseAmount: '',
-  quoteAmount: '',
+  sendAsset: Currency.LIGHTNING_BTC,
+  receiveAsset: Currency.ETH,
+  sendAmount: '',
+  receiveAmount: '',
 };
 
 export const swapsSlice = createSlice({
@@ -29,17 +29,17 @@ export const swapsSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    setBaseAsset: (state, action: PayloadAction<Currency>) => {
-      state.baseAsset = action.payload;
+    setSendAsset: (state, action: PayloadAction<Currency>) => {
+      state.sendAsset = action.payload;
     },
-    setQuoteAsset: (state, action: PayloadAction<Currency>) => {
-      state.quoteAsset = action.payload;
+    setReceiveAsset: (state, action: PayloadAction<Currency>) => {
+      state.receiveAsset = action.payload;
     },
-    setBaseAmount: (state, action: PayloadAction<string>) => {
-      state.baseAmount = action.payload;
+    setSendAmount: (state, action: PayloadAction<string>) => {
+      state.sendAmount = action.payload;
     },
-    setQuoteAmount: (state, action: PayloadAction<string>) => {
-      state.quoteAmount = action.payload;
+    setReceiveAmount: (state, action: PayloadAction<string>) => {
+      state.receiveAmount = action.payload;
     },
     setRates: (state, action: PayloadAction<any>) => {
       state.rates = action.payload;
@@ -51,22 +51,24 @@ export const swapsSlice = createSlice({
 });
 
 export const {
-  setBaseAsset,
-  setQuoteAsset,
-  setBaseAmount,
-  setQuoteAmount,
+  setSendAsset,
+  setReceiveAsset,
+  setSendAmount,
+  setReceiveAmount,
   setRates,
   setSwapStep,
 } = swapsSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSwapStep = (state: RootState) => state.swaps.swapStep;
-export const selectBaseAsset = (state: RootState) => state.swaps.baseAsset;
-export const selectQuoteAsset = (state: RootState) => state.swaps.quoteAsset;
-export const selectBaseAmount = (state: RootState) => state.swaps.baseAmount;
-export const selectQuoteAmount = (state: RootState) => state.swaps.quoteAmount;
+export const selectSendAsset = (state: RootState) => state.swaps.sendAsset;
+export const selectReceiveAsset = (state: RootState) =>
+  state.swaps.receiveAsset;
+export const selectSendAmount = (state: RootState) => state.swaps.sendAmount;
+export const selectReceiveAmount = (state: RootState) =>
+  state.swaps.receiveAmount;
 export const selectSwapProvider = (state: RootState) =>
-  getSwapProvider(state.swaps.baseAsset, state.swaps.quoteAsset);
+  getSwapProvider(state.swaps.sendAsset, state.swaps.receiveAsset);
 export const isRatesLoaded = (state: RootState) => !!state.swaps.rates;
 
 export default swapsSlice.reducer;
