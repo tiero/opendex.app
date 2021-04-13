@@ -15,7 +15,7 @@ export interface AmountPreview {
 
 export interface RatesFetcher {
   // Preview wants the amount and the currency entered by the user and will return the
-  // amount to be sent or to be received of the opposite currency in the pair, comprhensive of fees.
+  // amount to be sent or to be received of the opposite currency in the pair, comprehensive of fees.
   // By default it "should" expect the "sending amount" to be given, but also the "receiving amount" could be
   // passed setting the isSend parameter to false in order to do a reverse calculation.
   Preview(
