@@ -6,7 +6,7 @@ export interface AmountCurrency {
 }
 
 export interface AmountPreview {
-  //This is comprhensive of swap provider fees
+  // This is comprehensive of swap provider fees
   amountWithFees: AmountCurrency;
   // This is general purpose key value object that can be used to communicate
   // to end users the detail of amounts added into the amountWithFees
