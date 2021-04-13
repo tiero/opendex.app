@@ -1,5 +1,5 @@
 import CurrencyID from './currency';
-import { RatesFetcher, Preview, AmountCurrency } from './rates';
+import { RatesFetcher, AmountPreview, AmountCurrency } from './rates';
 
 export default class ExampleFetcher implements RatesFetcher {
   private client: any;
@@ -11,7 +11,7 @@ export default class ExampleFetcher implements RatesFetcher {
   async Preview(
     amountWithCurrency: AmountCurrency,
     isSend: boolean = true
-  ): Promise<Preview> {
+  ): Promise<AmountPreview> {
     const usdPerBtc = await this.fetchPriceBTC();
 
     const isBTCcomingIn =
@@ -33,12 +33,12 @@ export default class ExampleFetcher implements RatesFetcher {
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<Preview> {
+  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
     return this.Preview(amountWithCurrency, true);
   }
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<Preview> {
+  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
     return this.Preview(amountWithCurrency, false);
   }
 

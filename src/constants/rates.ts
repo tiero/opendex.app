@@ -5,7 +5,7 @@ export interface AmountCurrency {
   currency: CurrencyID;
 }
 
-export interface Preview {
+export interface AmountPreview {
   //This is comprhensive of swap provider fees
   amountWithFees: AmountCurrency;
   // This is general purpose key value object that can be used to communicate
@@ -21,11 +21,11 @@ export interface RatesFetcher {
   Preview(
     amountWithCurrency: AmountCurrency,
     isSend: boolean
-  ): Promise<Preview>;
+  ): Promise<AmountPreview>;
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<Preview>;
+  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview>;
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<Preview>;
+  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<AmountPreview>;
 }
