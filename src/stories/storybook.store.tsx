@@ -8,8 +8,8 @@ const store = {
     return {
       swaps: {
         ...initialState,
-        baseAmount: '0.01',
-        quoteAmount: '0.002',
+        sendAmount: '0.01',
+        receiveAmount: '0.002',
         rates: {},
       },
     };
