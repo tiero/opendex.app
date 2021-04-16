@@ -1,12 +1,12 @@
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AssetSelector from '../AssetSelector';
 import Button from '../Button';
 import CardComponent from '../Card';
 import ErrorMessage from '../ErrorMessage';
 import SwapButton from '../SwapButton';
-import { SwapStep } from '../../constants/swap';
+import { SwapStep, SwapProvider } from '../../constants/swap';
 import { CurrencyOptions, CurrencyOption } from '../../constants/currency';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -24,6 +24,8 @@ import {
   setSwapStep,
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
+import { RatesFetcher } from '../../constants/rates';
+import ExampleFetcherWithInitalizer from '../../constants/rates_example';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -73,10 +75,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
-  const baseCurrency = CurrencyOptions.find(
+  const [tdexFetcher, setTdexFetcher] = useState<RatesFetcher | undefined>();
+
+  const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
   )!;
-  const quoteCurrency = CurrencyOptions.find(
+  const receiveCurrency = CurrencyOptions.find(
     currency => currency.id === receiveAsset
   )!;
 
@@ -87,6 +91,64 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
+  useEffect(() => {
+    (async () => {
+      // start a new Example rates fetcher
+      // This is an example of stateful implementation with async
+      // instantiation using the The Functional Options Pattern
+      // https://betterprogramming.pub/how-to-write-an-async-class-constructor-in-typescript-javascript-7d7e8325c35e
+
+      const tdexFetcher = new ExampleFetcherWithInitalizer(
+        await ExampleFetcherWithInitalizer.WithCustomInitializer()
+      );
+
+      setTdexFetcher(tdexFetcher);
+    })();
+  }, []);
+
+  let ratesFetcher;
+  switch (swapProvider) {
+    case SwapProvider.TDEX:
+      ratesFetcher = tdexFetcher;
+      break;
+    case SwapProvider.BOLTZ:
+    case SwapProvider.COMIT:
+    default:
+      break;
+  }
+
+  const onSendAmountChange = async (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    dispatch(setSendAmount(value));
+
+    // preview other amount
+    if (ratesFetcher) {
+      const receiveValue = await ratesFetcher.PreviewGivenSend({
+        amount: Number(value),
+        currency: sendCurrency.id,
+      });
+      dispatch(setReceiveAmount(receiveValue.amountWithFees.amount.toString()));
+    }
+  };
+
+  const onReceiveAmountChange = async (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    dispatch(setReceiveAmount(value));
+
+    // preview other amount
+    if (ratesFetcher) {
+      const sendValue = await ratesFetcher.PreviewGivenReceive({
+        amount: Number(value),
+        currency: receiveCurrency.id,
+      });
+      dispatch(setSendAmount(sendValue.amountWithFees.amount.toString()));
+    }
+  };
+
   const renderCryptoOptions = () => {
     return (
       <Grid container justify="center" direction="row" alignItems="center">
@@ -95,21 +157,19 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             label={'You send'}
             value={sendAmount}
             placeholder={'0.00'}
-            onAmountChange={(
-              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setSendAmount(e.target.value))}
+            onAmountChange={onSendAmountChange}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setSendAsset(currency.id))
             }
-            selectedAsset={baseCurrency}
+            selectedAsset={sendCurrency}
             loading={!ratesLoaded}
           />
         </Grid>
         <Grid item xs={12}>
           <SwapButton
             onClick={() => {
-              dispatch(setSendAsset(quoteCurrency.id));
-              dispatch(setReceiveAsset(baseCurrency.id));
+              dispatch(setSendAsset(receiveCurrency.id));
+              dispatch(setReceiveAsset(sendCurrency.id));
             }}
             disabled={!ratesLoaded}
           />
@@ -119,13 +179,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             label={'You receive'}
             value={receiveAmount}
             placeholder={'0.00'}
-            onAmountChange={(
-              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setReceiveAmount(e.target.value))}
+            onAmountChange={onReceiveAmountChange}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setReceiveAsset(currency.id))
             }
-            selectedAsset={quoteCurrency}
+            selectedAsset={receiveCurrency}
             loading={!ratesLoaded}
           />
         </Grid>

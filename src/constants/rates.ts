@@ -13,8 +13,10 @@ export interface AmountPreview {
   feesDetail?: Record<string, any>;
 }
 
+export interface RatesFetcherOpts {}
+
 export interface RatesFetcher {
-  // Preview wants the amount and the currency entered by the user and will return the
+  // preview wants the amount and the currency entered by the user and will return the
   // amount to be sent or to be received of the opposite currency in the pair, comprehensive of fees.
   // By default it "should" expect the "sending amount" to be given, but also the "receiving amount" could be
   // passed setting the isSend parameter to false in order to do a reverse calculation.
@@ -27,5 +29,7 @@ export interface RatesFetcher {
   PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview>;
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<AmountPreview>;
+  PreviewGivenReceive(
+    amountWithCurrency: AmountCurrency
+  ): Promise<AmountPreview>;
 }

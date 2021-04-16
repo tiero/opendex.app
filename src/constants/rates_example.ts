@@ -1,11 +1,22 @@
 import CurrencyID from './currency';
-import { RatesFetcher, AmountPreview, AmountCurrency } from './rates';
+import {
+  RatesFetcher,
+  AmountPreview,
+  AmountCurrency,
+  RatesFetcherOpts,
+} from './rates';
 
-export default class ExampleFetcher implements RatesFetcher {
-  private client: any;
+interface ExampleOptions extends RatesFetcherOpts {
+  url: string;
+}
 
-  constructor() {
-    this.client = window.fetch;
+//'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+
+export default class ExampleFetcherWithInitalizer implements RatesFetcher {
+  private url: string;
+
+  constructor(options: ExampleOptions) {
+    this.url = options.url;
   }
 
   async Preview(
@@ -38,16 +49,23 @@ export default class ExampleFetcher implements RatesFetcher {
   }
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
+  PreviewGivenReceive(
+    amountWithCurrency: AmountCurrency
+  ): Promise<AmountPreview> {
     return this.Preview(amountWithCurrency, false);
   }
 
   async fetchPriceBTC(): Promise<number> {
-    const res = await this.client(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-    );
+    const res = await fetch(this.url);
     const json = await res.json();
 
     return json.bitcoin.usd as number;
+  }
+
+  public static async WithCustomInitializer(): Promise<ExampleOptions> {
+    return {
+      url:
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+    };
   }
 }
