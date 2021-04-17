@@ -140,7 +140,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
       setIsPreviewing(true);
 
-      const receiveValue = await ratesFetcher.PreviewGivenSend({
+      const receiveValue: AmountPreview = await ratesFetcher.PreviewGivenSend({
         amount,
         currency: sendCurrency.id,
       });
