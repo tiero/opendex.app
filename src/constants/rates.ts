@@ -32,4 +32,7 @@ export interface RatesFetcher {
   PreviewGivenReceive(
     amountWithCurrency: AmountCurrency
   ): Promise<AmountPreview>;
+
+  // Any complex instatiation or tickers could be cleaned up
+  Clean(): void;
 }

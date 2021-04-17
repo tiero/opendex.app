@@ -8,22 +8,72 @@ import {
 
 interface ExampleOptions extends RatesFetcherOpts {
   url: string;
+  useInterval: boolean;
 }
-
-//'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
 
 export default class ExampleFetcherWithInitalizer implements RatesFetcher {
   private url: string;
+  private useInterval: boolean;
+  private interval: any;
+  private usdPerBtc: number = 0;
+  private isFetching: boolean = false;
 
   constructor(options: ExampleOptions) {
     this.url = options.url;
+    this.useInterval = options.useInterval;
+
+    if (options.useInterval) {
+      this.interval = setInterval(async () => {
+        if (this.isFetching) return;
+
+        this.isFetching = true;
+
+        this.usdPerBtc = await this._fetchPriceBTC();
+
+        this.isFetching = false;
+      }, 1000);
+    }
+  }
+
+  Clean(): void {
+    if (this.useInterval && this.interval) {
+      clearInterval(this.interval);
+    }
   }
 
   async Preview(
     amountWithCurrency: AmountCurrency,
     isSend: boolean = true
   ): Promise<AmountPreview> {
-    const usdPerBtc = await this.fetchPriceBTC();
+    return this._preview(amountWithCurrency, isSend);
+  }
+
+  // PreviewGivenSend does the same thing as Preview with isSend = true
+  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
+    return this._preview(amountWithCurrency, true);
+  }
+
+  // PreviewGivenReceive does the same thing as Preview with isSend = false
+  PreviewGivenReceive(
+    amountWithCurrency: AmountCurrency
+  ): Promise<AmountPreview> {
+    return this._preview(amountWithCurrency, false);
+  }
+
+  private async _fetchPriceBTC(): Promise<number> {
+    const res = await fetch(this.url);
+    const json = await res.json();
+
+    return json.bitcoin.usd as number;
+  }
+
+  private async _preview(
+    amountWithCurrency: AmountCurrency,
+    isSend: boolean = true
+  ): Promise<AmountPreview> {
+    const usdPerBtc = this.useInterval
+      ? this.usdPerBtc
+      : await this._fetchPriceBTC();
 
     const isBTCcomingIn =
       (isSend && amountWithCurrency.currency === CurrencyID.LIQUID_BTC) ||
@@ -43,27 +93,19 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     };
   }
 
-  // PreviewGivenSend does the same thing as Preview with isSend = true
-  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
-    return this.Preview(amountWithCurrency, true);
-  }
-
-  // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(
-    amountWithCurrency: AmountCurrency
-  ): Promise<AmountPreview> {
-    return this.Preview(amountWithCurrency, false);
-  }
-
-  async fetchPriceBTC(): Promise<number> {
-    const res = await fetch(this.url);
-    const json = await res.json();
-
-    return json.bitcoin.usd as number;
-  }
-
-  public static async WithCustomInitializer(): Promise<ExampleOptions> {
+  public static async WithoutInterval(): Promise<ExampleOptions> {
+    // here I can do all my async initiazization and instantiate my class as I wish
     return {
+      useInterval: false,
+      url:
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+    };
+  }
+
+  public static async WithInterval(): Promise<ExampleOptions> {
+    // here I can do all my async initiazization and instantiate my class as I wish
+    return {
+      useInterval: true,
       url:
         'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
     };

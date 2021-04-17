@@ -24,7 +24,7 @@ import {
   setSwapStep,
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
-import { RatesFetcher } from '../../constants/rates';
+import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import ExampleFetcherWithInitalizer from '../../constants/rates_example';
 
 const useStyles = makeStyles(() =>
@@ -76,6 +76,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
   const [tdexFetcher, setTdexFetcher] = useState<RatesFetcher | undefined>();
+  const [isPreviewing, setIsPreviewing] = useState(false);
 
   const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
@@ -99,10 +100,19 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       // https://betterprogramming.pub/how-to-write-an-async-class-constructor-in-typescript-javascript-7d7e8325c35e
 
       const tdexFetcher = new ExampleFetcherWithInitalizer(
-        await ExampleFetcherWithInitalizer.WithCustomInitializer()
+        await ExampleFetcherWithInitalizer.WithoutInterval()
       );
-
       setTdexFetcher(tdexFetcher);
+
+      // here we should instantiate all other fetchers
+      // const comitFetcher = ...
+      // const boltzFetcher = ...
+
+      //Clean up
+      return () => {
+        tdexFetcher.Clean();
+        // we should clean the other fetchers as well
+      };
     })();
   }, []);
 
@@ -120,32 +130,58 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    if (isPreviewing) return;
+
     const value = e.target.value;
     dispatch(setSendAmount(value));
 
     // preview other amount
-    if (ratesFetcher) {
+    const amount = Number(value);
+    if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
+      setIsPreviewing(true);
+
       const receiveValue = await ratesFetcher.PreviewGivenSend({
-        amount: Number(value),
+        amount,
         currency: sendCurrency.id,
       });
-      dispatch(setReceiveAmount(receiveValue.amountWithFees.amount.toString()));
+
+      dispatch(
+        setReceiveAmount(
+          receiveValue.amountWithFees.amount.toLocaleString(undefined, {
+            maximumFractionDigits: 8,
+          })
+        )
+      );
+      setIsPreviewing(false);
     }
   };
 
   const onReceiveAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    if (isPreviewing) return;
+
     const value = e.target.value;
     dispatch(setReceiveAmount(value));
 
     // preview other amount
-    if (ratesFetcher) {
-      const sendValue = await ratesFetcher.PreviewGivenReceive({
-        amount: Number(value),
+    const amount = Number(value);
+    if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
+      setIsPreviewing(true);
+
+      const sendValue: AmountPreview = await ratesFetcher.PreviewGivenReceive({
+        amount,
         currency: receiveCurrency.id,
       });
-      dispatch(setSendAmount(sendValue.amountWithFees.amount.toString()));
+
+      dispatch(
+        setSendAmount(
+          sendValue.amountWithFees.amount.toLocaleString(undefined, {
+            maximumFractionDigits: 8,
+          })
+        )
+      );
+      setIsPreviewing(false);
     }
   };
 
