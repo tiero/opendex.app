@@ -41,6 +41,11 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     }
   }
 
+  IsPairSupported(x: CurrencyID, y: CurrencyID): boolean {
+    const pair = [x, y];
+    return pair.includes(CurrencyID.LIQUID_BTC) && pair.includes(CurrencyID.LIQUID_USDT);
+  }
+
   async Preview(
     amountWithCurrency: AmountCurrency,
     isSend: boolean = true

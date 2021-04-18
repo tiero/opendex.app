@@ -13,7 +13,7 @@ export interface AmountPreview {
   feesDetail?: Record<string, any>;
 }
 
-export interface RatesFetcherOpts {}
+export interface RatesFetcherOpts { }
 
 export interface RatesFetcher {
   // preview wants the amount and the currency entered by the user and will return the
@@ -35,4 +35,8 @@ export interface RatesFetcher {
 
   // Any complex instatiation or tickers could be cleaned up
   Clean(): void;
+
+  // define wich trading pair is suppported by the fetcher implementation
+  IsPairSupported(x: CurrencyID, y: CurrencyID): boolean;
+
 }
