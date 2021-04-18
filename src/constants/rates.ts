@@ -1,5 +1,11 @@
 import CurrencyID from './currency';
 
+
+export enum AmountFeeType {
+  Percentage = 'Percentage',
+  Fixed = 'Fixed',
+  // TODO add more types here for all providers
+}
 export interface AmountCurrency {
   amount: number;
   currency: CurrencyID;
@@ -10,7 +16,7 @@ export interface AmountPreview {
   amountWithFees: AmountCurrency;
   // This is general purpose key value object that can be used to communicate
   // to end users the detail of amounts added into the amountWithFees
-  feesDetail?: Record<string, any>;
+  feesDetail?: Record<AmountFeeType, number>;
 }
 
 export interface RatesFetcherOpts { }
