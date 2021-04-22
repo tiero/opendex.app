@@ -35,18 +35,19 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     }
   }
 
-  Clean(): void {
+
+  clean(): void {
     if (this.useInterval && this.interval) {
       clearInterval(this.interval);
     }
   }
 
-  IsPairSupported(x: CurrencyID, y: CurrencyID): boolean {
+  isPairSupported(x: CurrencyID, y: CurrencyID): boolean {
     const pair = [x, y];
     return pair.includes(CurrencyID.LIQUID_BTC) && pair.includes(CurrencyID.LIQUID_USDT);
   }
 
-  async Preview(
+  preview(
     amountWithCurrency: AmountCurrency,
     isSend: boolean = true
   ): Promise<AmountPreview> {
@@ -54,12 +55,12 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  PreviewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
+  previewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
     return this._preview(amountWithCurrency, true);
   }
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
-  PreviewGivenReceive(
+  previewGivenReceive(
     amountWithCurrency: AmountCurrency
   ): Promise<AmountPreview> {
     return this._preview(amountWithCurrency, false);

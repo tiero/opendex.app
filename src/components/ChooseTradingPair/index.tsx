@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AssetSelector from '../AssetSelector';
 import Button from '../Button';
 import CardComponent from '../Card';
@@ -24,8 +24,8 @@ import {
   setSwapStep,
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
-import { AmountPreview, RatesFetcher } from '../../constants/rates';
-import ExampleFetcherWithInitalizer from '../../constants/rates_example';
+import { AmountPreview } from '../../constants/rates';
+import useExampleHook from '../../constants/ratesExampleHook';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -75,7 +75,6 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
-  const [tdexFetcher, setTdexFetcher] = useState<RatesFetcher | undefined>();
   const [isPreviewing, setIsPreviewing] = useState(false);
 
   const sendCurrency = CurrencyOptions.find(
@@ -92,29 +91,8 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
-  useEffect(() => {
-    (async () => {
-      // start a new Example rates fetcher
-      // This is an example of stateful implementation with async
-      // instantiation using the The Functional Options Pattern
-      // https://betterprogramming.pub/how-to-write-an-async-class-constructor-in-typescript-javascript-7d7e8325c35e
 
-      const tdexFetcher = new ExampleFetcherWithInitalizer(
-        await ExampleFetcherWithInitalizer.WithoutInterval()
-      );
-      setTdexFetcher(tdexFetcher);
-
-      // here we should instantiate all other fetchers
-      // const comitFetcher = ...
-      // const boltzFetcher = ...
-
-      //Clean up
-      return () => {
-        tdexFetcher.Clean();
-        // we should clean the other fetchers as well
-      };
-    })();
-  }, []);
+  const tdexFetcher = useExampleHook();
 
   let ratesFetcher;
   switch (swapProvider) {
@@ -140,7 +118,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
       setIsPreviewing(true);
 
-      const receiveValue: AmountPreview = await ratesFetcher.PreviewGivenSend({
+      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
         amount,
         currency: sendCurrency.id,
       });
@@ -169,7 +147,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
       setIsPreviewing(true);
 
-      const sendValue: AmountPreview = await ratesFetcher.PreviewGivenReceive({
+      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
         amount,
         currency: receiveCurrency.id,
       });
