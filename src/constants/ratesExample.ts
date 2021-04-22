@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js'
 import CurrencyID from './currency';
 import {
   RatesFetcher,
@@ -15,7 +16,7 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
   private url: string;
   private useInterval: boolean;
   private interval: any;
-  private usdPerBtc: number = 0;
+  private usdPerBtc: Decimal = new Decimal(0);
   private isFetching: boolean = false;
 
   constructor(options: ExampleOptions) {
@@ -66,11 +67,11 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     return this._preview(amountWithCurrency, false);
   }
 
-  private async _fetchPriceBTC(): Promise<number> {
+  private async _fetchPriceBTC(): Promise<Decimal> {
     const res = await fetch(this.url);
     const json = await res.json();
 
-    return json.bitcoin.usd as number;
+    return new Decimal(json.bitcoin.usd as number);
   }
 
   private async _preview(
@@ -85,9 +86,10 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
       (isSend && amountWithCurrency.currency === CurrencyID.LIQUID_BTC) ||
       (!isSend && amountWithCurrency.currency !== CurrencyID.LIQUID_USDT);
 
+    console.log(amountWithCurrency.amount.toString())
     const amount = isBTCcomingIn
-      ? usdPerBtc * amountWithCurrency.amount
-      : amountWithCurrency.amount / usdPerBtc;
+      ? usdPerBtc.mul(amountWithCurrency.amount)
+      : amountWithCurrency.amount.div(usdPerBtc);
     const currency = isBTCcomingIn
       ? CurrencyID.LIQUID_USDT
       : CurrencyID.LIQUID_BTC;

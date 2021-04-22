@@ -26,6 +26,7 @@ import {
 import { timer } from 'rxjs';
 import { AmountPreview } from '../../constants/rates';
 import useExampleHook from '../../constants/ratesExampleHook';
+import Decimal from 'decimal.js';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -105,6 +106,15 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       break;
   }
 
+
+  const amountIsPositive = (x: any): boolean => {
+    if (!Number.isNaN(x) && Number(x) > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -114,10 +124,10 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     dispatch(setSendAmount(value));
 
     // preview other amount
-    const amount = Number(value);
-    if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
+    if (ratesFetcher && amountIsPositive(value)) {
       setIsPreviewing(true);
 
+      const amount = new Decimal(value);
       const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
         amount,
         currency: sendCurrency.id,
@@ -125,7 +135,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
       dispatch(
         setReceiveAmount(
-          receiveValue.amountWithFees.amount.toLocaleString(undefined, {
+          receiveValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
             maximumFractionDigits: 8,
           })
         )
@@ -143,10 +153,10 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     dispatch(setReceiveAmount(value));
 
     // preview other amount
-    const amount = Number(value);
-    if (ratesFetcher && !Number.isNaN(amount) && amount > 0) {
+    if (ratesFetcher && amountIsPositive(value)) {
       setIsPreviewing(true);
 
+      const amount = new Decimal(value);
       const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
         amount,
         currency: receiveCurrency.id,
@@ -154,7 +164,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
       dispatch(
         setSendAmount(
-          sendValue.amountWithFees.amount.toLocaleString(undefined, {
+          sendValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
             maximumFractionDigits: 8,
           })
         )

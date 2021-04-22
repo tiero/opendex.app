@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import CurrencyID from './currency';
 
 
@@ -7,7 +8,7 @@ export enum AmountFeeType {
   // TODO add more types here for all providers
 }
 export interface AmountCurrency {
-  amount: number;
+  amount: Decimal;
   currency: CurrencyID;
 }
 
