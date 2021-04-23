@@ -7,14 +7,14 @@ export enum AmountFeeType {
   Fixed = 'Fixed',
   // TODO add more types here for all providers
 }
-export interface AmountCurrency {
+export interface CurrencyAmount {
   amount: Decimal;
   currency: CurrencyID;
 }
 
 export interface AmountPreview {
   // This is comprehensive of swap provider fees
-  amountWithFees: AmountCurrency;
+  amountWithFees: CurrencyAmount;
   // This is general purpose key value object that can be used to communicate
   // to end users the detail of amounts added into the amountWithFees
   feesDetail?: Record<AmountFeeType, number>;
@@ -28,16 +28,16 @@ export interface RatesFetcher {
   // By default it "should" expect the "sending amount" to be given, but also the "receiving amount" could be
   // passed setting the isSend parameter to false in order to do a reverse calculation.
   preview(
-    amountWithCurrency: AmountCurrency,
+    amountWithCurrency: CurrencyAmount,
     isSend: boolean
   ): Promise<AmountPreview>;
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  previewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview>;
+  previewGivenSend(amountWithCurrency: CurrencyAmount): Promise<AmountPreview>;
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
   previewGivenReceive(
-    amountWithCurrency: AmountCurrency
+    amountWithCurrency: CurrencyAmount
   ): Promise<AmountPreview>;
 
   // define wich trading pair is suppported by the fetcher implementation

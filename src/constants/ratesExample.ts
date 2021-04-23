@@ -3,7 +3,7 @@ import CurrencyID from './currency';
 import {
   RatesFetcher,
   AmountPreview,
-  AmountCurrency,
+  CurrencyAmount,
   RatesFetcherOpts,
 } from './rates';
 
@@ -49,20 +49,20 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
   }
 
   preview(
-    amountWithCurrency: AmountCurrency,
+    amountWithCurrency: CurrencyAmount,
     isSend: boolean = true
   ): Promise<AmountPreview> {
     return this._preview(amountWithCurrency, isSend);
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  previewGivenSend(amountWithCurrency: AmountCurrency): Promise<AmountPreview> {
+  previewGivenSend(amountWithCurrency: CurrencyAmount): Promise<AmountPreview> {
     return this._preview(amountWithCurrency, true);
   }
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
   previewGivenReceive(
-    amountWithCurrency: AmountCurrency
+    amountWithCurrency: CurrencyAmount
   ): Promise<AmountPreview> {
     return this._preview(amountWithCurrency, false);
   }
@@ -75,7 +75,7 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
   }
 
   private async _preview(
-    amountWithCurrency: AmountCurrency,
+    amountWithCurrency: CurrencyAmount,
     isSend: boolean = true
   ): Promise<AmountPreview> {
     const usdPerBtc = this.useInterval
