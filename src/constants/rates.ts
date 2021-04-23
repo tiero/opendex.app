@@ -7,6 +7,9 @@ export enum AmountFeeType {
   Fixed = 'Fixed',
   // TODO add more types here for all providers
 }
+
+export type CurrencyPair = [CurrencyID, CurrencyID];
+
 export interface CurrencyAmount {
   amount: Decimal;
   currency: CurrencyID;
@@ -29,18 +32,22 @@ export interface RatesFetcher {
   // passed setting the isSend parameter to false in order to do a reverse calculation.
   preview(
     amountWithCurrency: CurrencyAmount,
+    pair: CurrencyPair,
     isSend: boolean
   ): Promise<AmountPreview>;
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  previewGivenSend(amountWithCurrency: CurrencyAmount): Promise<AmountPreview>;
+  previewGivenSend(
+    amountWithCurrency: CurrencyAmount,
+    pair: CurrencyPair
+  ): Promise<AmountPreview>;
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
   previewGivenReceive(
-    amountWithCurrency: CurrencyAmount
+    amountWithCurrency: CurrencyAmount,
+    pair: CurrencyPair,
   ): Promise<AmountPreview>;
 
   // define wich trading pair is suppported by the fetcher implementation
-  isPairSupported(x: CurrencyID, y: CurrencyID): boolean;
-
+  isPairSupported(pair: CurrencyPair): boolean;
 }

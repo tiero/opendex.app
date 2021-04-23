@@ -5,6 +5,7 @@ import {
   AmountPreview,
   CurrencyAmount,
   RatesFetcherOpts,
+  CurrencyPair,
 } from './rates';
 
 interface ExampleOptions extends RatesFetcherOpts {
@@ -43,28 +44,35 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     }
   }
 
-  isPairSupported(x: CurrencyID, y: CurrencyID): boolean {
-    const pair = [x, y];
+  isPairSupported(pair: CurrencyPair): boolean {
     return pair.includes(CurrencyID.LIQUID_BTC) && pair.includes(CurrencyID.LIQUID_USDT);
   }
 
   preview(
     amountWithCurrency: CurrencyAmount,
+    pair: CurrencyPair,
     isSend: boolean = true
   ): Promise<AmountPreview> {
-    return this._preview(amountWithCurrency, isSend);
+    if (!this.isPairSupported(pair)) throw new Error('pair is not support');
+
+    return this.previewBTCUSDT(amountWithCurrency, isSend);
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
-  previewGivenSend(amountWithCurrency: CurrencyAmount): Promise<AmountPreview> {
-    return this._preview(amountWithCurrency, true);
+  previewGivenSend(amountWithCurrency: CurrencyAmount, pair: CurrencyPair): Promise<AmountPreview> {
+    if (!this.isPairSupported(pair)) throw new Error('pair is not support');
+
+    return this.previewBTCUSDT(amountWithCurrency, true);
   }
 
   // PreviewGivenReceive does the same thing as Preview with isSend = false
   previewGivenReceive(
-    amountWithCurrency: CurrencyAmount
+    amountWithCurrency: CurrencyAmount,
+    pair: CurrencyPair
   ): Promise<AmountPreview> {
-    return this._preview(amountWithCurrency, false);
+    if (!this.isPairSupported(pair)) throw new Error('pair is not support');
+
+    return this.previewBTCUSDT(amountWithCurrency, false);
   }
 
   private async _fetchPriceBTC(): Promise<Decimal> {
@@ -74,7 +82,7 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
     return new Decimal(json.bitcoin.usd as number);
   }
 
-  private async _preview(
+  private async previewBTCUSDT(
     amountWithCurrency: CurrencyAmount,
     isSend: boolean = true
   ): Promise<AmountPreview> {

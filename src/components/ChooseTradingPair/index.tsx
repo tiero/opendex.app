@@ -24,7 +24,7 @@ import {
   setSwapStep,
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
-import { AmountPreview } from '../../constants/rates';
+import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useExampleHook from '../../constants/ratesExampleHook';
 import Decimal from 'decimal.js';
 
@@ -95,7 +95,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const tdexFetcher = useExampleHook();
 
-  let ratesFetcher;
+  let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
     case SwapProvider.TDEX:
       ratesFetcher = tdexFetcher;
@@ -131,7 +131,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
         amount,
         currency: sendCurrency.id,
-      });
+      },
+        [
+          sendCurrency.id,
+          receiveCurrency.id
+        ]
+      );
 
       dispatch(
         setReceiveAmount(
@@ -160,7 +165,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
         amount,
         currency: receiveCurrency.id,
-      });
+      },
+        [
+          sendCurrency.id,
+          receiveCurrency.id
+        ]
+      );
 
       dispatch(
         setSendAmount(
