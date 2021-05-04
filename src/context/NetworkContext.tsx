@@ -22,18 +22,13 @@ type BoltzConfiguration = {
   litecoinConstants: NetworkConstants,
 }
 
-type NetworkConfiguration = {
-  network: Network,
-  explorers: Map<CurrencyID, BlockExplorerConfiguration>,
-}
-
 type NetworkContextData = {
   network: Network,
   setNetwork: (network: Network) => void,
 }
 
-// TODO: parse based on URL
-const defaultNetwork = Network.Regtest;
+const defaultNetwork = window.location.hostname === 'opendex.app' ? Network.Mainnet :
+  window.location.hostname === 'staging.opendex.app' ? Network.Testnet : Network.Regtest;
 
 const NetworkContext = React.createContext<NetworkContextData>({
   network: defaultNetwork,
@@ -55,8 +50,12 @@ const NetworkProvider = ({ children }) => {
   );
 };
 
-const useNetwork = (): { network: NetworkConfiguration, setNetwork: (network: Network) => void } => {
-  const { network, setNetwork } = React.useContext(NetworkContext);
+const useNetwork = (): NetworkContextData => {
+  return React.useContext(NetworkContext);
+};
+
+const useBlockExplorers = (): Map<CurrencyID, BlockExplorerConfiguration> => {
+  const { network } = React.useContext(NetworkContext);
 
   const explorers = new Map<CurrencyID, BlockExplorerConfiguration>();
 
@@ -71,13 +70,7 @@ const useNetwork = (): { network: NetworkConfiguration, setNetwork: (network: Ne
     }
   }
 
-  return {
-    setNetwork,
-    network: {
-      network,
-      explorers
-    },
-  };
+  return explorers;
 };
 
 const useBoltzConfiguration = (): BoltzConfiguration => {
@@ -100,5 +93,6 @@ export {
   Network,
   useNetwork,
   NetworkProvider,
+  useBlockExplorers,
   useBoltzConfiguration,
 };

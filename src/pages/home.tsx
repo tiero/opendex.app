@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core';
-import { default as React, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import ChooseTradingPair from '../components/ChooseTradingPair';
 import SwapFlow from '../components/SwapFlow';
 import SwapProvider from '../components/SwapProvider';
@@ -12,6 +12,7 @@ import {
   selectSwapProvider,
   selectSwapStep,
 } from '../store/swaps-slice';
+import NetworkSelection from '../components/NetworkSelection';
 
 export type HomePageProps = {};
 
@@ -29,6 +30,7 @@ const HomePage = (_props: HomePageProps): ReactElement => {
     <Layout>
       <Grid container direction="column" wrap="nowrap">
         <Title>CROSS-CHAIN DEX AGGREGATOR</Title>
+        <NetworkSelection />
         <Grid item container direction="column" wrap="nowrap">
           {swapSteps[swapStep]}
           {ratesLoaded && !!swapProvider && (
