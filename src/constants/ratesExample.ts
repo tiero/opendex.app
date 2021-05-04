@@ -94,7 +94,6 @@ export default class ExampleFetcherWithInitalizer implements RatesFetcher {
       (isSend && amountWithCurrency.currency === CurrencyID.LIQUID_BTC) ||
       (!isSend && amountWithCurrency.currency !== CurrencyID.LIQUID_USDT);
 
-    console.log(amountWithCurrency.amount.toString())
     const amount = isBTCcomingIn
       ? usdPerBtc.mul(amountWithCurrency.amount)
       : amountWithCurrency.amount.div(usdPerBtc);
