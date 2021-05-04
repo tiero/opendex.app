@@ -23,16 +23,41 @@ type BoltzConfiguration = {
 }
 
 type NetworkConfiguration = {
+  network: Network,
   explorers: Map<CurrencyID, BlockExplorerConfiguration>,
-  boltz: BoltzConfiguration,
 }
 
 type NetworkContextData = {
-  network: NetworkConfiguration,
-  updateNetwork: (network: Network) => void,
+  network: Network,
+  setNetwork: (network: Network) => void,
 }
 
-const parseNetwork = (network: Network): NetworkConfiguration => {
+// TODO: parse based on URL
+const defaultNetwork = Network.Regtest;
+
+const NetworkContext = React.createContext<NetworkContextData>({
+  network: defaultNetwork,
+  setNetwork: () => {},
+});
+
+const NetworkProvider = ({ children }) => {
+  const [network, setNetwork] = React.useState<Network>(defaultNetwork);
+
+  return (
+    <NetworkContext.Provider
+      value={{
+        network,
+        setNetwork,
+      }}
+    >
+      <>{children}</>
+    </NetworkContext.Provider>
+  );
+};
+
+const useNetwork = (): { network: NetworkConfiguration, setNetwork: (network: Network) => void } => {
+  const { network, setNetwork } = React.useContext(NetworkContext);
+
   const explorers = new Map<CurrencyID, BlockExplorerConfiguration>();
 
   for (const currency of Object.keys(CurrencyID)) {
@@ -46,51 +71,34 @@ const parseNetwork = (network: Network): NetworkConfiguration => {
     }
   }
 
-  // Boltz config parsing
+  return {
+    setNetwork,
+    network: {
+      network,
+      explorers
+    },
+  };
+};
+
+const useBoltzConfiguration = (): BoltzConfiguration => {
+  const { network } = React.useContext(NetworkContext);
+
   const capitalizeFirstLetter = (input: string) => {
     return input.charAt(0).toUpperCase() + input.slice(1);
   };
   
-  const boltz: BoltzConfiguration = {
+  return {
     apiEndpoint: process.env[`REACT_APP_BOLTZ_${network}_API`]!,
     infuraId: process.env[`REACT_APP_BOLTZ_${network}_INFURA_ID`]!,
 
     bitcoinConstants: Networks[`bitcoin${capitalizeFirstLetter(network.toLowerCase())}`],
     litecoinConstants: Networks[`litecoin${capitalizeFirstLetter(network.toLowerCase())}`],
   };
-
-  return {
-    boltz,
-    explorers,
-  }
-};
-
-// TODO: parse based on URL
-const defaultNetwork = Network.Regtest;
-
-const NetworkContext = React.createContext<NetworkContextData | null>(null);
-
-const NetworkProvider = ({ children }) => {
-  const [network, setNetwork] = React.useState<NetworkConfiguration>(parseNetwork(defaultNetwork));
-
-  const updateNetwork = (network: Network) => {
-    setNetwork(parseNetwork(network));
-  };
-
-  return (
-    <NetworkContext.Provider
-      value={{
-        network,
-        updateNetwork,
-      }}
-    >
-      <>{children}</>
-    </NetworkContext.Provider>
-  );
 };
 
 export {
   Network,
-  NetworkContext,
+  useNetwork,
   NetworkProvider,
+  useBoltzConfiguration,
 };
