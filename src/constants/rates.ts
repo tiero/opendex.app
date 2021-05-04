@@ -27,14 +27,14 @@ export interface RatesFetcherOpts { }
 
 export interface RatesFetcher {
   // PreviewGivenSend wants the sending amount and the currency entered by the user and will return the
-  // amount to be received of the opposite currency in the pair, comprehensive of fees.
+  // amount to be received of the opposite currency in the pair, included of fees.
   previewGivenSend(
     amountWithCurrency: CurrencyAmount,
     pair: CurrencyPair
   ): Promise<AmountPreview>;
 
   // PreviewGivenReceive wants the receving amount and the currency entered by the user and will return the
-  // amount to be sent of the opposite currency in the pair, comprehensive of fees.
+  // amount to be sent of the opposite currency in the pair, included of fees.
   previewGivenReceive(
     amountWithCurrency: CurrencyAmount,
     pair: CurrencyPair,
