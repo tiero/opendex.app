@@ -26,6 +26,7 @@ import {
 import { timer } from 'rxjs';
 import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useExampleHook from '../../constants/ratesExampleHook';
+import useBoltzFetcher from '../../constants/boltzFetcherHook';
 import Decimal from 'decimal.js';
 
 const useStyles = makeStyles(() =>
@@ -92,8 +93,8 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
-
   const tdexFetcher = useExampleHook();
+  const boltzFetcher = useBoltzFetcher();
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
@@ -101,11 +102,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       ratesFetcher = tdexFetcher;
       break;
     case SwapProvider.BOLTZ:
+      ratesFetcher = boltzFetcher;
+      break;
     case SwapProvider.COMIT:
     default:
       break;
   }
-
 
   const amountIsPositive = (x: any): boolean => {
     if (!Number.isNaN(x) && Number(x) > 0) {
@@ -113,7 +115,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     }
 
     return false;
-  }
+  };
 
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -128,21 +130,21 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new Decimal(value);
-      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
-        amount,
-        currency: sendCurrency.id,
-      },
-        [
-          sendCurrency.id,
-          receiveCurrency.id
-        ]
+      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
+        {
+          amount,
+          currency: sendCurrency.id,
+        },
+        [sendCurrency.id, receiveCurrency.id]
       );
 
       dispatch(
         setReceiveAmount(
-          receiveValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
-            maximumFractionDigits: 8,
-          })
+          receiveValue.amountWithFees.amount
+            .toNumber()
+            .toLocaleString(undefined, {
+              maximumFractionDigits: 8,
+            })
         )
       );
       setIsPreviewing(false);
@@ -162,14 +164,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new Decimal(value);
-      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
-        amount,
-        currency: receiveCurrency.id,
-      },
-        [
-          sendCurrency.id,
-          receiveCurrency.id
-        ]
+      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
+        {
+          amount,
+          currency: receiveCurrency.id,
+        },
+        [sendCurrency.id, receiveCurrency.id]
       );
 
       dispatch(

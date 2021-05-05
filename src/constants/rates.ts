@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js';
 import CurrencyID from './currency';
 
-
 export enum AmountFeeType {
   Percentage = 'Percentage',
   Fixed = 'Fixed',
@@ -23,7 +22,7 @@ export interface AmountPreview {
   feesDetail?: Record<AmountFeeType, number>;
 }
 
-export interface RatesFetcherOpts { }
+export interface RatesFetcherOpts {}
 
 export interface RatesFetcher {
   // PreviewGivenSend wants the sending amount and the currency entered by the user and will return the
@@ -37,7 +36,7 @@ export interface RatesFetcher {
   // amount to be sent of the opposite currency in the pair, included of fees.
   previewGivenReceive(
     amountWithCurrency: CurrencyAmount,
-    pair: CurrencyPair,
+    pair: CurrencyPair
   ): Promise<AmountPreview>;
 
   // define wich trading pair is suppported by the fetcher implementation

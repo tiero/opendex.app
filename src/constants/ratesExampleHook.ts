@@ -1,14 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { RatesFetcher } from './rates';
 import ExampleFetcherWithInitalizer from './ratesExample';
 
 export default function useExampleHook(): RatesFetcher | null {
-  let [
-    fetcher,
-    setFetcher,
-  ] = useState<RatesFetcher | null>(null);
-
+  let [fetcher, setFetcher] = useState<RatesFetcher | null>(null);
 
   useEffect(() => {
     (async () => {
