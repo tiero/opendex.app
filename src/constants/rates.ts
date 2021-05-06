@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import CurrencyID from './currency';
 
 
@@ -11,7 +11,7 @@ export enum AmountFeeType {
 export type CurrencyPair = [CurrencyID, CurrencyID];
 
 export interface CurrencyAmount {
-  amount: Decimal;
+  amount: BigNumber;
   currency: CurrencyID;
 }
 

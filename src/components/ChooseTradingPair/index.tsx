@@ -26,7 +26,7 @@ import {
 import { timer } from 'rxjs';
 import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useExampleHook from '../../constants/ratesExampleHook';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -127,7 +127,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     if (ratesFetcher && amountIsPositive(value)) {
       setIsPreviewing(true);
 
-      const amount = new Decimal(value);
+      const amount = new BigNumber(value);
       const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
         amount,
         currency: sendCurrency.id,
@@ -161,7 +161,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     if (ratesFetcher && amountIsPositive(value)) {
       setIsPreviewing(true);
 
-      const amount = new Decimal(value);
+      const amount = new BigNumber(value);
       const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
         amount,
         currency: receiveCurrency.id,
