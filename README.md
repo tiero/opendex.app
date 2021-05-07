@@ -5,22 +5,22 @@
 
 ## Install
 ```bash
-npm i
+yarn
 ```
 
 ## Build for production
 ```bash
-npm run build
+yarn build
 ```
 
 ## Development
 
 ### Start
 ```bash
-npm start
+yarn start
 ```
 
 ### Develop view components
 ```bash
-npm run storybook
+yarn run storybook
 ```

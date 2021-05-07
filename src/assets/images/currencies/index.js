@@ -1,5 +1,6 @@
 import Ether from './Ether.svg';
 import Bitcoin from './Bitcoin.svg';
+import LiquidBitcoin from './LiquidBitcoin.png';
 import Litecoin from './Litecoin.svg';
 import Tether from './TetherLogo.svg';
 import LightningBitcoin from './LightningBitcoin.svg';
@@ -11,6 +12,7 @@ export default {
   Tether,
   Bitcoin,
   Litecoin,
+  LiquidBitcoin,
   LightningBitcoin,
   LightningLitecoin,
   Monero,

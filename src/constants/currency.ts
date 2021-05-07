@@ -106,13 +106,27 @@ export const CurrencyByID: Record<CurrencyID, CurrencyOption> = {
     id: CurrencyID.LIQUID_BTC,
     name: CurrencyName.BTC,
     symbol: 'L-BTC',
-    label: getCurrencyLabel('L-BTC', 'Bitcoin'),
+    label: getCurrencyLabel('L-BTC', 'LiquidBitcoin'),
     transport: {
       chain: TransportChain.LIQUID,
       layer: TransportLayer.ONCHAIN,
     },
     swapValues: {
       label: 'Bitcoin Liquid',
+      type: CurrencyType.Liquid,
+    },
+  },
+  [CurrencyID.LIQUID_USDT]: {
+    id: CurrencyID.LIQUID_USDT,
+    name: CurrencyName.USDT,
+    symbol: 'USDt',
+    transport: {
+      chain: TransportChain.LIQUID,
+      layer: TransportLayer.ONCHAIN,
+    },
+    label: getCurrencyLabel('L-USDt', 'Tether'),
+    swapValues: {
+      label: 'Tether Liquid',
       type: CurrencyType.Liquid,
     },
   },
@@ -186,20 +200,6 @@ export const CurrencyByID: Record<CurrencyID, CurrencyOption> = {
     swapValues: {
       label: 'Monero',
       type: CurrencyType.Monero,
-    },
-  },
-  [CurrencyID.LIQUID_USDT]: {
-    id: CurrencyID.LIQUID_USDT,
-    name: CurrencyName.USDT,
-    symbol: 'USDt',
-    transport: {
-      chain: TransportChain.LIQUID,
-      layer: TransportLayer.ONCHAIN,
-    },
-    label: getCurrencyLabel('L-USDt', 'Tether'),
-    swapValues: {
-      label: 'Tether Liquid',
-      type: CurrencyType.Liquid,
     },
   },
 };
