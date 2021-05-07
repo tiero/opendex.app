@@ -1,6 +1,5 @@
 import { Grid } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
 import svgIcons from '../../utils/svgIcons';
 
 const useStyles = makeStyles(() =>

@@ -7,7 +7,6 @@ import {
   withWidth,
 } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
 import Divider from '../Divider';
 import Logo from '../Logo/';
 import Menu from '../Menu';
