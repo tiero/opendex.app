@@ -1,12 +1,12 @@
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import AssetSelector from '../AssetSelector';
 import Button from '../Button';
 import CardComponent from '../Card';
 import ErrorMessage from '../ErrorMessage';
 import SwapButton from '../SwapButton';
-import { SwapStep } from '../../constants/swap';
+import { SwapStep, SwapProvider } from '../../constants/swap';
 import { CurrencyOptions, CurrencyOption } from '../../constants/currency';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -24,6 +24,9 @@ import {
   setSwapStep,
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
+import { AmountPreview, RatesFetcher } from '../../constants/rates';
+import useExampleHook from '../../constants/ratesExampleHook';
+import BigNumber from 'bignumber.js';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -73,10 +76,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
-  const baseCurrency = CurrencyOptions.find(
+  const [isPreviewing, setIsPreviewing] = useState(false);
+
+  const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
   )!;
-  const quoteCurrency = CurrencyOptions.find(
+  const receiveCurrency = CurrencyOptions.find(
     currency => currency.id === receiveAsset
   )!;
 
@@ -87,6 +92,97 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
+
+  const tdexFetcher = useExampleHook();
+
+  let ratesFetcher: RatesFetcher | null;
+  switch (swapProvider) {
+    case SwapProvider.TDEX:
+      ratesFetcher = tdexFetcher;
+      break;
+    case SwapProvider.BOLTZ:
+    case SwapProvider.COMIT:
+    default:
+      break;
+  }
+
+
+  const amountIsPositive = (x: any): boolean => {
+    if (!Number.isNaN(x) && Number(x) > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  const onSendAmountChange = async (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    if (isPreviewing) return;
+
+    const value = e.target.value;
+    dispatch(setSendAmount(value));
+
+    // preview other amount
+    if (ratesFetcher && amountIsPositive(value)) {
+      setIsPreviewing(true);
+
+      const amount = new BigNumber(value);
+      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
+        amount,
+        currency: sendCurrency.id,
+      },
+        [
+          sendCurrency.id,
+          receiveCurrency.id
+        ]
+      );
+
+      dispatch(
+        setReceiveAmount(
+          receiveValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
+            maximumFractionDigits: 8,
+          })
+        )
+      );
+      setIsPreviewing(false);
+    }
+  };
+
+  const onReceiveAmountChange = async (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    if (isPreviewing) return;
+
+    const value = e.target.value;
+    dispatch(setReceiveAmount(value));
+
+    // preview other amount
+    if (ratesFetcher && amountIsPositive(value)) {
+      setIsPreviewing(true);
+
+      const amount = new BigNumber(value);
+      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
+        amount,
+        currency: receiveCurrency.id,
+      },
+        [
+          sendCurrency.id,
+          receiveCurrency.id
+        ]
+      );
+
+      dispatch(
+        setSendAmount(
+          sendValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
+            maximumFractionDigits: 8,
+          })
+        )
+      );
+      setIsPreviewing(false);
+    }
+  };
+
   const renderCryptoOptions = () => {
     return (
       <Grid container justify="center" direction="row" alignItems="center">
@@ -95,21 +191,19 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             label={'You send'}
             value={sendAmount}
             placeholder={'0.00'}
-            onAmountChange={(
-              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setSendAmount(e.target.value))}
+            onAmountChange={onSendAmountChange}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setSendAsset(currency.id))
             }
-            selectedAsset={baseCurrency}
+            selectedAsset={sendCurrency}
             loading={!ratesLoaded}
           />
         </Grid>
         <Grid item xs={12}>
           <SwapButton
             onClick={() => {
-              dispatch(setSendAsset(quoteCurrency.id));
-              dispatch(setReceiveAsset(baseCurrency.id));
+              dispatch(setSendAsset(receiveCurrency.id));
+              dispatch(setReceiveAsset(sendCurrency.id));
             }}
             disabled={!ratesLoaded}
           />
@@ -119,13 +213,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             label={'You receive'}
             value={receiveAmount}
             placeholder={'0.00'}
-            onAmountChange={(
-              e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setReceiveAmount(e.target.value))}
+            onAmountChange={onReceiveAmountChange}
             onAssetChange={(currency: CurrencyOption) =>
               dispatch(setReceiveAsset(currency.id))
             }
-            selectedAsset={quoteCurrency}
+            selectedAsset={receiveCurrency}
             loading={!ratesLoaded}
           />
         </Grid>
