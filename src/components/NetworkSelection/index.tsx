@@ -5,15 +5,15 @@ const NetworkSelection = () => {
   const { network, setNetwork } = useNetwork();
 
   return (
-    <Box style={{marginTop: "2rem"}}>
+    <Box style={{ marginTop: '2rem' }}>
       <TextField
         select
-        className={"currency-options"}
+        className={'currency-options'}
         value={network}
-        onChange={(event) => {
+        onChange={event => {
           setNetwork(event.target.value! as Network);
         }}
-        variant={"outlined"}
+        variant={'outlined'}
         SelectProps={{ MenuProps: { disableScrollLock: true } }}
       >
         {Object.entries(Network).map(([key, value]) => (
