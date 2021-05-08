@@ -11,15 +11,15 @@ import { CurrencyOptions, CurrencyOption } from '../../constants/currency';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   isRatesLoaded,
-  selectBaseAmount,
-  selectBaseAsset,
-  selectQuoteAmount,
-  selectQuoteAsset,
+  selectSendAmount,
+  selectSendAsset,
+  selectReceiveAmount,
+  selectReceiveAsset,
   selectSwapProvider,
-  setBaseAmount,
-  setBaseAsset,
-  setQuoteAmount,
-  setQuoteAsset,
+  setSendAmount,
+  setSendAsset,
+  setReceiveAmount,
+  setReceiveAsset,
   setRates,
   setSwapStep,
 } from '../../store/swaps-slice';
@@ -66,25 +66,25 @@ export type ChooseTradingPairProps = {};
 const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const baseAsset = useAppSelector(selectBaseAsset);
-  const quoteAsset = useAppSelector(selectQuoteAsset);
-  const baseAmount = useAppSelector(selectBaseAmount);
-  const quoteAmount = useAppSelector(selectQuoteAmount);
+  const sendAsset = useAppSelector(selectSendAsset);
+  const receiveAsset = useAppSelector(selectReceiveAsset);
+  const sendAmount = useAppSelector(selectSendAmount);
+  const receiveAmount = useAppSelector(selectReceiveAmount);
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
 
   const baseCurrency = CurrencyOptions.find(
-    currency => currency.id === baseAsset
+    currency => currency.id === sendAsset
   )!;
   const quoteCurrency = CurrencyOptions.find(
-    currency => currency.id === quoteAsset
+    currency => currency.id === receiveAsset
   )!;
 
   timer(1000).subscribe(() => dispatch(setRates({})));
   const nextDisabled =
     !ratesLoaded ||
-    Number(baseAmount) === 0 ||
-    Number(quoteAmount) === 0 ||
+    Number(sendAmount) === 0 ||
+    Number(receiveAmount) === 0 ||
     !swapProvider;
 
   const renderCryptoOptions = () => {
@@ -93,13 +93,13 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         <Grid item xs={12}>
           <AssetSelector
             label={'You send'}
-            value={baseAmount}
+            value={sendAmount}
             placeholder={'0.00'}
             onAmountChange={(
               e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setBaseAmount(e.target.value))}
+            ) => dispatch(setSendAmount(e.target.value))}
             onAssetChange={(currency: CurrencyOption) =>
-              dispatch(setBaseAsset(currency.id))
+              dispatch(setSendAsset(currency.id))
             }
             selectedAsset={baseCurrency}
             loading={!ratesLoaded}
@@ -108,8 +108,8 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         <Grid item xs={12}>
           <SwapButton
             onClick={() => {
-              dispatch(setBaseAsset(quoteCurrency.id));
-              dispatch(setQuoteAsset(baseCurrency.id));
+              dispatch(setSendAsset(quoteCurrency.id));
+              dispatch(setReceiveAsset(baseCurrency.id));
             }}
             disabled={!ratesLoaded}
           />
@@ -117,13 +117,13 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         <Grid item xs={12}>
           <AssetSelector
             label={'You receive'}
-            value={quoteAmount}
+            value={receiveAmount}
             placeholder={'0.00'}
             onAmountChange={(
               e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-            ) => dispatch(setQuoteAmount(e.target.value))}
+            ) => dispatch(setReceiveAmount(e.target.value))}
             onAssetChange={(currency: CurrencyOption) =>
-              dispatch(setQuoteAsset(currency.id))
+              dispatch(setReceiveAsset(currency.id))
             }
             selectedAsset={quoteCurrency}
             loading={!ratesLoaded}
