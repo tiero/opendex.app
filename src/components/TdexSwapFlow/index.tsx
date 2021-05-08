@@ -14,7 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
 import { SwapStep } from '../../constants/swap';
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -43,7 +43,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const { baseAmount, baseAsset, quoteAmount, quoteAsset } = useAppSelector(
+  const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
   );
 
@@ -118,10 +118,10 @@ const TdexSwapFlow: React.FC<Props> = () => {
           <Review
             chain={chain}
             terms={{
-              assetToBeSent: baseAsset,
-              amountToBeSent: Number(baseAmount),
-              assetToReceive: quoteAsset,
-              amountToReceive: Number(quoteAmount),
+              assetToBeSent: sendAsset,
+              amountToBeSent: Number(sendAmount),
+              assetToReceive: receiveAsset,
+              amountToReceive: Number(receiveAmount),
             }}
             onTrade={handleTradeCompleted}
             onReject={handleGoBack}
@@ -147,9 +147,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${
-          connected ? `Connected - Network: ${chain}` : `Not Connected`
-        }`}
+        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
       </div>
     </div>
   );
