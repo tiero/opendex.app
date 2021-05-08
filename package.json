@@ -44,7 +44,7 @@
   "scripts": {
     "start": "BROWSER=none PORT=8080 react-scripts start",
     "build": "react-scripts build",
-    "test": "npm run prettier:check && react-scripts test",
+    "test": "yarn prettier:check && react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "storybook:no-cache": "start-storybook -p 6006 -s public --no-manager-cache",

@@ -12,7 +12,7 @@ import {
   withWidth,
 } from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import svgIcons from '../../utils/svgIcons';
 import Button from '../Button';
 import NavLink from '../NavLink';
