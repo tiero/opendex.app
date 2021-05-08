@@ -92,7 +92,6 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
-
   const tdexFetcher = useExampleHook();
 
   let ratesFetcher: RatesFetcher | null;
@@ -106,14 +105,13 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       break;
   }
 
-
   const amountIsPositive = (x: any): boolean => {
     if (!Number.isNaN(x) && Number(x) > 0) {
       return true;
     }
 
     return false;
-  }
+  };
 
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -128,21 +126,21 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend({
-        amount,
-        currency: sendCurrency.id,
-      },
-        [
-          sendCurrency.id,
-          receiveCurrency.id
-        ]
+      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
+        {
+          amount,
+          currency: sendCurrency.id,
+        },
+        [sendCurrency.id, receiveCurrency.id]
       );
 
       dispatch(
         setReceiveAmount(
-          receiveValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
-            maximumFractionDigits: 8,
-          })
+          receiveValue.amountWithFees.amount
+            .toNumber()
+            .toLocaleString(undefined, {
+              maximumFractionDigits: 8,
+            })
         )
       );
       setIsPreviewing(false);
@@ -162,14 +160,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive({
-        amount,
-        currency: receiveCurrency.id,
-      },
-        [
-          sendCurrency.id,
-          receiveCurrency.id
-        ]
+      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
+        {
+          amount,
+          currency: receiveCurrency.id,
+        },
+        [sendCurrency.id, receiveCurrency.id]
       );
 
       dispatch(
