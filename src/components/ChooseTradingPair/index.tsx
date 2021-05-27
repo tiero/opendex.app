@@ -25,7 +25,8 @@ import {
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
 import { AmountPreview, RatesFetcher } from '../../constants/rates';
-import useExampleHook from '../../constants/ratesExampleHook';
+import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
+
 import BigNumber from 'bignumber.js';
 
 const useStyles = makeStyles(() =>
@@ -92,7 +93,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
-  const tdexFetcher = useExampleHook();
+  const tdexFetcher = useTdexFetcher('regtest');
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
@@ -138,7 +139,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         setReceiveAmount(
           receiveValue.amountWithFees.amount
             .toNumber()
-            .toLocaleString(undefined, {
+            .toLocaleString('en-US', {
               maximumFractionDigits: 8,
             })
         )
@@ -170,7 +171,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
       dispatch(
         setSendAmount(
-          sendValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
+          sendValue.amountWithFees.amount.toNumber().toLocaleString('en-US', {
             maximumFractionDigits: 8,
           })
         )

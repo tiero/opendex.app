@@ -19,7 +19,7 @@
     "decimal.js": "^10.2.1",
     "ethers": "^5.0.31",
     "is_js": "^0.9.0",
-    "marina-provider": "^1.0.0",
+    "marina-provider": "^1.1.0",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "qrcode-parser": "^1.2.0",
@@ -38,7 +38,7 @@
     "redux-saga": "^1.1.3",
     "reselect": "^4.0.0",
     "rxjs": "^6.6.6",
-    "tdex-sdk": "^1.6.3",
+    "tdex-sdk": "^1.6.7",
     "web3modal": "^1.9.3"
   },
   "scripts": {

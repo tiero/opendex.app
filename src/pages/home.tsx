@@ -29,7 +29,7 @@ const HomePage = (_props: HomePageProps): ReactElement => {
   return (
     <Layout>
       <Grid container direction="column" wrap="nowrap" alignItems="center">
-        <Title>CROSS-CHAIN DEX AGGREGATOR</Title>
+        {/* <Title>CROSS-CHAIN DEX AGGREGATOR</Title> */}
         <NetworkSelection />
 
         <Grid item container direction="column" wrap="nowrap">

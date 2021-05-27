@@ -21,6 +21,7 @@ export enum CurrencyID {
   ETH_USDT = 'Ethereum USDt', // this become "Ethterum USDt" to be consistent
   MONERO = 'XMR',
   LIQUID_USDT = 'Liquid USDt',
+  LIQUID_CAD = 'Liquid CAD',
 }
 
 // this allows to export currency as Currency in other places in the codebase
@@ -61,6 +62,7 @@ export enum CurrencyName {
   USDT = 'Tether USD',
   ETH = 'Ether',
   MONERO = 'Monero',
+  CAD = 'CAD'
 }
 
 // old: kept for backward compatibility only to maintain swapValues
@@ -127,6 +129,20 @@ export const CurrencyByID: Record<CurrencyID, CurrencyOption> = {
     label: getCurrencyLabel('L-USDt', 'Tether'),
     swapValues: {
       label: 'Tether Liquid',
+      type: CurrencyType.Liquid,
+    },
+  },
+  [CurrencyID.LIQUID_CAD]: {
+    id: CurrencyID.LIQUID_CAD,
+    name: CurrencyName.CAD,
+    symbol: 'USDt',
+    transport: {
+      chain: TransportChain.LIQUID,
+      layer: TransportLayer.ONCHAIN,
+    },
+    label: getCurrencyLabel('LCAD', 'LiquidCAD'),
+    swapValues: {
+      label: 'Liquid CAD',
       type: CurrencyType.Liquid,
     },
   },

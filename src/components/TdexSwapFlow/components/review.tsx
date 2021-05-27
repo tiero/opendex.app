@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { fetchAndUnblindUtxos, greedyCoinSelector, IdentityType } from 'ldk';
-import BrowserInjectOpenDex from './browserInject';
+import BrowserInjectOpenDex from '../utils/browserInject';
 import { Trade } from 'tdex-sdk';
 
 import {
@@ -13,7 +13,8 @@ import {
   CurrencyToAssetByChain,
 } from '../constants';
 import CurrencyID from '../../../constants/currency';
-import { toSatoshi } from '../../../utils/format';
+import { toSatoshi } from '../utils/format';
+import { BigNumber } from 'bignumber.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,7 +86,7 @@ const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
       const utxos = await fetchAndUnblindUtxos(addrs, explorer);
 
       const trade = new Trade({
-        providerUrl: provider,
+        providerUrl: provider.endpoint,
         explorerUrl: explorer,
         coinSelector: greedyCoinSelector(),
         utxos,

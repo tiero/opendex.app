@@ -62,7 +62,7 @@ const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
       ) : (
         <>
           <Typography className={classes.instructions}>
-            Connect your wallet to OpenDEX
+            Connect your wallet
           </Typography>
           <Button
             className={classes.button}

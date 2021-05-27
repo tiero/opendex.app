@@ -24,7 +24,7 @@ const OpendexLogo = (props: OpendexLogoProps) => {
 
   return (
     <Grid item onClick={onClick} className={classes.logoWrapper}>
-      <img className={classes.logo} src={svgIcons.opendex} alt="OpenDEX Logo" />
+      {/* <img className={classes.logo} src={svgIcons.opendex} alt="OpenDEX Logo" /> */}
     </Grid>
   );
 };
