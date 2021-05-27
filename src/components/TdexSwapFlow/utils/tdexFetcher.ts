@@ -7,10 +7,10 @@ import {
   RatesFetcherOpts,
   CurrencyPair,
 } from '../../../constants/rates';
-import { Provider, ProviderWithMarket, CurrencyToAssetByChain, AssetToCurrencyByChain, CurrencyPairKey } from '../constants';
+import { Provider, ProviderWithMarket, CurrencyToAssetByChain, AssetToCurrencyByChain, CurrencyPairKey, LBTC_USDT, BaseQuoteByPair } from '../constants';
 
 import { TraderClient, TradeType } from 'tdex-sdk';
-import { fromSatoshi, toSatoshi, toKey } from './format';
+import { fromSatoshi, toSatoshi, toKeys } from './format';
 
 
 
@@ -35,8 +35,8 @@ export default class TdexFetcher implements RatesFetcher {
   }
 
   isPairSupported(pair: CurrencyPair): boolean {
-    const pairAsKey = toKey(pair);
-    return this.supportedPairs.includes(pairAsKey);
+    const [front, reverse] = toKeys(pair);
+    return this.supportedPairs.includes(front) || this.supportedPairs.includes(reverse);
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
@@ -44,7 +44,7 @@ export default class TdexFetcher implements RatesFetcher {
     amountWithCurrency: CurrencyAmount,
     pair: CurrencyPair
   ): Promise<AmountPreview> {
-    if (!this.isPairSupported(pair)) throw new Error('pair is not support');
+    if (!this.isPairSupported(pair)) throw new Error('pair is not supported');
 
     return this.previewForPair(amountWithCurrency, pair, true);
   }
@@ -54,7 +54,7 @@ export default class TdexFetcher implements RatesFetcher {
     amountWithCurrency: CurrencyAmount,
     pair: CurrencyPair
   ): Promise<AmountPreview> {
-    if (!this.isPairSupported(pair)) throw new Error('pair is not support');
+    if (!this.isPairSupported(pair)) throw new Error('pair is not supported');
 
     return this.previewForPair(amountWithCurrency, pair, false);
   }
@@ -65,11 +65,10 @@ export default class TdexFetcher implements RatesFetcher {
     isSend: boolean = true
   ): Promise<AmountPreview> {
 
-    const pairAsKey = toKey(pair);
-    if (!this.supportedPairs.includes(pairAsKey))
-      throw new Error('selected pair is not supported by tdex');
 
-    const [baseCurrency, quoteCurrecy] = pair;
+    const [pairAsKeyFront] = toKeys(pair);
+    const [baseCurrency, quoteCurrecy] = BaseQuoteByPair[pairAsKeyFront];
+    console.log(baseCurrency, quoteCurrecy);
 
     const isBaseComingIn =
       (isSend && amountWithCurrency.currency === baseCurrency) ||
@@ -77,6 +76,7 @@ export default class TdexFetcher implements RatesFetcher {
 
     const tradeType = isBaseComingIn ? TradeType.SELL : TradeType.BUY;
 
+    const [pairAsKey] = toKeys([baseCurrency, quoteCurrecy]);
     const providersForPair = this.providersWithMarketByPair[pairAsKey];
 
     const promises = providersForPair.map((providerWithMarket: ProviderWithMarket) => {
@@ -117,7 +117,7 @@ export default class TdexFetcher implements RatesFetcher {
     return {
       network: network,
       providersWithMarketByPair: {
-        [toKey([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT])]: [
+        [toKeys([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT])[0]]: [
           {
             provider: { name: 'regtest daemon', endpoint: 'http://localhost:9945' },
             market: {

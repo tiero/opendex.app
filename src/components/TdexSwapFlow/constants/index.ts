@@ -1,5 +1,7 @@
 import CurrencyID from '../../../constants/currency';
 import { MarketInterface } from 'tdex-sdk';
+import { CurrencyPair } from '../../../constants/rates';
+import { toKeys } from '../utils/format';
 
 export const ExplorerByChain: Record<'liquid' | 'regtest', string> = {
   liquid: 'https://blockstream.info/liquid/api',
@@ -46,6 +48,21 @@ const LIQUID_BTC_REGTEST = '5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca
 const LIQUID_BTC = '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d';
 const LIQUID_USDT = 'ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2';
 const LIQUID_CAD = '0e99c1a6da379d1f4151fb9df90449d40d0608f6cb33a5bcbfc8c265f42bab0a';
+
+
+export type CurrencyPairKey = string;
+
+export const LBTC_USDT = `${CurrencyID.LIQUID_BTC}#${CurrencyID.LIQUID_USDT}`;
+export const USDT_LBTC = `${CurrencyID.LIQUID_USDT}#${CurrencyID.LIQUID_BTC}`;
+export const LBTC_LCAD = `${CurrencyID.LIQUID_BTC}#${CurrencyID.LIQUID_CAD}`;
+export const LCAD_LBTC = `${CurrencyID.LIQUID_CAD}#${CurrencyID.LIQUID_BTC}`;
+
+export const BaseQuoteByPair: Record<CurrencyPairKey, CurrencyPair> = {
+  [LBTC_USDT]: [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT],
+  [USDT_LBTC]: [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT],
+  [LBTC_LCAD]: [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD],
+  [LCAD_LBTC]: [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD]
+}
 
 const LiquidAssetHashByCurrenyID: AssetByCurrency = {
   [CurrencyID.LIQUID_BTC]: {
@@ -106,5 +123,4 @@ export const AssetToCurrencyByChain: Record<
   regtest: RegtestCurrencyIDByAssetHash,
 };
 
-export type CurrencyPairKey = string;
 

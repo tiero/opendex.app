@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import CurrencyID from '../../../constants/currency';
 import { CurrencyPair } from '../../../constants/rates';
-import { CurrencyPairKey } from '../constants';
+import { CurrencyPairKey, LCAD_LBTC, USDT_LBTC } from '../constants';
 
 const defaultPrecision = 8;
 
@@ -22,7 +22,7 @@ export function fromKey(x: CurrencyPairKey): CurrencyPair {
 }
 
 
-export function toKey(x: CurrencyPair): CurrencyPairKey {
+export function toKeys(x: CurrencyPair): CurrencyPairKey[] {
   const [currencyA, currencyB] = x;
-  return `${currencyA}#${currencyB}`;
+  return [`${currencyA}#${currencyB}`, `${currencyB}#${currencyA}`];
 }

@@ -126,7 +126,7 @@ export const CurrencyByID: Record<CurrencyID, CurrencyOption> = {
       chain: TransportChain.LIQUID,
       layer: TransportLayer.ONCHAIN,
     },
-    label: getCurrencyLabel('L-USDt', 'Tether'),
+    label: getCurrencyLabel('USDt', 'LiquidTether'),
     swapValues: {
       label: 'Tether Liquid',
       type: CurrencyType.Liquid,
@@ -135,7 +135,7 @@ export const CurrencyByID: Record<CurrencyID, CurrencyOption> = {
   [CurrencyID.LIQUID_CAD]: {
     id: CurrencyID.LIQUID_CAD,
     name: CurrencyName.CAD,
-    symbol: 'USDt',
+    symbol: 'LCAD',
     transport: {
       chain: TransportChain.LIQUID,
       layer: TransportLayer.ONCHAIN,
