@@ -62,7 +62,7 @@ export enum CurrencyName {
   USDT = 'Tether USD',
   ETH = 'Ether',
   MONERO = 'Monero',
-  CAD = 'CAD'
+  CAD = 'CAD',
 }
 
 // old: kept for backward compatibility only to maintain swapValues

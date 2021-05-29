@@ -49,8 +49,8 @@
     "storybook": "start-storybook -p 6006 -s public",
     "storybook:no-cache": "start-storybook -p 6006 -s public --no-manager-cache",
     "build-storybook": "build-storybook -s public",
-    "prettier": "prettier --write src/ public/",
-    "prettier:check": "prettier --check src/ public/",
+    "prettier": "npx prettier --write src public",
+    "prettier:check": "npx prettier --check src public",
     "provider:tdex": "bash scripts/run-tdex",
     "clean:tdex": "bash scripts/clean-tdex"
   },

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import CurrencyID from '../../../constants/currency';
 import {
   RatesFetcher,
   AmountPreview,
@@ -7,13 +6,23 @@ import {
   RatesFetcherOpts,
   CurrencyPair,
 } from '../../../constants/rates';
-import { Provider, ProviderWithMarket, CurrencyToAssetByChain, AssetToCurrencyByChain, CurrencyPairKey, LBTC_USDT, BaseQuoteByPair } from '../constants';
+import {
+  Provider,
+  ProviderWithMarket,
+  CurrencyToAssetByChain,
+  AssetToCurrencyByChain,
+  CurrencyPairKey,
+  PriceWithFee,
+  BaseQuoteByPair,
+} from '../constants';
 
-import { TraderClient, TradeType } from 'tdex-sdk';
-import { fromSatoshi, toSatoshi, toKeys } from './format';
-
-
-
+import { MarketInterface, TraderClient, TradeType } from 'tdex-sdk';
+import {
+  fromSatoshi,
+  toSatoshi,
+  toKey,
+  baseQuoteFromCurrencyPair,
+} from './format';
 
 interface TdexFetcherOptions extends RatesFetcherOpts {
   network: 'liquid' | 'regtest';
@@ -23,7 +32,10 @@ interface TdexFetcherOptions extends RatesFetcherOpts {
 export default class TdexFetcher implements RatesFetcher {
   private network: 'liquid' | 'regtest';
   private supportedPairs: CurrencyPairKey[];
-  private providersWithMarketByPair: Record<CurrencyPairKey, ProviderWithMarket[]>;
+  private providersWithMarketByPair: Record<
+    CurrencyPairKey,
+    ProviderWithMarket[]
+  >;
 
   constructor(options: TdexFetcherOptions) {
     const { providersWithMarketByPair, network } = options;
@@ -31,12 +43,13 @@ export default class TdexFetcher implements RatesFetcher {
     this.network = network;
     this.providersWithMarketByPair = providersWithMarketByPair;
 
-    this.supportedPairs = Object.keys(providersWithMarketByPair) as CurrencyPairKey[];
+    console.log(providersWithMarketByPair);
+
+    this.supportedPairs = Object.keys(BaseQuoteByPair) as CurrencyPairKey[];
   }
 
   isPairSupported(pair: CurrencyPair): boolean {
-    const [front, reverse] = toKeys(pair);
-    return this.supportedPairs.includes(front) || this.supportedPairs.includes(reverse);
+    return this.supportedPairs.includes(toKey(pair));
   }
 
   // PreviewGivenSend does the same thing as Preview with isSend = true
@@ -64,69 +77,88 @@ export default class TdexFetcher implements RatesFetcher {
     pair: CurrencyPair,
     isSend: boolean = true
   ): Promise<AmountPreview> {
-
-
-    const [pairAsKeyFront] = toKeys(pair);
-    const [baseCurrency, quoteCurrecy] = BaseQuoteByPair[pairAsKeyFront];
-    console.log(baseCurrency, quoteCurrecy);
+    const [baseCurrency, quoteCurrency] = baseQuoteFromCurrencyPair(pair);
 
     const isBaseComingIn =
       (isSend && amountWithCurrency.currency === baseCurrency) ||
-      (!isSend && amountWithCurrency.currency !== quoteCurrecy);
+      (!isSend && amountWithCurrency.currency !== quoteCurrency);
 
     const tradeType = isBaseComingIn ? TradeType.SELL : TradeType.BUY;
 
-    const [pairAsKey] = toKeys([baseCurrency, quoteCurrecy]);
-    const providersForPair = this.providersWithMarketByPair[pairAsKey];
+    const providersForPair =
+      this.providersWithMarketByPair[toKey([baseCurrency, quoteCurrency])];
 
-    const promises = providersForPair.map((providerWithMarket: ProviderWithMarket) => {
-      const client = new TraderClient(providerWithMarket.provider.endpoint);
-      return client.marketPrice(
-        providerWithMarket.market, tradeType,
-        toSatoshi(
-          amountWithCurrency.amount.toNumber(),
-          CurrencyToAssetByChain[this.network][amountWithCurrency.currency].precision
-        ),
-        CurrencyToAssetByChain[this.network][amountWithCurrency.currency].hash
-      )
-    });
-
+    const promises = providersForPair.map(
+      (providerWithMarket: ProviderWithMarket) => {
+        const client = new TraderClient(providerWithMarket.provider.endpoint);
+        return client.marketPrice(
+          providerWithMarket.market,
+          tradeType,
+          toSatoshi(
+            amountWithCurrency.amount.toNumber(),
+            CurrencyToAssetByChain[this.network][amountWithCurrency.currency]
+              .precision
+          ),
+          CurrencyToAssetByChain[this.network][amountWithCurrency.currency].hash
+        );
+      }
+    );
 
     const results = (await Promise.allSettled(promises))
       .filter(({ status }) => status === 'fulfilled')
-      .map(
-        (p) => (p as PromiseFulfilledResult<Array<{ amount: number, asset: string, balance: any, fee: any, price: any }>>).value
-      )
-      .filter((res) => res !== undefined);
+      .map(p => (p as PromiseFulfilledResult<PriceWithFee[]>).value)
+      .filter(res => res !== undefined);
 
     const [firstProvider] = results;
     const [firstPrice] = firstProvider;
 
-    const expectedCurrency = amountWithCurrency.currency === baseCurrency ? quoteCurrecy : baseCurrency;
+    const expectedCurrency =
+      amountWithCurrency.currency === baseCurrency
+        ? quoteCurrency
+        : baseCurrency;
 
     return {
       amountWithFees: {
-        amount: new BigNumber(fromSatoshi(firstPrice.amount, CurrencyToAssetByChain[this.network][expectedCurrency].precision)),
+        amount: new BigNumber(
+          fromSatoshi(
+            firstPrice.amount,
+            CurrencyToAssetByChain[this.network][expectedCurrency].precision
+          )
+        ),
         currency: AssetToCurrencyByChain[this.network][firstPrice.asset],
       },
     };
   }
 
-  public static async WithTdexProviders(providers: Provider[], network: 'liquid' | 'regtest'): Promise<TdexFetcherOptions> {
-    // normalize providers per market
-    return {
-      network: network,
-      providersWithMarketByPair: {
-        [toKeys([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT])[0]]: [
-          {
-            provider: { name: 'regtest daemon', endpoint: 'http://localhost:9945' },
-            market: {
-              baseAsset: CurrencyToAssetByChain[network][CurrencyID.LIQUID_BTC].hash,
-              quoteAsset: CurrencyToAssetByChain[network][CurrencyID.LIQUID_USDT].hash
-            }
-          }
-        ]
+  public static async WithTdexProviders(
+    providers: Provider[],
+    network: 'liquid' | 'regtest'
+  ): Promise<TdexFetcherOptions> {
+    let providersWithMarketByPair = {};
+    for (const provider of providers) {
+      const client = new TraderClient(provider.endpoint);
+      let markets: MarketInterface[];
+
+      try {
+        markets = await client.markets();
+      } catch (e) {
+        throw new Error(`provider ${provider.name} is not reachable`);
       }
-    };
+
+      markets.forEach((market: MarketInterface) => {
+        const { baseAsset, quoteAsset } = market;
+        const baseCurrency = AssetToCurrencyByChain[network][baseAsset];
+        const quoteCurrency = AssetToCurrencyByChain[network][quoteAsset];
+        const pairAsKey = toKey([baseCurrency, quoteCurrency]);
+
+        if (providersWithMarketByPair.hasOwnProperty(pairAsKey)) {
+          providersWithMarketByPair[pairAsKey].push({ provider, market });
+        } else {
+          providersWithMarketByPair[pairAsKey] = [{ provider, market }];
+        }
+      });
+    }
+
+    return { network, providersWithMarketByPair };
   }
 }

@@ -28,6 +28,7 @@ import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
 
 import BigNumber from 'bignumber.js';
+import { Network, useNetwork } from '../../context/NetworkContext';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -70,6 +71,7 @@ export type ChooseTradingPairProps = {};
 const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const { network } = useNetwork();
   const sendAsset = useAppSelector(selectSendAsset);
   const receiveAsset = useAppSelector(selectReceiveAsset);
   const sendAmount = useAppSelector(selectSendAmount);
@@ -93,7 +95,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     Number(receiveAmount) === 0 ||
     !swapProvider;
 
-  const tdexFetcher = useTdexFetcher('regtest');
+  const tdexFetcher = useTdexFetcher(network);
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {

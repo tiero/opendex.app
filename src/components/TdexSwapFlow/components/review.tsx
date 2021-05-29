@@ -14,7 +14,6 @@ import {
 } from '../constants';
 import CurrencyID from '../../../constants/currency';
 import { toSatoshi } from '../utils/format';
-import { BigNumber } from 'bignumber.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -92,9 +91,8 @@ const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
         utxos,
       });
 
-      const { precision, hash } = CurrencyToAssetByChain[chain][
-        terms.assetToBeSent
-      ];
+      const { precision, hash } =
+        CurrencyToAssetByChain[chain][terms.assetToBeSent];
       const amountToBeSentInSatoshis = toSatoshi(
         terms.amountToBeSent,
         precision
