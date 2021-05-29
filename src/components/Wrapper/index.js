@@ -117,7 +117,11 @@ const Wrapper = props => {
           } ${openDrawer ? classes.contentShift : ''}`}
           role="presentation"
         >
-          {/* {typeof props.children === 'function' ? React.cloneElement(props.children, { setDrawerOpen: drawerHandler(true) }) : props.children} */}
+          {typeof props.children === 'function'
+            ? React.cloneElement(props.children, {
+                setDrawerOpen: drawerHandler(true),
+              })
+            : props.children}
           {props.children}
         </div>
       </Drawer>

@@ -96,7 +96,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [activeStep]);
+  }, [activeStep, network, rightNetwork]);
 
   const handleTradeCompleted = (txid: string) => {
     setTxid(txid);
