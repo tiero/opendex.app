@@ -107,10 +107,21 @@ export default class TdexFetcher implements RatesFetcher {
     const results = (await Promise.allSettled(promises))
       .filter(({ status }) => status === 'fulfilled')
       .map(p => (p as PromiseFulfilledResult<PriceWithFee[]>).value)
-      .filter(res => res !== undefined);
+      .filter(res => res !== undefined)
+      .sort(([firstPriceA], [firstPriceB]) => {
+        if (tradeType === TradeType.BUY) {
+          return (
+            firstPriceB.balance.baseAmount - firstPriceA.balance.baseAmount
+          );
+        } else {
+          return (
+            firstPriceB.balance.quoteAmount - firstPriceA.balance.quoteAmount
+          );
+        }
+      });
 
-    const [firstProvider] = results;
-    const [firstPrice] = firstProvider;
+    const [providerWithBestBalance] = results;
+    const [firstPrice] = providerWithBestBalance;
 
     const expectedCurrency =
       amountWithCurrency.currency === baseCurrency
