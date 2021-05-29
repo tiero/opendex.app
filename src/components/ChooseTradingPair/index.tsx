@@ -28,7 +28,7 @@ import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
 
 import BigNumber from 'bignumber.js';
-import { Network, useNetwork } from '../../context/NetworkContext';
+import { useNetwork } from '../../context/NetworkContext';
 
 const useStyles = makeStyles(() =>
   createStyles({

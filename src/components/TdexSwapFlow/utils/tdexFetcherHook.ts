@@ -16,7 +16,7 @@ export default function useTdexFetcher(network: Network): RatesFetcher | null {
         },
       ];
 
-      if (liquidNetwork == 'liquid') {
+      if (liquidNetwork === 'liquid') {
         const result = await fetch(
           `https://raw.githubusercontent.com/TDex-network/tdex-registry/master/registry.json`
         );

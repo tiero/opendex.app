@@ -13,6 +13,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
 import { SwapStep } from '../../constants/swap';
+import { Network, useNetwork } from '../../context/NetworkContext';
 
 interface Props {}
 
@@ -43,6 +44,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
+  const { network } = useNetwork();
+
   const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
   );
@@ -52,36 +55,42 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [connected, setConnected] = useState(false);
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
+  const [rightNetwork, setRightNetwork] = useState(false);
 
   useEffect(() => {
     let isCheckingMarina = false;
     const interval = setInterval(async () => {
       try {
-        if (isCheckingMarina) return;
-        isCheckingMarina = true;
-
-        if (activeStep > 0) return;
-
         const marina: MarinaProvider = (window as any).marina;
         setInstalled(true);
-
-        const isEnabled = await marina.isEnabled();
-        setConnected(isEnabled);
 
         const net = await marina.getNetwork();
         setChain(net);
 
-        if (isEnabled && activeStep === 0) {
+        const isTheRightNetwork =
+          (net === 'liquid' && network === Network.Mainnet) ||
+          (net === 'regtest' && network !== Network.Mainnet);
+        setRightNetwork(isTheRightNetwork);
+
+        if (isCheckingMarina) return;
+        isCheckingMarina = true;
+
+        if (activeStep > 0) return;
+        const isEnabled = await marina.isEnabled();
+        setConnected(isEnabled);
+
+        if (isEnabled && activeStep === 0 && rightNetwork) {
           // skip directly to Review step
           setActiveStep(1);
         }
       } catch (error) {
         console.log(error);
+        alert(error.message);
       } finally {
         setIsLoading(false);
         isCheckingMarina = false;
       }
-    }, 2000);
+    }, 1000);
 
     //Clean up
     return () => {
@@ -111,6 +120,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
             installed={installed}
             connected={connected}
             onConnect={handleNext}
+            rightNetwork={rightNetwork}
           />
         );
       case 1:
