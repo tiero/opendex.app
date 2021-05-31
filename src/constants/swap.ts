@@ -16,7 +16,10 @@ export const swapProviders = {
     [CurrencyID.LTC, CurrencyID.LIGHTNING_LTC],
   ],
   [SwapProvider.COMIT]: [[CurrencyID.BTC, CurrencyID.MONERO]],
-  [SwapProvider.TDEX]: [[CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT]],
+  [SwapProvider.TDEX]: [
+    [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT],
+    [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD],
+  ],
 };
 
 export enum SwapStep {
