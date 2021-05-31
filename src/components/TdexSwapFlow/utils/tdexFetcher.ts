@@ -43,8 +43,6 @@ export default class TdexFetcher implements RatesFetcher {
     this.network = network;
     this.providersWithMarketByPair = providersWithMarketByPair;
 
-    console.log(providersWithMarketByPair);
-
     this.supportedPairs = Object.keys(BaseQuoteByPair) as CurrencyPairKey[];
   }
 
@@ -153,7 +151,7 @@ export default class TdexFetcher implements RatesFetcher {
       try {
         markets = await client.markets();
       } catch (e) {
-        throw new Error(`provider ${provider.name} is not reachable`);
+        throw new Error(`TDEX provider ${provider.name} is not reachable`);
       }
 
       markets.forEach((market: MarketInterface) => {

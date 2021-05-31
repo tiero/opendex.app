@@ -24,16 +24,10 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   installed: boolean;
   connected: boolean;
-  rightNetwork: boolean;
   onConnect(): void;
 }
 
-const Connect: React.FC<Props> = ({
-  onConnect,
-  installed,
-  connected,
-  rightNetwork,
-}) => {
+const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
   const classes = useStyles();
 
   const handleConnect = async () => {
@@ -51,10 +45,6 @@ const Connect: React.FC<Props> = ({
 
     if (!connected) {
       return alert('User must enable this website to proceed');
-    }
-
-    if (!rightNetwork) {
-      return alert('User must select same network in Marina and OpenDEX app');
     }
 
     onConnect();

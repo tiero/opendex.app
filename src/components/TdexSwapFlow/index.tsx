@@ -13,7 +13,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
 import { SwapStep } from '../../constants/swap';
-import { Network, useNetwork } from '../../context/NetworkContext';
 
 interface Props {}
 
@@ -44,8 +43,6 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const { network } = useNetwork();
-
   const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
   );
@@ -55,7 +52,6 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const [connected, setConnected] = useState(false);
   const [chain, setChain] = useState<'liquid' | 'regtest'>('liquid');
   const [txid, setTxid] = useState('');
-  const [rightNetwork, setRightNetwork] = useState(false);
 
   useEffect(() => {
     let isCheckingMarina = false;
@@ -67,11 +63,6 @@ const TdexSwapFlow: React.FC<Props> = () => {
         const net = await marina.getNetwork();
         setChain(net);
 
-        const isTheRightNetwork =
-          (net === 'liquid' && network === Network.Mainnet) ||
-          (net === 'regtest' && network !== Network.Mainnet);
-        setRightNetwork(isTheRightNetwork);
-
         if (isCheckingMarina) return;
         isCheckingMarina = true;
 
@@ -79,7 +70,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
         const isEnabled = await marina.isEnabled();
         setConnected(isEnabled);
 
-        if (isEnabled && activeStep === 0 && rightNetwork) {
+        if (isEnabled && activeStep === 0) {
           // skip directly to Review step
           setActiveStep(1);
         }
@@ -96,7 +87,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [activeStep, network, rightNetwork]);
+  }, [activeStep]);
 
   const handleTradeCompleted = (txid: string) => {
     setTxid(txid);
@@ -120,7 +111,6 @@ const TdexSwapFlow: React.FC<Props> = () => {
             installed={installed}
             connected={connected}
             onConnect={handleNext}
-            rightNetwork={rightNetwork}
           />
         );
       case 1:
