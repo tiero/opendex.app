@@ -28,10 +28,10 @@ const Footer = () => {
       <Grid item xs={12}>
         <Divider />
       </Grid>
-      {/* <Grid item className={classes.text} xs={11} sm={9}>
+      <Grid item className={classes.text} xs={11} sm={9}>
         opendex.app runs locally in your browser. It does not collect any
         personal data and ensures swaps are secure.
-      </Grid> */}
+      </Grid>
     </Grid>
   );
 };
