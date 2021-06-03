@@ -1,7 +1,11 @@
 import React from 'react';
 import is from 'is_js';
 
-export const UtilsContext = React.createContext(null);
+type Utils = {
+  isMobileView?: boolean;
+};
+
+export const UtilsContext = React.createContext<Utils | null>(null);
 
 export const UtilsProvider = ({ children }) => {
   const isMobileView = is.mobile();
