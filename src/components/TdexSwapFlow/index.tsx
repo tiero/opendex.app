@@ -16,7 +16,7 @@ import { seletctBestProvider } from '../../store/tdex-slice';
 
 import { SwapStep } from '../../constants/swap';
 
-interface Props { }
+interface Props {}
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -162,8 +162,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <div className={classes.info}>
         <p>
           {' '}
-          {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
-            }`}
+          {`Status: ${
+            connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
         </p>
         <p>
           Market provided by

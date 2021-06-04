@@ -13,13 +13,8 @@ const DownloadRefundFile = (props: DownloadRefundFileProps) => {
     []
   );
 
-  const {
-    swapId,
-    currency,
-    privateKey,
-    redeemScript,
-    timeoutBlockHeight,
-  } = props.details;
+  const { swapId, currency, privateKey, redeemScript, timeoutBlockHeight } =
+    props.details;
 
   useEffect(() => {
     ref?.current?.click();

@@ -53,15 +53,12 @@ const BoltzRefund = (): ReactElement => {
   const location = useLocation<{ swapId: string }>();
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [refundDetails, setRefundDetails] = useState<RefundDetails | undefined>(
-    undefined
-  );
-  const [swapStatus, setSwapStatus] = useState<StatusResponse | undefined>(
-    undefined
-  );
-  const [swapTransaction, setSwapTransaction] = useState<
-    SwapTransaction | undefined
-  >(undefined);
+  const [refundDetails, setRefundDetails] =
+    useState<RefundDetails | undefined>(undefined);
+  const [swapStatus, setSwapStatus] =
+    useState<StatusResponse | undefined>(undefined);
+  const [swapTransaction, setSwapTransaction] =
+    useState<SwapTransaction | undefined>(undefined);
   const [activeStep, setActiveStep] = useState(0);
   const [address, setAddress] = useState('');
 
@@ -170,39 +167,40 @@ const BoltzRefund = (): ReactElement => {
   ];
 
   const checkStatus = useMemo(
-    () => (swapId: string): void => {
-      setLoading(true);
-      from(
-        fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-          },
-          body: JSON.stringify({ id: swapId }),
-        })
-      )
-        .pipe(mergeMap(response => response.json()))
-        .subscribe({
-          next: status => {
-            setSwapStatus(status);
-            setLoading(false);
-            setActiveStep(prev => prev + 1);
-            if (
-              SwapUpdateEvent.TransactionClaimed === status.status ||
-              !!status.failureReason
-            ) {
-              return;
-            }
-            startListening(swapId, apiEndpoint, data => {
-              setSwapStatus(data);
-            });
-          },
-          error: err => {
-            setErrorMessage(getErrorMessage(err) || 'Failed to get status');
-            setLoading(false);
-          },
-        });
-    },
+    () =>
+      (swapId: string): void => {
+        setLoading(true);
+        from(
+          fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({ id: swapId }),
+          })
+        )
+          .pipe(mergeMap(response => response.json()))
+          .subscribe({
+            next: status => {
+              setSwapStatus(status);
+              setLoading(false);
+              setActiveStep(prev => prev + 1);
+              if (
+                SwapUpdateEvent.TransactionClaimed === status.status ||
+                !!status.failureReason
+              ) {
+                return;
+              }
+              startListening(swapId, apiEndpoint, data => {
+                setSwapStatus(data);
+              });
+            },
+            error: err => {
+              setErrorMessage(getErrorMessage(err) || 'Failed to get status');
+              setLoading(false);
+            },
+          });
+      },
     [apiEndpoint]
   );
 

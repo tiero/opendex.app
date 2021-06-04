@@ -79,9 +79,10 @@ export const getAmountOut = (
       },
     };
   }
-  const inputCurrencyIsBaseAsset = !!rates.pairs[
-    `${boltzPairsMap(inputCurrency)}/${boltzPairsMap(outputCurrency)}`
-  ];
+  const inputCurrencyIsBaseAsset =
+    !!rates.pairs[
+      `${boltzPairsMap(inputCurrency)}/${boltzPairsMap(outputCurrency)}`
+    ];
   const { rate, fees } = inputCurrencyIsBaseAsset
     ? rates.pairs[
         `${boltzPairsMap(inputCurrency)}/${boltzPairsMap(outputCurrency)}`

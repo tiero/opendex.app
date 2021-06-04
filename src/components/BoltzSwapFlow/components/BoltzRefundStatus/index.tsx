@@ -42,9 +42,8 @@ const BoltzRefundStatus = (props: BoltzRefundStatusProps): ReactElement => {
     onSwapTransactionChange,
   } = props;
   const { apiEndpoint } = useBoltzConfiguration();
-  const [swapTransaction, setSwapTransaction] = useState<
-    SwapTransaction | undefined
-  >(undefined);
+  const [swapTransaction, setSwapTransaction] =
+    useState<SwapTransaction | undefined>(undefined);
   const [queryTransaction, setQueryTransaction] = useState(true);
 
   const addressFieldText = `Insert your ${refundDetails.currency} address for refund`;

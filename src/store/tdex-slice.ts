@@ -9,7 +9,7 @@ interface TdexState {
 
 // Define the initial state using that type
 export const initialState: TdexState = {
-  bestProvider: undefined
+  bestProvider: undefined,
 };
 
 export const tdexSlice = createSlice({
@@ -27,6 +27,7 @@ export const tdexSlice = createSlice({
 export const { setBestProvider } = tdexSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const seletctBestProvider = (state: RootState) => state.tdex.bestProvider;
+export const seletctBestProvider = (state: RootState) =>
+  state.tdex.bestProvider;
 
 export default tdexSlice.reducer;
