@@ -20,7 +20,7 @@ export default function useTdexFetcher(): RatesFetcher | null {
         },
       ];
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV === 'production') {
         const result = await fetch(
           `https://raw.githubusercontent.com/TDex-network/tdex-registry/master/registry.json`
         );
