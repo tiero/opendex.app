@@ -98,12 +98,17 @@ export default class TdexFetcher implements RatesFetcher {
     for (const providerWithMarket of providersForPair) {
       try {
         const client = new TraderClient(providerWithMarket.provider.endpoint);
-        const [firstPrice] = await client.marketPrice(
+        const prices = await client.marketPrice(
           providerWithMarket.market,
           tradeType,
           amountInSatoshis,
           CurrencyToAssetByChain[this.network][amountWithCurrency.currency].hash
         );
+
+        if (!prices || prices.length === 0)
+          throw new Error('price fetching failed');
+
+        const [firstPrice] = prices;
 
         if (tradeType === TradeType.BUY) {
           if (
@@ -125,6 +130,7 @@ export default class TdexFetcher implements RatesFetcher {
           }
         }
       } catch (e) {
+        console.error(e);
         console.warn(
           `TDEX provider ${providerWithMarket.provider.name} is not reachable`
         );
