@@ -74,6 +74,15 @@ export default class TdexFetcher implements RatesFetcher {
     pair: CurrencyPair,
     isSend: boolean = true
   ): Promise<AmountPreview> {
+    const amountInSatoshis = toSatoshi(
+      amountWithCurrency.amount.toNumber(),
+      CurrencyToAssetByChain[this.network][amountWithCurrency.currency]
+        .precision
+    );
+
+    if (amountInSatoshis < 1)
+      throw new Error('amount too low');
+
     const [baseCurrency, quoteCurrency] = baseQuoteFromCurrencyPair(pair);
 
     const isBaseComingIn =
@@ -93,11 +102,7 @@ export default class TdexFetcher implements RatesFetcher {
         const [firstPrice] = await client.marketPrice(
           providerWithMarket.market,
           tradeType,
-          toSatoshi(
-            amountWithCurrency.amount.toNumber(),
-            CurrencyToAssetByChain[this.network][amountWithCurrency.currency]
-              .precision
-          ),
+          amountInSatoshis,
           CurrencyToAssetByChain[this.network][amountWithCurrency.currency].hash
         );
 

@@ -76,9 +76,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const receiveAmount = useAppSelector(selectReceiveAmount);
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
+  const [sendAmountError, setSendAmountError] = useState('');
   const [receiveAmountError, setReceiveAmountError] = useState('');
 
   const [isPreviewing, setIsPreviewing] = useState(false);
+
 
   const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
@@ -123,6 +125,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    setSendAmountError('');
     if (isPreviewing) return;
 
     const value = e.target.value;
@@ -133,23 +136,25 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
-        {
-          amount,
-          currency: sendCurrency.id,
-        },
-        [sendCurrency.id, receiveCurrency.id]
-      );
-      dispatch(
-        setReceiveAmount(
-          receiveValue.amountWithFees.amount
-            .toNumber()
-            .toLocaleString('en-US', {
-              maximumFractionDigits: 8,
-            })
-        )
-      );
-      validateReceiveLimits(receiveValue.amountWithFees.amount);
+
+      try {
+        const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
+          {
+            amount,
+            currency: sendCurrency.id,
+          },
+          [sendCurrency.id, receiveCurrency.id]
+        );
+        dispatch(
+          setReceiveAmount(
+            convertAmountToString(receiveValue.amountWithFees.amount)
+          )
+        );
+        validateReceiveLimits(receiveValue.amountWithFees.amount);
+      } catch (e: any) {
+        setSendAmountError(e.message);
+      }
+
       setIsPreviewing(false);
     }
   };
@@ -169,21 +174,25 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
       const amount = new BigNumber(value);
       validateReceiveLimits(amount);
-      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
-        {
-          amount,
-          currency: receiveCurrency.id,
-        },
-        [sendCurrency.id, receiveCurrency.id]
-      );
 
-      dispatch(
-        setSendAmount(
-          sendValue.amountWithFees.amount.toNumber().toLocaleString('en-US', {
-            maximumFractionDigits: 8,
-          })
-        )
-      );
+      try {
+        const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
+          {
+            amount,
+            currency: receiveCurrency.id,
+          },
+          [sendCurrency.id, receiveCurrency.id]
+        );
+
+        dispatch(
+          setSendAmount(
+            convertAmountToString(sendValue.amountWithFees.amount)
+          )
+        );
+      } catch (e: any) {
+        setReceiveAmountError(e.message);
+      }
+
       setIsPreviewing(false);
     }
   };
@@ -225,6 +234,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             }
             selectedAsset={sendCurrency}
             loading={!ratesLoaded}
+            error={sendAmountError}
           />
         </Grid>
         <Grid item xs={12}>
