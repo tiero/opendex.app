@@ -16,7 +16,7 @@ import { selectTdex } from '../../store/providers-slice';
 
 import { SwapStep } from '../../constants/swap';
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -41,9 +41,15 @@ const useStyles = makeStyles(theme =>
 
 const steps = ['Connect', 'Review & Confirm', 'Summary'];
 
+enum Steps {
+  Connect,
+  Review,
+  Summary
+}
+
 const TdexSwapFlow: React.FC<Props> = () => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(Steps.Connect);
 
   const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
@@ -71,13 +77,13 @@ const TdexSwapFlow: React.FC<Props> = () => {
         if (isCheckingMarina) return;
         isCheckingMarina = true;
 
-        if (activeStep > 0) return;
+        if (activeStep > Steps.Connect) return;
         const isEnabled = await marina.isEnabled();
         setConnected(isEnabled);
 
-        if (isEnabled && activeStep === 0) {
+        if (isEnabled && activeStep === Steps.Connect) {
           // skip directly to Review step
-          setActiveStep(1);
+          setActiveStep(Steps.Review);
         }
       } catch (error) {
         console.log(error);
@@ -96,7 +102,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
 
   const handleTradeCompleted = (txid: string) => {
     setTxid(txid);
-    setActiveStep(2);
+    setActiveStep(Steps.Summary);
   };
 
   const handleNext = () => {
@@ -110,7 +116,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
 
   const getStepContent = () => {
     switch (activeStep) {
-      case 0:
+      case Steps.Connect:
         return (
           <Connect
             installed={installed}
@@ -118,7 +124,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
             onConnect={handleNext}
           />
         );
-      case 1:
+      case Steps.Review:
         return (
           <Review
             chain={chain}
@@ -133,7 +139,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
             onReject={handleGoBack}
           />
         );
-      case 2:
+      case Steps.Summary:
         return <Summary chain={chain} txid={txid} />;
       default:
         return null;
@@ -153,9 +159,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${
-          connected ? `Connected - Network: ${chain}` : `Not Connected`
-        }`}
+        {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
       </div>
     </div>
   );

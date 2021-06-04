@@ -42,7 +42,6 @@ export default function useTdexFetcher(): RatesFetcher | null {
         window.addEventListener(
           'bestProvider',
           function (e: any) {
-            console.log(e.detail.provider.name);
             stableDispatch(setTdex({ bestProvider: e.detail }));
           },
           false
