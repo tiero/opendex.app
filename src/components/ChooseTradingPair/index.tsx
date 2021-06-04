@@ -88,6 +88,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   timer(1000).subscribe(() => dispatch(setRates({})));
   const nextDisabled =
+    isPreviewing ||
     !ratesLoaded ||
     Number(sendAmount) === 0 ||
     Number(receiveAmount) === 0 ||

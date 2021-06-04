@@ -8,9 +8,9 @@ import BrowserInjectOpenDex from '../utils/browserInject';
 import { Trade } from 'tdex-sdk';
 
 import {
-  ProviderByChain,
   ExplorerByChain,
   CurrencyToAssetByChain,
+  ProviderWithMarket,
 } from '../constants';
 import CurrencyID from '../../../constants/currency';
 import { toSatoshi } from '../utils/format';
@@ -50,24 +50,26 @@ interface SwapTerms {
 
 interface Props {
   chain: 'liquid' | 'regtest';
+  providerWithMarket: ProviderWithMarket;
   terms: SwapTerms;
   onTrade(txid: string): void;
   onReject(): void;
 }
 
-const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
+const Review: React.FC<Props> = ({
+  onTrade,
+  onReject,
+  terms,
+  chain,
+  providerWithMarket,
+}) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const LBTC_USDT_MARKET = {
-    baseAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_BTC].hash,
-    quoteAsset: CurrencyToAssetByChain[chain][CurrencyID.LIQUID_USDT].hash,
-  };
   const isBuy = terms.assetToBeSent === CurrencyID.LIQUID_USDT;
 
   const explorer = ExplorerByChain[chain];
-  const [provider] = ProviderByChain[chain];
 
   const identity = new BrowserInjectOpenDex({
     chain,
@@ -85,7 +87,7 @@ const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
       const utxos = await fetchAndUnblindUtxos(addrs, explorer);
 
       const trade = new Trade({
-        providerUrl: provider.endpoint,
+        providerUrl: providerWithMarket.provider.endpoint,
         explorerUrl: explorer,
         coinSelector: greedyCoinSelector(),
         utxos,
@@ -101,14 +103,14 @@ const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
       let txid;
       if (isBuy) {
         txid = await trade.buy({
-          market: LBTC_USDT_MARKET,
+          market: providerWithMarket.market,
           amount: amountToBeSentInSatoshis,
           asset: hash,
           identity,
         });
       } else {
         txid = await trade.sell({
-          market: LBTC_USDT_MARKET,
+          market: providerWithMarket.market,
           amount: amountToBeSentInSatoshis,
           asset: hash,
           identity,
@@ -120,6 +122,7 @@ const Review: React.FC<Props> = ({ onTrade, onReject, terms, chain }) => {
     } catch (error) {
       setIsLoading(false);
       console.error(error);
+      alert(error.message);
     }
   };
 

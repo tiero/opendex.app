@@ -12,6 +12,8 @@ import Summary from './components/summary';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
+import { selectTdex } from '../../store/providers-slice';
+
 import { SwapStep } from '../../constants/swap';
 
 interface Props {}
@@ -46,6 +48,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
   );
+  const { bestProvider } = useAppSelector(selectTdex);
+
+  if (!bestProvider) throw new Error('TDEX: no provider has been selected');
 
   const [isLoading, setIsLoading] = useState(true);
   const [installed, setInstalled] = useState(false);
@@ -117,6 +122,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
         return (
           <Review
             chain={chain}
+            providerWithMarket={bestProvider}
             terms={{
               assetToBeSent: sendAsset,
               amountToBeSent: Number(sendAmount.replace(',', '')),

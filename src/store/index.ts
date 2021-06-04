@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import swapsReducer from './swaps-slice';
+import providersReducer from './providers-slice';
 
 export const store = configureStore({
   reducer: {
     swaps: swapsReducer,
+    providers: providersReducer,
   },
 });
 

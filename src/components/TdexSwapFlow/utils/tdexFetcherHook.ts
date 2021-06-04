@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { RatesFetcher } from '../../../constants/rates';
 import TdexFetcher from './tdexFetcher';
 
+import { setTdex } from '../../../store/providers-slice';
+import { useAppDispatch } from '../../../store/hooks';
+
 export default function useTdexFetcher(): RatesFetcher | null {
+  const dispatch = useAppDispatch();
+  const stableDispatch = useCallback(dispatch, [dispatch]);
   let [fetcher, setFetcher] = useState<RatesFetcher | null>(null);
 
   useEffect(() => {
@@ -15,7 +20,7 @@ export default function useTdexFetcher(): RatesFetcher | null {
         },
       ];
 
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV !== 'production') {
         const result = await fetch(
           `https://raw.githubusercontent.com/TDex-network/tdex-registry/master/registry.json`
         );
@@ -27,16 +32,27 @@ export default function useTdexFetcher(): RatesFetcher | null {
       // https://betterprogramming.pub/how-to-write-an-async-class-constructor-in-typescript-javascript-7d7e8325c35e
 
       try {
+        // start tdex fetcher  with the providers from tdex registry
         const tdexFetcher = new TdexFetcher(
           await TdexFetcher.WithTdexProviders(listOfProviders, liquidNetwork)
         );
         setFetcher(tdexFetcher);
+
+        // we use browser events to dispatch redux action just before the previewGien* of the RatesFetcher returns
+        window.addEventListener(
+          'bestProvider',
+          function (e: any) {
+            console.log(e.detail.provider.name);
+            stableDispatch(setTdex({ bestProvider: e.detail }));
+          },
+          false
+        );
       } catch (e) {
         console.error(e);
         return;
       }
     })();
-  }, []);
+  }, [stableDispatch]);
 
   return fetcher;
 }

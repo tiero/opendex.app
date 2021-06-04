@@ -12,7 +12,6 @@ import {
   CurrencyToAssetByChain,
   AssetToCurrencyByChain,
   CurrencyPairKey,
-  PriceWithFee,
   BaseQuoteByPair,
 } from '../constants';
 
@@ -86,10 +85,12 @@ export default class TdexFetcher implements RatesFetcher {
     const providersForPair =
       this.providersWithMarketByPair[toKey([baseCurrency, quoteCurrency])];
 
-    const promises = providersForPair.map(
-      (providerWithMarket: ProviderWithMarket) => {
+    let bestPrice;
+    let bestProvider;
+    for (const providerWithMarket of providersForPair) {
+      try {
         const client = new TraderClient(providerWithMarket.provider.endpoint);
-        return client.marketPrice(
+        const [firstPrice] = await client.marketPrice(
           providerWithMarket.market,
           tradeType,
           toSatoshi(
@@ -99,27 +100,36 @@ export default class TdexFetcher implements RatesFetcher {
           ),
           CurrencyToAssetByChain[this.network][amountWithCurrency.currency].hash
         );
-      }
-    );
 
-    const results = (await Promise.allSettled(promises))
-      .filter(({ status }) => status === 'fulfilled')
-      .map(p => (p as PromiseFulfilledResult<PriceWithFee[]>).value)
-      .filter(res => res !== undefined)
-      .sort(([firstPriceA], [firstPriceB]) => {
         if (tradeType === TradeType.BUY) {
-          return (
-            firstPriceB.balance.baseAmount - firstPriceA.balance.baseAmount
-          );
+          if (
+            firstPrice.balance &&
+            (!bestPrice ||
+              firstPrice.balance.baseAmount > bestPrice.balance.baseAmount)
+          ) {
+            bestPrice = { ...firstPrice };
+            bestProvider = providerWithMarket;
+          }
         } else {
-          return (
-            firstPriceB.balance.quoteAmount - firstPriceA.balance.quoteAmount
-          );
+          if (
+            firstPrice.balance &&
+            (!bestPrice ||
+              firstPrice.balance.quoteAmount > bestPrice.balance.quoteAmount)
+          ) {
+            bestPrice = { ...firstPrice };
+            bestProvider = providerWithMarket;
+          }
         }
-      });
+      } catch (e) {
+        console.warn(
+          `TDEX provider ${providerWithMarket.provider.name} is not reachable`
+        );
+        continue;
+      }
+    }
 
-    const [providerWithBestBalance] = results;
-    const [firstPrice] = providerWithBestBalance;
+    const event = new CustomEvent('bestProvider', { detail: bestProvider });
+    window.dispatchEvent(event);
 
     const expectedCurrency =
       amountWithCurrency.currency === baseCurrency
@@ -130,11 +140,11 @@ export default class TdexFetcher implements RatesFetcher {
       amountWithFees: {
         amount: new BigNumber(
           fromSatoshi(
-            firstPrice.amount,
+            bestPrice.amount,
             CurrencyToAssetByChain[this.network][expectedCurrency].precision
           )
         ),
-        currency: AssetToCurrencyByChain[this.network][firstPrice.asset],
+        currency: AssetToCurrencyByChain[this.network][bestPrice.asset],
       },
     };
   }
