@@ -80,8 +80,7 @@ export default class TdexFetcher implements RatesFetcher {
         .precision
     );
 
-    if (amountInSatoshis < 1)
-      throw new Error('amount too low');
+    if (amountInSatoshis < 1) throw new Error('amount too low');
 
     const [baseCurrency, quoteCurrency] = baseQuoteFromCurrencyPair(pair);
 

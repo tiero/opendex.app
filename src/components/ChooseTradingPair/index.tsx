@@ -81,7 +81,6 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const [isPreviewing, setIsPreviewing] = useState(false);
 
-
   const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
   )!;
@@ -185,9 +184,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         );
 
         dispatch(
-          setSendAmount(
-            convertAmountToString(sendValue.amountWithFees.amount)
-          )
+          setSendAmount(convertAmountToString(sendValue.amountWithFees.amount))
         );
       } catch (e: any) {
         setReceiveAmountError(e.message);
