@@ -33,8 +33,19 @@ const useStyles = makeStyles(theme =>
       marginBottom: theme.spacing(1),
     },
     info: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(3),
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      paddingLeft: '25px',
+      paddingRight: '25px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+    },
+    infoText: {
+      flex: '1 1 100%',
+      wordWrap: 'break-word',
+      wordBreak: 'break-all',
     },
   })
 );
@@ -140,7 +151,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
           />
         );
       case Steps.Summary:
-        return <Summary chain={chain} txid={txid} />;
+        return <Summary chain={chain} txid={txid} onNewTrade={handleGoBack} />;
       default:
         return null;
     }
@@ -156,25 +167,25 @@ const TdexSwapFlow: React.FC<Props> = () => {
 
   const { name, endpoint } = bestProvider.provider;
   return (
-    <div className={classes.wrapper}>
-      <TdexSteps steps={steps} activeStep={activeStep} />
-      <div>{getStepContent()}</div>
+    <>
       <div className={classes.info}>
-        <p>
+        <p className={classes.infoText}>
           {' '}
           {`Status: ${
             connected ? `Connected - Network: ${chain}` : `Not Connected`
           }`}
         </p>
-        <p>
-          Market provided by
-          {name}
-          <br />
-          {endpoint.substring(0, 12)}...
-          {endpoint.substring(endpoint.length - 12, endpoint.length)}
+      </div>
+      <div className={classes.wrapper}>
+        <TdexSteps steps={steps} activeStep={activeStep} />
+        <div>{getStepContent()}</div>
+      </div>
+      <div className={classes.info}>
+        <p className={classes.infoText}>
+          Market provided by {` ${name} - ${endpoint}`}
         </p>
       </div>
-    </div>
+    </>
   );
 };
 

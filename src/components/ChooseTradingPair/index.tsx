@@ -140,7 +140,6 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         },
         [sendCurrency.id, receiveCurrency.id]
       );
-
       dispatch(
         setReceiveAmount(
           receiveValue.amountWithFees.amount

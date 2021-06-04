@@ -28,9 +28,10 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   chain: 'liquid' | 'regtest';
   txid: string;
+  onNewTrade(): void;
 }
 
-const Summary: React.FC<Props> = ({ chain, txid }) => {
+const Summary: React.FC<Props> = ({ chain, txid, onNewTrade }) => {
   const classes = useStyles();
 
   const openInNewTab = url => {
@@ -47,6 +48,7 @@ const Summary: React.FC<Props> = ({ chain, txid }) => {
       >
         Open in explorer
       </Button>
+      <Button onClick={onNewTrade}>New trade</Button>
     </div>
   );
 };
