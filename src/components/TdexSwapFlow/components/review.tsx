@@ -67,7 +67,7 @@ const Review: React.FC<Props> = ({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isBuy = terms.assetToBeSent === CurrencyID.LIQUID_USDT;
+  const isBuy = terms.assetToBeSent === providerWithMarket.market.quoteAsset;
 
   const explorer = ExplorerByChain[chain];
 
