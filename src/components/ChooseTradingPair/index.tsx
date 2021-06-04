@@ -25,8 +25,8 @@ import {
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
 import { AmountPreview, RatesFetcher } from '../../constants/rates';
+import useBoltzFetcher from '../../constants/boltzFetcherHook';
 import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
-
 import BigNumber from 'bignumber.js';
 
 const useStyles = makeStyles(() =>
@@ -76,6 +76,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const receiveAmount = useAppSelector(selectReceiveAmount);
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
+  const [receiveAmountError, setReceiveAmountError] = useState('');
 
   const [isPreviewing, setIsPreviewing] = useState(false);
 
@@ -92,9 +93,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
     !ratesLoaded ||
     Number(sendAmount) === 0 ||
     Number(receiveAmount) === 0 ||
-    !swapProvider;
+    !swapProvider ||
+    !!receiveAmountError;
 
   const tdexFetcher = useTdexFetcher();
+  const boltzFetcher = useBoltzFetcher();
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
@@ -102,6 +105,8 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       ratesFetcher = tdexFetcher;
       break;
     case SwapProvider.BOLTZ:
+      ratesFetcher = boltzFetcher;
+      break;
     case SwapProvider.COMIT:
     default:
       break;
@@ -145,6 +150,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             })
         )
       );
+      validateReceiveLimits(receiveValue.amountWithFees.amount);
       setIsPreviewing(false);
     }
   };
@@ -152,6 +158,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const onReceiveAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    setReceiveAmountError('');
     if (isPreviewing) return;
 
     const value = e.target.value;
@@ -162,6 +169,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
+      validateReceiveLimits(amount);
       const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
         {
           amount,
@@ -180,6 +188,29 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(false);
     }
   };
+
+  const validateReceiveLimits = async (receiveAmount: BigNumber) => {
+    if (ratesFetcher?.getLimits) {
+      const limits = await ratesFetcher.getLimits([
+        sendCurrency.id,
+        receiveCurrency.id,
+      ]);
+      if (receiveAmount.gt(limits.maximal)) {
+        setReceiveAmountError(
+          `Max amount is ${convertAmountToString(limits.maximal)}`
+        );
+      } else if (receiveAmount.lt(limits.minimal)) {
+        setReceiveAmountError(
+          `Min amount is ${convertAmountToString(limits.minimal)}`
+        );
+      }
+    }
+  };
+
+  const convertAmountToString = (amount: BigNumber): string =>
+    amount.toNumber().toLocaleString('en-US', {
+      maximumFractionDigits: 8,
+    });
 
   const renderCryptoOptions = () => {
     return (
@@ -217,6 +248,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             }
             selectedAsset={receiveCurrency}
             loading={!ratesLoaded}
+            error={receiveAmountError}
           />
         </Grid>
       </Grid>
@@ -243,6 +275,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
           </Grid>
         </Grid>
         <Button
+          fullWidth
           variant="contained"
           color="primary"
           disabled={nextDisabled}

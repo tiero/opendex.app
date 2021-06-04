@@ -6,19 +6,18 @@ export default function QrCodeReader(props) {
   const { onClose, open, setOpen } = props;
 
   if (open) {
-    if (navigator.getUserMedia) {
-      navigator.getUserMedia(
-        {
+    if (navigator?.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({
           video: true,
-        },
-        function (localMediaStream) {},
-        function (err) {
+        })
+        .then(() => {})
+        .catch(err =>
           alert(
             'The following error occurred when trying to access the camera: ' +
               err
-          );
-        }
-      );
+          )
+        );
     } else {
       alert('Sorry, browser does not support camera access');
     }
