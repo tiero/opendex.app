@@ -154,14 +154,25 @@ const TdexSwapFlow: React.FC<Props> = () => {
     );
   }
 
+  const { name, endpoint } = bestProvider.provider;
   return (
     <div className={classes.wrapper}>
       <TdexSteps steps={steps} activeStep={activeStep} />
       <div>{getStepContent()}</div>
       <div className={classes.info}>
-        {`Status: ${
-          connected ? `Connected - Network: ${chain}` : `Not Connected`
-        }`}
+        <p>
+          {' '}
+          {`Status: ${
+            connected ? `Connected - Network: ${chain}` : `Not Connected`
+          }`}
+        </p>
+        <p>
+          Market provided by
+          {name}
+          <br />
+          {endpoint.substring(0, 12)}...
+          {endpoint.substring(endpoint.length - 12, endpoint.length)}
+        </p>
       </div>
     </div>
   );
