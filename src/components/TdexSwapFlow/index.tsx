@@ -12,11 +12,11 @@ import Summary from './components/summary';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { setSwapStep } from '../../store/swaps-slice';
-import { selectTdex } from '../../store/providers-slice';
+import { seletctBestProvider } from '../../store/tdex-slice';
 
 import { SwapStep } from '../../constants/swap';
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -54,7 +54,7 @@ const TdexSwapFlow: React.FC<Props> = () => {
   const { sendAsset, receiveAsset, sendAmount, receiveAmount } = useAppSelector(
     (state: RootState) => state.swaps
   );
-  const { bestProvider } = useAppSelector(selectTdex);
+  const bestProvider = useAppSelector(seletctBestProvider);
 
   if (!bestProvider) throw new Error('TDEX: no provider has been selected');
 
@@ -162,9 +162,8 @@ const TdexSwapFlow: React.FC<Props> = () => {
       <div className={classes.info}>
         <p>
           {' '}
-          {`Status: ${
-            connected ? `Connected - Network: ${chain}` : `Not Connected`
-          }`}
+          {`Status: ${connected ? `Connected - Network: ${chain}` : `Not Connected`
+            }`}
         </p>
         <p>
           Market provided by

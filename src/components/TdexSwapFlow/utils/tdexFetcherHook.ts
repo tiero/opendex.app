@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { RatesFetcher } from '../../../constants/rates';
 import TdexFetcher from './tdexFetcher';
 
-import { setTdex } from '../../../store/providers-slice';
+import { setBestProvider } from '../../../store/tdex-slice';
 import { useAppDispatch } from '../../../store/hooks';
 
 export default function useTdexFetcher(): RatesFetcher | null {
@@ -41,8 +41,8 @@ export default function useTdexFetcher(): RatesFetcher | null {
         // we use browser events to dispatch redux action just before the previewGien* of the RatesFetcher returns
         window.addEventListener(
           'bestProvider',
-          function (e: any) {
-            stableDispatch(setTdex({ bestProvider: e.detail }));
+          (evt: any) => {
+            stableDispatch(setBestProvider((evt as CustomEvent).detail));
           },
           false
         );
