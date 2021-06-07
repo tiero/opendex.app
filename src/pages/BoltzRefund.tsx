@@ -24,7 +24,7 @@ import {
   removeRefundDetailsFromLocalStorage,
   startRefund,
 } from '../utils/boltzRefund';
-import { startListening } from '../utils/boltzSwapStatus';
+import { isFinal, startListening } from '../utils/boltzSwapStatus';
 import { getErrorMessage } from '../utils/error';
 
 type RefundStep = {
@@ -167,40 +167,42 @@ const BoltzRefund = (): ReactElement => {
   ];
 
   const checkStatus = useMemo(
-    () =>
-      (swapId: string): void => {
-        setLoading(true);
-        from(
-          fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify({ id: swapId }),
-          })
-        )
-          .pipe(mergeMap(response => response.json()))
-          .subscribe({
-            next: status => {
-              setSwapStatus(status);
-              setLoading(false);
-              setActiveStep(prev => prev + 1);
-              if (
-                SwapUpdateEvent.TransactionClaimed === status.status ||
-                !!status.failureReason
-              ) {
-                return;
+    () => (swapId: string): void => {
+      setLoading(true);
+      from(
+        fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+          },
+          body: JSON.stringify({ id: swapId }),
+        })
+      )
+        .pipe(mergeMap(response => response.json()))
+        .subscribe({
+          next: status => {
+            setSwapStatus(status);
+            setLoading(false);
+            setActiveStep(prev => prev + 1);
+            if (isFinal(status)) {
+              return;
+            }
+            startListening(swapId, apiEndpoint, (data, stream) => {
+              setSwapStatus(data);
+              if (isFinal(data)) {
+                stream.close();
+                if (SwapUpdateEvent.TransactionClaimed === data.status) {
+                  removeRefundDetailsFromLocalStorage(swapId);
+                }
               }
-              startListening(swapId, apiEndpoint, data => {
-                setSwapStatus(data);
-              });
-            },
-            error: err => {
-              setErrorMessage(getErrorMessage(err) || 'Failed to get status');
-              setLoading(false);
-            },
-          });
-      },
+            });
+          },
+          error: err => {
+            setErrorMessage(getErrorMessage(err) || 'Failed to get status');
+            setLoading(false);
+          },
+        });
+    },
     [apiEndpoint]
   );
 

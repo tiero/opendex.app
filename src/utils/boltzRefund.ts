@@ -121,7 +121,9 @@ export const startRefund = (
   );
 };
 
-const getFeeEstimation = (apiEndpoint: string): Observable<FeeResponse> => {
+export const getFeeEstimation = (
+  apiEndpoint: string
+): Observable<FeeResponse> => {
   return from(fetch(BOLTZ_GET_FEE_ESTIMATION_API_URL(apiEndpoint))).pipe(
     mergeMap((resp: Response) =>
       from(resp.json()).pipe(
@@ -131,7 +133,7 @@ const getFeeEstimation = (apiEndpoint: string): Observable<FeeResponse> => {
   );
 };
 
-const getHexBuffer = (input: string): Buffer => {
+export const getHexBuffer = (input: string): Buffer => {
   return Buffer.from(input, 'hex');
 };
 
@@ -176,7 +178,7 @@ const createRefundTransaction = (
   });
 };
 
-const broadcastRefund = (
+export const broadcastRefund = (
   currency: CurrencyID,
   transactionHex: string,
   apiEndpoint: string

@@ -8,6 +8,8 @@ export type BoltzSwapResponse = {
   expectedAmount?: number;
   bip21?: string;
   redeemScript?: string;
+  invoice?: string;
+  lockupAddress?: string;
   error?: string;
 };
 
@@ -23,6 +25,7 @@ export type RefundDetails = {
 export type StatusResponse = {
   status: SwapUpdateEvent;
   failureReason: string;
+  transaction?: LockupTransaction;
 };
 
 export type StatusStep = {
@@ -44,6 +47,18 @@ export type RefundTransaction = {
 };
 
 export type FeeResponse = { [key: string]: number };
+
+export type ClaimDetails = {
+  preImage: Buffer;
+  address: string;
+  instantSwap: boolean;
+  privateKey: string;
+};
+
+export type ReverseSwapDetails = ClaimDetails & {
+  swapId: string;
+  redeemScript: string;
+};
 
 export enum SwapUpdateEvent {
   InvoicePaid = 'invoice.paid',
@@ -92,3 +107,9 @@ export const swapSteps: StatusStep[] = [
     textComplete: 'Transaction complete',
   },
 ];
+
+type LockupTransaction = {
+  id: string;
+  hex: string;
+  eta: number;
+};

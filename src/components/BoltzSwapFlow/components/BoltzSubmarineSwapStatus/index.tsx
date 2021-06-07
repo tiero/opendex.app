@@ -4,15 +4,17 @@ import { SwapStep } from '../../../../constants/swap';
 import { useAppDispatch } from '../../../../store/hooks';
 import { setSwapStep } from '../../../../store/swaps-slice';
 import { swapError } from '../../../../utils/boltzSwapStatus';
-import BoltzStatus from '../BoltzStatus';
+import BoltzSubmarineStatus from '../BoltzSubmarineStatus';
 import BoltzSwapStep from '../BoltzSwapStep';
 
-type BoltzSwapStatusProps = {
+type BoltzSubmarineSwapStatusProps = {
   swapStatus: StatusResponse;
   swapId?: string;
 };
 
-const BoltzSwapStatus = (props: BoltzSwapStatusProps): ReactElement => {
+const BoltzSubmarineSwapStatus = (
+  props: BoltzSubmarineSwapStatusProps
+): ReactElement => {
   const { swapStatus, swapId } = props;
   const [activeStep, setActiveStep] = useState<number | undefined>(undefined);
   const dispatch = useAppDispatch();
@@ -24,7 +26,7 @@ const BoltzSwapStatus = (props: BoltzSwapStatusProps): ReactElement => {
     <BoltzSwapStep
       title="Swap status"
       content={
-        <BoltzStatus
+        <BoltzSubmarineStatus
           swapStatus={swapStatus}
           swapId={swapId}
           showRefundButton
@@ -38,4 +40,4 @@ const BoltzSwapStatus = (props: BoltzSwapStatusProps): ReactElement => {
   );
 };
 
-export default BoltzSwapStatus;
+export default BoltzSubmarineSwapStatus;

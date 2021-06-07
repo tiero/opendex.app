@@ -14,9 +14,9 @@ import {
   SwapUpdateEvent,
 } from '../../../../constants/boltzSwap';
 import { swapError } from '../../../../utils/boltzSwapStatus';
-import BoltzSwapResult from '../BoltzSwapResult';
+import BoltzSubmarineSwapResult from '../BoltzSubmarineSwapResult';
 
-type BoltzStatusProps = {
+type BoltzSubmarineStatusProps = {
   swapStatus: StatusResponse;
   showRefundButton?: boolean;
   swapId?: string;
@@ -37,7 +37,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const BoltzStatus = (props: BoltzStatusProps): ReactElement => {
+const BoltzSubmarineStatus = (
+  props: BoltzSubmarineStatusProps
+): ReactElement => {
   const classes = useStyles();
   const { swapId, swapStatus, showRefundButton, onActiveStepChange } = props;
   const [activeStep, setActiveStep] = useState(0);
@@ -58,7 +60,7 @@ const BoltzStatus = (props: BoltzStatusProps): ReactElement => {
     <>
       {swapError(swapStatus) ||
       swapStatus.status === SwapUpdateEvent.TransactionClaimed ? (
-        <BoltzSwapResult
+        <BoltzSubmarineSwapResult
           swapStatus={swapStatus}
           swapId={swapId}
           showRefundButton={showRefundButton}
@@ -83,4 +85,4 @@ const BoltzStatus = (props: BoltzStatusProps): ReactElement => {
   );
 };
 
-export default BoltzStatus;
+export default BoltzSubmarineStatus;

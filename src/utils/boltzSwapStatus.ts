@@ -4,28 +4,18 @@ import {
   swapSteps,
   SwapUpdateEvent,
 } from '../constants/boltzSwap';
-import { removeRefundDetailsFromLocalStorage } from './boltzRefund';
 
 export const startListening = (
   swapId: string,
   apiEndpoint: string,
-  onMessage: (data: StatusResponse) => void
+  onMessage: (data: StatusResponse, stream: EventSource) => void
 ) => {
   const stream = new EventSource(
     `${BOLTZ_STREAM_SWAP_STATUS_API_URL(apiEndpoint)}?id=${swapId}`
   );
   stream.onmessage = function (event) {
     const data: StatusResponse = JSON.parse(event.data);
-    onMessage(data);
-    if (
-      SwapUpdateEvent.TransactionClaimed === data.status ||
-      data.failureReason
-    ) {
-      stream.close();
-      if (SwapUpdateEvent.TransactionClaimed === data.status) {
-        removeRefundDetailsFromLocalStorage(swapId);
-      }
-    }
+    onMessage(data, stream);
   };
   stream.onerror = event => {
     console.log('error:', event);
@@ -53,4 +43,26 @@ export const swapError = (status: StatusResponse): string => {
     return 'Swap expired. Please refund your coins if you transferred any to the provided address.';
   }
   return status.failureReason || 'Error: Unknown status';
+};
+
+export const isFinal = (
+  status: StatusResponse,
+  reverse: boolean = false,
+  instant: boolean = false
+): boolean => {
+  if (!reverse) {
+    return (
+      SwapUpdateEvent.TransactionClaimed === status.status ||
+      !!status.failureReason
+    );
+  }
+  return (
+    (instant && SwapUpdateEvent.TransactionMempool === status.status) ||
+    [
+      SwapUpdateEvent.TransactionConfirmed,
+      SwapUpdateEvent.SwapExpired,
+      SwapUpdateEvent.TransactionRefunded,
+      SwapUpdateEvent.TransactionFailed,
+    ].includes(status.status)
+  );
 };
