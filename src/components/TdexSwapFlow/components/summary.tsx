@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 
 import { EsploraByChain } from '../constants';
 
+import svgIcons from '../../../utils/svgIcons';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -22,6 +24,10 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(6),
+  },
+  image: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
 }));
 
@@ -42,6 +48,7 @@ const Summary: React.FC<Props> = ({ chain, txid, onNewTrade }) => {
   return (
     <div className={classes.root}>
       <Typography className={classes.result}>Trade completed</Typography>
+      <img src={svgIcons.success} alt="Success" className={classes.image} />
       <Button
         variant="contained"
         onClick={() => openInNewTab(`${EsploraByChain[chain]}/tx/${txid}`)}
