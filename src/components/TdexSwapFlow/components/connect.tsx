@@ -30,6 +30,15 @@ interface Props {
 const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
   const classes = useStyles();
 
+  const handleInstall = () => {
+    const newWindow = window.open(
+      'https://chrome.google.com/webstore/detail/nhanebedohgejbllffboeipobccgedhl',
+      '_blank',
+      'noopener,noreferrer'
+    );
+    if (newWindow) newWindow.opener = null;
+  };
+
   const handleConnect = async () => {
     if (!installed) {
       return alert('Marina is not installed');
@@ -64,14 +73,25 @@ const Connect: React.FC<Props> = ({ onConnect, installed, connected }) => {
           <Typography className={classes.instructions}>
             Connect your wallet
           </Typography>
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            onClick={handleConnect}
-          >
-            Connect with Marina Wallet
-          </Button>
+          {installed ? (
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={handleConnect}
+            >
+              Connect with Marina Wallet
+            </Button>
+          ) : (
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={handleInstall}
+            >
+              Install Marina Wallet extension
+            </Button>
+          )}
           <Button
             className={classes.button}
             variant="contained"

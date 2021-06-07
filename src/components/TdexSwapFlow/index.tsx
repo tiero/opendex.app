@@ -80,6 +80,9 @@ const TdexSwapFlow: React.FC<Props> = () => {
     const interval = setInterval(async () => {
       try {
         const marina: MarinaProvider = (window as any).marina;
+
+        if (marina === undefined) return;
+
         setInstalled(true);
 
         const net = await marina.getNetwork();
