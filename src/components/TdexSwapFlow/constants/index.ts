@@ -8,8 +8,8 @@ export const ExplorerByChain: Record<'liquid' | 'regtest', string> = {
 };
 
 export const EsploraByChain: Record<'liquid' | 'regtest', string> = {
-  regtest: 'http://localhost:5001',
   liquid: 'https://blockstream.info/liquid',
+  regtest: 'http://localhost:5001',
 };
 
 export interface Provider {
@@ -29,16 +29,6 @@ export interface PriceWithFee {
   fee: any;
   price: any;
 }
-
-export const ProviderByChain: Record<'liquid' | 'regtest', Provider[]> = {
-  liquid: [
-    {
-      name: 'TDex Developers Daemon',
-      endpoint: 'https://provider.tdex.network:9945',
-    },
-  ],
-  regtest: [{ name: 'Regtest Daemon', endpoint: 'http://localhost:9945' }],
-};
 
 interface AssetInfo {
   hash: string;

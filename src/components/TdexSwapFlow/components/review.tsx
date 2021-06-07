@@ -67,8 +67,6 @@ const Review: React.FC<Props> = ({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isBuy = terms.assetToBeSent === providerWithMarket.market.quoteAsset;
-
   const explorer = ExplorerByChain[chain];
 
   const identity = new BrowserInjectOpenDex({
@@ -99,6 +97,10 @@ const Review: React.FC<Props> = ({
         terms.amountToBeSent,
         precision
       );
+
+      const isBuy =
+        CurrencyToAssetByChain[chain][terms.assetToBeSent].hash ===
+        providerWithMarket.market.quoteAsset;
 
       let txid;
       if (isBuy) {
