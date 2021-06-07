@@ -84,14 +84,17 @@ export default class TdexFetcher implements RatesFetcher {
 
     const [baseCurrency, quoteCurrency] = baseQuoteFromCurrencyPair(pair);
 
+    const providersForPair =
+      this.providersWithMarketByPair[toKey([baseCurrency, quoteCurrency])];
+
+    if (!providersForPair)
+      throw new Error('TDEX providers for the chosen pair are not reachable');
+
     const isBaseComingIn =
       (isSend && amountWithCurrency.currency === baseCurrency) ||
       (!isSend && amountWithCurrency.currency !== quoteCurrency);
 
     const tradeType = isBaseComingIn ? TradeType.SELL : TradeType.BUY;
-
-    const providersForPair =
-      this.providersWithMarketByPair[toKey([baseCurrency, quoteCurrency])];
 
     let bestPrice;
     let bestProvider;
