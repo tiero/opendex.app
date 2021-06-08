@@ -1,4 +1,5 @@
 import { CurrencyID } from './currency';
+import { CurrencyPair } from './rates';
 
 export enum SwapProvider {
   BOLTZ = 'Boltz',
@@ -6,19 +7,33 @@ export enum SwapProvider {
   TDEX = 'TDex',
 }
 
+export enum Direction {
+  SINGLE,
+  BOTH,
+}
+
+export class SwapProviderPair {
+  public constructor(
+    public pair: CurrencyPair,
+    public direction: Direction = Direction.BOTH
+  ) { }
+}
+
 export const swapProviders = {
   [SwapProvider.BOLTZ]: [
-    [CurrencyID.BTC, CurrencyID.LIGHTNING_BTC],
-    [CurrencyID.BTC, CurrencyID.LIGHTNING_LTC],
-    [CurrencyID.ETH, CurrencyID.LIGHTNING_BTC],
-    [CurrencyID.ETH_USDT, CurrencyID.LIGHTNING_BTC],
-    [CurrencyID.LTC, CurrencyID.LIGHTNING_BTC],
-    [CurrencyID.LTC, CurrencyID.LIGHTNING_LTC],
+    new SwapProviderPair([CurrencyID.BTC, CurrencyID.LIGHTNING_BTC]),
+    new SwapProviderPair([CurrencyID.BTC, CurrencyID.LIGHTNING_LTC]),
+    new SwapProviderPair([CurrencyID.ETH, CurrencyID.LIGHTNING_BTC]),
+    new SwapProviderPair([CurrencyID.ETH_USDT, CurrencyID.LIGHTNING_BTC]),
+    new SwapProviderPair([CurrencyID.LTC, CurrencyID.LIGHTNING_BTC]),
+    new SwapProviderPair([CurrencyID.LTC, CurrencyID.LIGHTNING_LTC]),
   ],
-  [SwapProvider.COMIT]: [[CurrencyID.BTC, CurrencyID.MONERO]],
+  [SwapProvider.COMIT]: [
+    new SwapProviderPair([CurrencyID.BTC, CurrencyID.MONERO], Direction.SINGLE),
+  ],
   [SwapProvider.TDEX]: [
-    [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT],
-    [CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD],
+    new SwapProviderPair([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT]),
+    new SwapProviderPair([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD]),
   ],
 };
 
