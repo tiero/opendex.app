@@ -79,17 +79,13 @@ const BoltzDestination = (props: BoltzDestinationProps): ReactElement => {
   const [downloadRefundFile, setDownloadRefundFile] = useState(true);
   const [loading, setLoading] = useState(false);
   const [browserScan, setBrowserScan] = useState(false);
-  const {
-    apiEndpoint,
-    bitcoinConstants,
-    litecoinConstants,
-  } = useBoltzConfiguration();
+  const { apiEndpoint, bitcoinConstants, litecoinConstants } =
+    useBoltzConfiguration();
   const [keys, setKeys] = useState<{ publicKey?: string; privateKey?: string }>(
     {}
   );
-  const [refundDetails, setRefundDetails] = useState<RefundDetails | undefined>(
-    undefined
-  );
+  const [refundDetails, setRefundDetails] =
+    useState<RefundDetails | undefined>(undefined);
   const [displayedAmount, setDisplayedAmount] = useState('');
   const utilsContext = useContext(UtilsContext);
   const isMobileView = !!utilsContext?.isMobileView;
