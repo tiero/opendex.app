@@ -16,7 +16,7 @@ export class SwapProviderPair {
   public constructor(
     public pair: CurrencyPair,
     public direction: Direction = Direction.BOTH
-  ) { }
+  ) {}
 }
 
 export const swapProviders = {
