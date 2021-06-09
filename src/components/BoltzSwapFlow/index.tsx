@@ -27,12 +27,10 @@ const BoltzSwapFlow = (): ReactElement => {
   const receiveCurrency = useAppSelector(selectReceiveAsset);
   const sendCurrency = useAppSelector(selectSendAsset);
   const [activeStep, setActiveStep] = useState(0);
-  const [swapDetails, setSwapDetails] = useState<BoltzSwapResponse | undefined>(
-    undefined
-  );
-  const [swapStatus, setSwapStatus] = useState<StatusResponse | undefined>(
-    undefined
-  );
+  const [swapDetails, setSwapDetails] =
+    useState<BoltzSwapResponse | undefined>(undefined);
+  const [swapStatus, setSwapStatus] =
+    useState<StatusResponse | undefined>(undefined);
   const { apiEndpoint } = useBoltzConfiguration();
 
   const proceedToNext = useCallback(

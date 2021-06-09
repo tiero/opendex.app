@@ -61,9 +61,8 @@ const useStyles = makeStyles(() =>
 const BoltzChooseSwap = (props: BoltzChooseSwapProps): ReactElement => {
   const classes = useStyles();
   const { setErrorMessage, setRefundDetails } = props;
-  const [uploadedFile, setUploadedFile] = useState<RefundDetails | undefined>(
-    undefined
-  );
+  const [uploadedFile, setUploadedFile] =
+    useState<RefundDetails | undefined>(undefined);
   const [storedSwaps, setStoredSwaps] = useState<RefundDetails[]>([]);
   const [selectedSwap, setSelectedSwap] = useState('');
   const fileInput: React.RefObject<HTMLInputElement> = useMemo(

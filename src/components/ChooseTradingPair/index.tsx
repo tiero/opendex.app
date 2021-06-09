@@ -28,6 +28,7 @@ import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useExampleHook from '../../constants/ratesExampleHook';
 import useBoltzFetcher from '../../constants/boltzFetcherHook';
 import BigNumber from 'bignumber.js';
+import useComitFetcher from '../ComitSwapFlow/useComitFetcher';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -80,6 +81,10 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const [isPreviewing, setIsPreviewing] = useState(false);
 
+  // TODO: Should be handled in a reducer
+  const [previewValueError, setPreviewValueError] =
+    useState<Error | null>(null);
+
   const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
   )!;
@@ -97,16 +102,19 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const tdexFetcher = useExampleHook();
   const boltzFetcher = useBoltzFetcher();
+  const comitFetcher = useComitFetcher();
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
     case SwapProvider.TDEX:
       ratesFetcher = tdexFetcher;
       break;
+    case SwapProvider.COMIT:
+      ratesFetcher = comitFetcher;
+      break;
     case SwapProvider.BOLTZ:
       ratesFetcher = boltzFetcher;
       break;
-    case SwapProvider.COMIT:
     default:
       break;
   }
@@ -132,25 +140,33 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
-        {
-          amount,
-          currency: sendCurrency.id,
-        },
-        [sendCurrency.id, receiveCurrency.id]
-      );
 
-      dispatch(
-        setReceiveAmount(
-          receiveValue.amountWithFees.amount
-            .toNumber()
-            .toLocaleString(undefined, {
-              maximumFractionDigits: 8,
-            })
-        )
-      );
-      validateReceiveLimits(receiveValue.amountWithFees.amount);
-      setIsPreviewing(false);
+      try {
+        setPreviewValueError(null);
+        const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
+          {
+            amount,
+            currency: sendCurrency.id,
+          },
+          [sendCurrency.id, receiveCurrency.id]
+        );
+
+        dispatch(
+          setReceiveAmount(
+            receiveValue.amountWithFees.amount
+              .toNumber()
+              .toLocaleString(undefined, {
+                maximumFractionDigits: 8,
+              })
+          )
+        );
+        validateReceiveLimits(receiveValue.amountWithFees.amount);
+        setIsPreviewing(false);
+      } catch (e) {
+        if (!previewValueError) {
+          setPreviewValueError(e);
+        }
+      }
     }
   };
 
@@ -168,23 +184,33 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      validateReceiveLimits(amount);
-      const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
-        {
-          amount,
-          currency: receiveCurrency.id,
-        },
-        [sendCurrency.id, receiveCurrency.id]
-      );
+      try {
+        validateReceiveLimits(amount);
 
-      dispatch(
-        setSendAmount(
-          sendValue.amountWithFees.amount.toNumber().toLocaleString(undefined, {
-            maximumFractionDigits: 8,
-          })
-        )
-      );
-      setIsPreviewing(false);
+        setPreviewValueError(null);
+        const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
+          {
+            amount,
+            currency: receiveCurrency.id,
+          },
+          [sendCurrency.id, receiveCurrency.id]
+        );
+
+        dispatch(
+          setSendAmount(
+            sendValue.amountWithFees.amount
+              .toNumber()
+              .toLocaleString(undefined, {
+                maximumFractionDigits: 8,
+              })
+          )
+        );
+        setIsPreviewing(false);
+      } catch (e) {
+        if (!previewValueError) {
+          setPreviewValueError(e);
+        }
+      }
     }
   };
 
@@ -270,6 +296,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
           >
             {!swapProvider && ratesLoaded && (
               <ErrorMessage message="Trading pair not supported" />
+            )}
+            {previewValueError ? (
+              <ErrorMessage message={previewValueError.message} />
+            ) : (
+              <></>
             )}
           </Grid>
         </Grid>

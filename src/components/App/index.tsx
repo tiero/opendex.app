@@ -17,7 +17,7 @@ const history = createBrowserHistory();
 
 function App() {
   return (
-    <ThemeProvider theme={createMuiTheme((theme as unknown) as Theme)}>
+    <ThemeProvider theme={createMuiTheme(theme as unknown as Theme)}>
       <CssBaseline />
       <NetworkProvider>
         <UtilsProvider>
