@@ -21,9 +21,10 @@ export const addReverseSwapDetailsToLocalStorage = (
   setBoltzReverseSwapsToLocalStorage(boltzSwaps);
 };
 
-export const getBoltzReverseSwapsFromLocalStorage = (): ReverseSwapDetails[] => {
-  return JSON.parse(localStorage.getItem('boltzReverseSwaps') || '[]');
-};
+export const getBoltzReverseSwapsFromLocalStorage =
+  (): ReverseSwapDetails[] => {
+    return JSON.parse(localStorage.getItem('boltzReverseSwaps') || '[]');
+  };
 
 export const setBoltzReverseSwapsToLocalStorage = (
   swaps: ReverseSwapDetails[]

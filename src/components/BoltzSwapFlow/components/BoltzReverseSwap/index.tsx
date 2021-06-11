@@ -23,18 +23,13 @@ const BoltzReverseSwap = (): ReactElement => {
   const receiveCurrency = useAppSelector(selectReceiveAsset);
   const [activeStep, setActiveStep] = useState(0);
   const [claimTransactionId, setClaimTransactionId] = useState('');
-  const [swapDetails, setSwapDetails] = useState<BoltzSwapResponse | undefined>(
-    undefined
-  );
-  const [swapStatus, setSwapStatus] = useState<StatusResponse | undefined>(
-    undefined
-  );
+  const [swapDetails, setSwapDetails] =
+    useState<BoltzSwapResponse | undefined>(undefined);
+  const [swapStatus, setSwapStatus] =
+    useState<StatusResponse | undefined>(undefined);
   const [error, setError] = useState('');
-  const {
-    apiEndpoint,
-    bitcoinConstants,
-    litecoinConstants,
-  } = useBoltzConfiguration();
+  const { apiEndpoint, bitcoinConstants, litecoinConstants } =
+    useBoltzConfiguration();
 
   const network = useMemo(
     () =>

@@ -65,11 +65,8 @@ const BoltzReverseDestination = (
 ): ReactElement => {
   const { proceedToNext } = props;
   const classes = useStyles();
-  const {
-    apiEndpoint,
-    bitcoinConstants,
-    litecoinConstants,
-  } = useBoltzConfiguration();
+  const { apiEndpoint, bitcoinConstants, litecoinConstants } =
+    useBoltzConfiguration();
   const receiveCurrency = useAppSelector(selectReceiveAsset);
   const sendAmount = useAppSelector(selectSendAmount);
   const sendCurrency = useAppSelector(selectSendAsset);

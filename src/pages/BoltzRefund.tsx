@@ -167,42 +167,43 @@ const BoltzRefund = (): ReactElement => {
   ];
 
   const checkStatus = useMemo(
-    () => (swapId: string): void => {
-      setLoading(true);
-      from(
-        fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-          },
-          body: JSON.stringify({ id: swapId }),
-        })
-      )
-        .pipe(mergeMap(response => response.json()))
-        .subscribe({
-          next: status => {
-            setSwapStatus(status);
-            setLoading(false);
-            setActiveStep(prev => prev + 1);
-            if (isFinal(status)) {
-              return;
-            }
-            startListening(swapId, apiEndpoint, (data, stream) => {
-              setSwapStatus(data);
-              if (isFinal(data)) {
-                stream.close();
-                if (SwapUpdateEvent.TransactionClaimed === data.status) {
-                  removeRefundDetailsFromLocalStorage(swapId);
-                }
+    () =>
+      (swapId: string): void => {
+        setLoading(true);
+        from(
+          fetch(BOLTZ_SWAP_STATUS_API_URL(apiEndpoint), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({ id: swapId }),
+          })
+        )
+          .pipe(mergeMap(response => response.json()))
+          .subscribe({
+            next: status => {
+              setSwapStatus(status);
+              setLoading(false);
+              setActiveStep(prev => prev + 1);
+              if (isFinal(status)) {
+                return;
               }
-            });
-          },
-          error: err => {
-            setErrorMessage(getErrorMessage(err) || 'Failed to get status');
-            setLoading(false);
-          },
-        });
-    },
+              startListening(swapId, apiEndpoint, (data, stream) => {
+                setSwapStatus(data);
+                if (isFinal(data)) {
+                  stream.close();
+                  if (SwapUpdateEvent.TransactionClaimed === data.status) {
+                    removeRefundDetailsFromLocalStorage(swapId);
+                  }
+                }
+              });
+            },
+            error: err => {
+              setErrorMessage(getErrorMessage(err) || 'Failed to get status');
+              setLoading(false);
+            },
+          });
+      },
     [apiEndpoint]
   );
 

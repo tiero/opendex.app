@@ -71,10 +71,10 @@ const BoltzReverseSend = (props: BoltzReverseSendProps): ReactElement => {
   const [etaTimeDiffLabel, setEtaTimeDiffLabel] = useState('');
   const [etaLeft, setETALeft] = useState(timeUntilExpiry(swapDetails?.invoice));
 
-  const explorer = useMemo(() => explorers.get(boltzPairsMap(sendCurrency)), [
-    sendCurrency,
-    explorers,
-  ]);
+  const explorer = useMemo(
+    () => explorers.get(boltzPairsMap(sendCurrency)),
+    [sendCurrency, explorers]
+  );
 
   const blockExplorerLink = `${explorer!.address}${swapDetails?.lockupAddress}`;
 

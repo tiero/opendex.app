@@ -21,10 +21,10 @@ const BoltzReverseSwapResult = (
   const explorers = useBlockExplorers();
   const sendCurrency = useAppSelector(selectSendAsset);
 
-  const explorer = useMemo(() => explorers.get(boltzPairsMap(sendCurrency)), [
-    sendCurrency,
-    explorers,
-  ]);
+  const explorer = useMemo(
+    () => explorers.get(boltzPairsMap(sendCurrency)),
+    [sendCurrency, explorers]
+  );
 
   const blockExplorerLink = `${explorer!.transaction}${transactionId}`;
 
