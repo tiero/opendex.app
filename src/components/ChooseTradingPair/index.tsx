@@ -155,7 +155,8 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         );
 
         dispatch(
-          setReceiveAmount(convertAmountToString(receiveValue.amountWithFees.amount)
+          setReceiveAmount(
+            convertAmountToString(receiveValue.amountWithFees.amount)
           )
         );
         validateReceiveLimits(receiveValue.amountWithFees.amount);

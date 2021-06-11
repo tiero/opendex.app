@@ -139,7 +139,7 @@ const BoltzRefund = (): ReactElement => {
           swapTransaction!.transactionHex,
           boltzConfig
         ).subscribe({
-          next: () => { },
+          next: () => {},
           error: err => {
             setErrorMessage(getErrorMessage(err) || 'Refund failed');
             console.log('Refund failed:', err);
