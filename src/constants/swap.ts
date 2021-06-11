@@ -33,6 +33,7 @@ export const swapProviders = {
   ],
   [SwapProvider.TDEX]: [
     new SwapProviderPair([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_USDT]),
+    new SwapProviderPair([CurrencyID.LIQUID_BTC, CurrencyID.LIQUID_CAD]),
   ],
 };
 

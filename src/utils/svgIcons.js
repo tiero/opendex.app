@@ -26,6 +26,7 @@ import externalLinkIcon from '../assets/images/external-link.svg';
 import comitLogo from '../assets/images/comit-logo.svg';
 import comitLogoBlack from '../assets/images/comit-logo-black.svg';
 import tdexLogo from '../assets/images/tdex-logo.svg';
+import success from '../assets/images/success.svg';
 
 export default {
   leftArrow,
@@ -56,4 +57,5 @@ export default {
   comitLogo,
   comitLogoBlack,
   tdexLogo,
+  success,
 };

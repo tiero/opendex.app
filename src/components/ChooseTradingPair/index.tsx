@@ -25,8 +25,8 @@ import {
 } from '../../store/swaps-slice';
 import { timer } from 'rxjs';
 import { AmountPreview, RatesFetcher } from '../../constants/rates';
-import useExampleHook from '../../constants/ratesExampleHook';
 import useBoltzFetcher from '../../constants/boltzFetcherHook';
+import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
 import BigNumber from 'bignumber.js';
 import useComitFetcher from '../ComitSwapFlow/useComitFetcher';
 
@@ -77,6 +77,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const receiveAmount = useAppSelector(selectReceiveAmount);
   const swapProvider = useAppSelector(selectSwapProvider);
   const ratesLoaded = useAppSelector(isRatesLoaded);
+  const [sendAmountError, setSendAmountError] = useState('');
   const [receiveAmountError, setReceiveAmountError] = useState('');
 
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -94,13 +95,14 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   timer(1000).subscribe(() => dispatch(setRates({})));
   const nextDisabled =
+    isPreviewing ||
     !ratesLoaded ||
     Number(sendAmount) === 0 ||
     Number(receiveAmount) === 0 ||
     !swapProvider ||
     !!receiveAmountError;
 
-  const tdexFetcher = useExampleHook();
+  const tdexFetcher = useTdexFetcher();
   const boltzFetcher = useBoltzFetcher();
   const comitFetcher = useComitFetcher();
 
@@ -130,6 +132,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
   const onSendAmountChange = async (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    setSendAmountError('');
     if (isPreviewing) return;
 
     const value = e.target.value;
@@ -153,11 +156,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
         dispatch(
           setReceiveAmount(
-            receiveValue.amountWithFees.amount
-              .toNumber()
-              .toLocaleString(undefined, {
-                maximumFractionDigits: 8,
-              })
+            convertAmountToString(receiveValue.amountWithFees.amount)
           )
         );
         validateReceiveLimits(receiveValue.amountWithFees.amount);
@@ -197,13 +196,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         );
 
         dispatch(
-          setSendAmount(
-            sendValue.amountWithFees.amount
-              .toNumber()
-              .toLocaleString(undefined, {
-                maximumFractionDigits: 8,
-              })
-          )
+          setSendAmount(convertAmountToString(sendValue.amountWithFees.amount))
         );
         setIsPreviewing(false);
       } catch (e) {
@@ -251,6 +244,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
             }
             selectedAsset={sendCurrency}
             loading={!ratesLoaded}
+            error={sendAmountError}
           />
         </Grid>
         <Grid item xs={12}>

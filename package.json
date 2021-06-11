@@ -2,6 +2,7 @@
   "name": "opendex-app",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://opendex.app",
   "dependencies": {
     "@boltz/bolt11": "^1.2.7",
     "@material-ui/core": "^4.10.1",
@@ -20,6 +21,7 @@
     "decimal.js": "^10.2.1",
     "ethers": "^5.0.31",
     "is_js": "^0.9.0",
+    "marina-provider": "^1.1.0",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "qrcode-parser": "^1.2.0",
@@ -34,7 +36,6 @@
     "react-redux": "^7.2.2",
     "react-responsive": "^8.0.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
     "react-use": "^17.2.3",
     "react-use-websocket": "^2.7.1",
     "redux": "^4.0.5",
@@ -42,19 +43,22 @@
     "redux-saga": "^1.1.3",
     "reselect": "^4.0.0",
     "rxjs": "^6.6.6",
+    "tdex-sdk": "^1.6.7",
     "use-async-effect": "^2.2.3",
     "web3modal": "^1.9.3"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "BROWSER=none PORT=8080 react-scripts start",
     "build": "react-scripts build",
     "test": "yarn prettier:check && react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "storybook:no-cache": "start-storybook -p 6006 -s public --no-manager-cache",
     "build-storybook": "build-storybook -s public",
-    "prettier": "prettier --write src public",
-    "prettier:check": "prettier --check src public"
+    "prettier": "npx prettier --write src public",
+    "prettier:check": "npx prettier --check src public",
+    "provider:tdex": "bash scripts/run-tdex",
+    "clean:tdex": "bash scripts/clean-tdex"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -90,6 +94,7 @@
     "babel-loader": "^8.1.0",
     "prettier": "^2.2.1",
     "redux-devtools-extension": "^2.13.8",
+    "tdex-react-scripts": "^4.0.3-tdex",
     "typescript": "^4.2.2"
   }
 }
