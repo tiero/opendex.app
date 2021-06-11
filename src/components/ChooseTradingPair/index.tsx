@@ -28,6 +28,7 @@ import { AmountPreview, RatesFetcher } from '../../constants/rates';
 import useBoltzFetcher from '../../constants/boltzFetcherHook';
 import useTdexFetcher from '../TdexSwapFlow/utils/tdexFetcherHook';
 import BigNumber from 'bignumber.js';
+import useComitFetcher from '../ComitSwapFlow/useComitFetcher';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -81,6 +82,10 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const [isPreviewing, setIsPreviewing] = useState(false);
 
+  // TODO: Should be handled in a reducer
+  const [previewValueError, setPreviewValueError] =
+    useState<Error | null>(null);
+
   const sendCurrency = CurrencyOptions.find(
     currency => currency.id === sendAsset
   )!;
@@ -99,16 +104,19 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
 
   const tdexFetcher = useTdexFetcher();
   const boltzFetcher = useBoltzFetcher();
+  const comitFetcher = useComitFetcher();
 
   let ratesFetcher: RatesFetcher | null;
   switch (swapProvider) {
     case SwapProvider.TDEX:
       ratesFetcher = tdexFetcher;
       break;
+    case SwapProvider.COMIT:
+      ratesFetcher = comitFetcher;
+      break;
     case SwapProvider.BOLTZ:
       ratesFetcher = boltzFetcher;
       break;
-    case SwapProvider.COMIT:
     default:
       break;
   }
@@ -137,6 +145,7 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       const amount = new BigNumber(value);
 
       try {
+        setPreviewValueError(null);
         const receiveValue: AmountPreview = await ratesFetcher.previewGivenSend(
           {
             amount,
@@ -144,17 +153,18 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
           },
           [sendCurrency.id, receiveCurrency.id]
         );
+
         dispatch(
-          setReceiveAmount(
-            convertAmountToString(receiveValue.amountWithFees.amount)
+          setReceiveAmount(convertAmountToString(receiveValue.amountWithFees.amount)
           )
         );
         validateReceiveLimits(receiveValue.amountWithFees.amount);
-      } catch (e: any) {
-        setSendAmountError(e.message);
+        setIsPreviewing(false);
+      } catch (e) {
+        if (!previewValueError) {
+          setPreviewValueError(e);
+        }
       }
-
-      setIsPreviewing(false);
     }
   };
 
@@ -172,9 +182,10 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
       setIsPreviewing(true);
 
       const amount = new BigNumber(value);
-      validateReceiveLimits(amount);
-
       try {
+        validateReceiveLimits(amount);
+
+        setPreviewValueError(null);
         const sendValue: AmountPreview = await ratesFetcher.previewGivenReceive(
           {
             amount,
@@ -186,11 +197,12 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
         dispatch(
           setSendAmount(convertAmountToString(sendValue.amountWithFees.amount))
         );
-      } catch (e: any) {
-        setReceiveAmountError(e.message);
+        setIsPreviewing(false);
+      } catch (e) {
+        if (!previewValueError) {
+          setPreviewValueError(e);
+        }
       }
-
-      setIsPreviewing(false);
     }
   };
 
@@ -277,6 +289,11 @@ const ChooseTradingPair = (_props: ChooseTradingPairProps) => {
           >
             {!swapProvider && ratesLoaded && (
               <ErrorMessage message="Trading pair not supported" />
+            )}
+            {previewValueError ? (
+              <ErrorMessage message={previewValueError.message} />
+            ) : (
+              <></>
             )}
           </Grid>
         </Grid>

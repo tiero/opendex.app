@@ -24,7 +24,7 @@ import {
   removeRefundDetailsFromLocalStorage,
   startRefund,
 } from '../utils/boltzRefund';
-import { startListening } from '../utils/boltzSwapStatus';
+import { isFinal, startListening } from '../utils/boltzSwapStatus';
 import { getErrorMessage } from '../utils/error';
 
 type RefundStep = {
@@ -139,7 +139,7 @@ const BoltzRefund = (): ReactElement => {
           swapTransaction!.transactionHex,
           boltzConfig
         ).subscribe({
-          next: () => {},
+          next: () => { },
           error: err => {
             setErrorMessage(getErrorMessage(err) || 'Refund failed');
             console.log('Refund failed:', err);
@@ -185,14 +185,17 @@ const BoltzRefund = (): ReactElement => {
               setSwapStatus(status);
               setLoading(false);
               setActiveStep(prev => prev + 1);
-              if (
-                SwapUpdateEvent.TransactionClaimed === status.status ||
-                !!status.failureReason
-              ) {
+              if (isFinal(status)) {
                 return;
               }
-              startListening(swapId, apiEndpoint, data => {
+              startListening(swapId, apiEndpoint, (data, stream) => {
                 setSwapStatus(data);
+                if (isFinal(data)) {
+                  stream.close();
+                  if (SwapUpdateEvent.TransactionClaimed === data.status) {
+                    removeRefundDetailsFromLocalStorage(swapId);
+                  }
+                }
               });
             },
             error: err => {

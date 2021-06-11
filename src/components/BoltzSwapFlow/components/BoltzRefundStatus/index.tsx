@@ -11,7 +11,7 @@ import {
   SwapUpdateEvent,
 } from '../../../../constants/boltzSwap';
 import { useBoltzConfiguration } from '../../../../context/NetworkContext';
-import BoltzStatus from '../BoltzStatus';
+import BoltzSubmarineStatus from '../BoltzSubmarineStatus';
 
 type BoltzRefundStatusProps = {
   refundDetails: RefundDetails;
@@ -92,7 +92,7 @@ const BoltzRefundStatus = (props: BoltzRefundStatusProps): ReactElement => {
 
   return (
     <>
-      <BoltzStatus swapStatus={swapStatus!} />
+      <BoltzSubmarineStatus swapStatus={swapStatus!} />
       {!!swapTransaction?.transactionHex &&
         !swapSteps.some(step => step.status.includes(swapStatus.status)) && (
           <TextField

@@ -20,7 +20,7 @@ import BoltzSwapStep from '../BoltzSwapStep';
 import Button from '../../../Button';
 import DrawQrCode from '../../../DrawQrCode';
 
-type BoltzSendProps = {
+type BoltzSubmarineSendProps = {
   swapDetails: BoltzSwapResponse;
   swapStatus?: StatusResponse;
   proceedToNext: () => void;
@@ -37,7 +37,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const BoltzSend = (props: BoltzSendProps): ReactElement => {
+const BoltzSubmarineSend = (props: BoltzSubmarineSendProps): ReactElement => {
   const classes = useStyles();
   const { swapDetails, swapStatus, proceedToNext } = props;
   const sendCurrency = useAppSelector(selectSendAsset);
@@ -108,4 +108,4 @@ const BoltzSend = (props: BoltzSendProps): ReactElement => {
   );
 };
 
-export default BoltzSend;
+export default BoltzSubmarineSend;

@@ -186,7 +186,7 @@ type BoltzPair = {
   };
 };
 
-type BoltzGetRatesResponse = {
+export type BoltzGetRatesResponse = {
   pairs: Record<string, BoltzPair>;
 };
 

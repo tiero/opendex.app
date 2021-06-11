@@ -60,10 +60,10 @@ const useNetwork = (): NetworkContextData => {
   return React.useContext(NetworkContext);
 };
 
-const useBlockExplorers = (): Map<CurrencyID, BlockExplorerConfiguration> => {
+const useBlockExplorers = (): Map<string, BlockExplorerConfiguration> => {
   const { network } = React.useContext(NetworkContext);
 
-  const explorers = new Map<CurrencyID, BlockExplorerConfiguration>();
+  const explorers = new Map<string, BlockExplorerConfiguration>();
 
   for (const currency of Object.keys(CurrencyID)) {
     const blockExplorer: BlockExplorerConfiguration = {
@@ -77,7 +77,7 @@ const useBlockExplorers = (): Map<CurrencyID, BlockExplorerConfiguration> => {
       blockExplorer.address !== undefined &&
       blockExplorer.transaction !== undefined
     ) {
-      explorers.set(currency as CurrencyID, blockExplorer);
+      explorers.set(currency, blockExplorer);
     }
   }
 

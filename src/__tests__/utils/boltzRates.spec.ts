@@ -1,9 +1,12 @@
 import BigNumber from 'bignumber.js';
-import { getAmountOut } from '../../constants/boltzRates';
+import {
+  BoltzGetRatesResponse,
+  getAmountOut,
+} from '../../constants/boltzRates';
 import CurrencyID from '../../constants/currency';
 import { CurrencyPair } from '../../constants/rates';
 
-const rates = {
+const rates: BoltzGetRatesResponse = {
   pairs: {
     'ETH/BTC': {
       fees: {
@@ -26,6 +29,10 @@ const rates = {
         },
       },
       rate: 0.0608543,
+      limits: {
+        maximal: 0,
+        minimal: 0,
+      },
     },
   },
 };
