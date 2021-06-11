@@ -34,7 +34,7 @@ import Button from '../../../Button';
 import DownloadRefundFile from '../../../DownloadRefundFile';
 import QrCodeReader from '../../../QrCodeReader';
 
-type BoltzDestinationProps = {
+type BoltzSubmarineDestinationProps = {
   proceedToNext: (swapDetails: BoltzSwapResponse) => void;
 };
 
@@ -67,7 +67,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const BoltzDestination = (props: BoltzDestinationProps): ReactElement => {
+const BoltzSubmarineDestination = (
+  props: BoltzSubmarineDestinationProps
+): ReactElement => {
   const { proceedToNext } = props;
   const classes = useStyles();
   const receiveAmount = useAppSelector(selectReceiveAmount);
@@ -107,12 +109,13 @@ const BoltzDestination = (props: BoltzDestinationProps): ReactElement => {
   }, [sendCurrency, receiveCurrency, bitcoinConstants, litecoinConstants]);
 
   const createSwap = () => {
+    const pairId = `${boltzPairsMap(sendCurrency)}/${boltzPairsMap(
+      receiveCurrency
+    )}`;
     const params = {
       type: 'submarine',
-      pairId: `${boltzPairsMap(sendCurrency)}/${boltzPairsMap(
-        receiveCurrency
-      )}`,
-      orderSide: 'sell',
+      pairId: pairId === 'BTC/LTC' ? 'LTC/BTC' : pairId,
+      orderSide: pairId === 'BTC/LTC' ? 'buy' : 'sell',
       invoice: invoice,
       refundPublicKey: keys.publicKey,
       channel: {
@@ -255,4 +258,4 @@ const BoltzDestination = (props: BoltzDestinationProps): ReactElement => {
   );
 };
 
-export default BoltzDestination;
+export default BoltzSubmarineDestination;
